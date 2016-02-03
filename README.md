@@ -55,6 +55,29 @@ app.post('/') { request, response in
 //...start server
 ```
 
+## Router
+
+You can also create a Router object which will allow you to define multiple routes with a prefix.
+
+```swift
+let router = Router()
+
+router.get("/") { request, response in
+    response.send(text: "Bird is the word")
+}
+
+router.get("/about") { request, response in
+    response.send(text: "Don't you know, about the bird?")
+}
+
+app.use(path: "/birds", router: router)
+
+// ...start server
+```
+
+Navigating to `http://example.com/birds` will show a page with `Bird is the word` and navigating to `http://example.com/birds/about` will show a page with `"Don't you know, about the bird?"`.
+
+
 ### JSON
 
 Responding with JSON is easy.
