@@ -1,100 +1,43 @@
-//
-// Based on HttpRouter from Swifter (https://github.com/glock45/swifter) by Damian Kołakowski.
-//
 
-import Foundation
+protocol Routing {
+    func get(path: String, handler: Route.Handler)
+    func put(path: String, handler: Route.Handler)
+    func delete(path: String, handler: Route.Handler)
+    func post(path: String, handler: Route.Handler)
+    func patch(path: String, handler: Route.Handler)
+    func any(path: String, handler: Route.Handler)
+}
 
-class Router {
+public class Router: Routing {
     
-    private class Node {
-        var nodes = [String: Node]()
-        var handler: ((Request, Response) -> Void)? = nil
+    var gets: [String: Route.Handler] = [:]
+    var puts: [String: Route.Handler] = [:]
+    var deletes: [String: Route.Handler] = [:]
+    var posts: [String: Route.Handler] = [:]
+    var patches: [String: Route.Handler] = [:]
+    var anys: [String: Route.Handler] = [:]
+    
+    public func get(path: String, handler: Route.Handler) {
+        gets[path] = handler
     }
     
-    private var rootNode = Node()
-
-    func routes() -> [String] {
-        var routes = [String]()
-        for (_, child) in rootNode.nodes {
-            routes.appendContentsOf(routesForNode(child));
-        }
-        return routes
+    public func put(path: String, handler: Route.Handler) {
+        puts[path] = handler
     }
     
-    private func routesForNode(node: Node, prefix: String = "") -> [String] {
-        var result = [String]()
-        if node.handler != nil {
-            result.append(prefix)
-        }
-        for (key, child) in node.nodes {
-            result.appendContentsOf(routesForNode(child, prefix: prefix + "/" + key));
-        }
-        return result
+    public func delete(path: String, handler: Route.Handler) {
+        deletes[path] = handler;
     }
     
-    func register(method: String?, path: String, handler: ((Request, Response) -> Void)?) {
-        var pathSegments = stripQuery(path).split("/")
-        if let method = method {
-            pathSegments.insert(method, atIndex: 0)
-        } else {
-            pathSegments.insert("*", atIndex: 0)
-        }
-        var pathSegmentsGenerator = pathSegments.generate()
-        inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
+    public func post(path: String, handler: Route.Handler) {
+        posts[path] = handler;
     }
     
-    func route(method: Request.Method?, path: String) -> ((Request, Response) -> Void)? {
-        if let method = method {
-            let pathSegments = (method.rawValue + "/" + stripQuery(path)).split("/")
-            var pathSegmentsGenerator = pathSegments.generate()
-            var params = [String:String]()
-            if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
-                return handler
-            }
-        }
-        let pathSegments = ("*/" + stripQuery(path)).split("/")
-        var pathSegmentsGenerator = pathSegments.generate()
-        var params = [String:String]()
-        if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
-            return handler
-        }
-        return nil
+    public func patch(path: String, handler: Route.Handler) {
+        patches[path] = handler;
     }
     
-    private func inflate(inout node: Node, inout generator: IndexingGenerator<[String]>) -> Node {
-        if let pathSegment = generator.next() {
-            if let _ = node.nodes[pathSegment] {
-                return inflate(&node.nodes[pathSegment]!, generator: &generator)
-            }
-            var nextNode = Node()
-            node.nodes[pathSegment] = nextNode
-            return inflate(&nextNode, generator: &generator)
-        }
-        return node
-    }
-    
-    private func findHandler(inout node: Node, inout params: [String: String], inout generator: IndexingGenerator<[String]>) -> ((Request, Response) -> Void)? {
-        guard let pathToken = generator.next() else {
-            return node.handler
-        }
-        let variableNodes = node.nodes.filter { $0.0.characters.first == ":" }
-        if let variableNode = variableNodes.first {
-            params[variableNode.0] = pathToken
-            return findHandler(&node.nodes[variableNode.0]!, params: &params, generator: &generator)
-        }
-        if let _ = node.nodes[pathToken] {
-            return findHandler(&node.nodes[pathToken]!, params: &params, generator: &generator)
-        }
-        if let _ = node.nodes["*"] {
-            return findHandler(&node.nodes["*"]!, params: &params, generator: &generator)
-        }
-        return nil
-    }
-    
-    private func stripQuery(path: String) -> String {
-        if let path = path.split("?").first {
-            return path
-        }
-        return path
+    public func any(path: String, handler: Route.Handler) {
+        anys[path] = handler;
     }
 }

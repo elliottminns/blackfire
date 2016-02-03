@@ -15,6 +15,24 @@ public class Route {
 
 		Route.routes.append(self)
 	}
+    
+    class func createRoutesFromRouter(router: Router, withPath path: String) {
+        addHandlers(router.gets, toRoutesWithFunction: get, withPath: path)
+        addHandlers(router.posts, toRoutesWithFunction: post, withPath: path)
+        addHandlers(router.puts, toRoutesWithFunction: put, withPath: path)
+        addHandlers(router.deletes, toRoutesWithFunction: delete, withPath: path)
+        addHandlers(router.patches, toRoutesWithFunction: patch, withPath: path)
+        addHandlers(router.anys, toRoutesWithFunction: any, withPath: path)
+    }
+    
+    class func addHandlers(handlers: [String: Handler],
+        toRoutesWithFunction function: ((path: String, handler: Handler) -> Void),
+        withPath path: String) {
+            for (postPath, handler) in handlers {
+                let fullPath = "\(path)\(postPath)"
+                function(path: fullPath, handler: handler)
+            }
+    }
 
 	class func get(path: String, handler: Handler) {
 		let _ = Route(method: .Get, path: path, handler: handler)
@@ -42,16 +60,6 @@ public class Route {
 		self.put(path, handler: handler)
 		self.patch(path, handler: handler)
 		self.delete(path, handler: handler)
-	}
-
-
-	class func resource(path: String, controller: Controller) {
-		self.get(path, handler: controller.index)
-		self.post(path, handler: controller.store)
-
-		self.get("\(path)/:id", handler: controller.show)
-		self.put("\(path)/:id", handler: controller.update)
-		self.delete("\(path)/:id", handler: controller.destroy)
 	}
 
 }
