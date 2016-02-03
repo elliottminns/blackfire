@@ -23,7 +23,7 @@ public class SocketServer {
     private var queue: dispatch_queue_t
     
     init() {
-        queue = dispatch_queue_create("blackfish.queue.request", DISPATCH_QUEUE_SERIAL)
+        queue = dispatch_queue_create("blackfish.queue.request", DISPATCH_QUEUE_CONCURRENT)
     }
 
     /**
@@ -42,23 +42,21 @@ public class SocketServer {
             //creates the infinite loop that will wait for client connections
             while let socket = try? self.listenSocket.acceptClientSocket() {
 
-
                 //wait for lock to notify a new connection
                 self.lock(self.clientSocketsLock) {
                     //keep track of open sockets
                     self.clientSockets.insert(socket)
                 }
 
-                //handle connection in background thread
-                dispatch_async(dispatch_get_main_queue(), {
+                dispatch_async(self.queue) {
                     self.handleConnection(socket)
+                }
                     
-                    dispatch_async(self.queue) {
-                        self.lock(self.clientSocketsLock) {
-                            self.clientSockets.remove(socket)
-                        }
+                dispatch_async(self.queue) {
+                    self.lock(self.clientSocketsLock) {
+                        self.clientSockets.remove(socket)
                     }
-                })
+                }
             }
 
             //stop the server in case something didn't work
@@ -89,15 +87,18 @@ public class SocketServer {
 
         if let request = try? parser.readHttpRequest(socket) {
             
-            //dispatch the server to handle the request
-            let handler = self.dispatch(request.method, path: request.path)
-
-            //add parameters to request
-            request.address = address
-            request.parameters = [:]
-
-            let response = Response(request: request, responder: self, socket: socket)
-            handler(request, response)
+            dispatch_async(dispatch_get_main_queue()) {
+                
+                //dispatch the server to handle the request
+                let handler = self.dispatch(request.method, path: request.path)
+                
+                //add parameters to request
+                request.address = address
+                request.parameters = [:]
+                
+                let response = Response(request: request, responder: self, socket: socket)
+                handler(request, response)
+            }
         }
     }
 
