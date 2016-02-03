@@ -3,7 +3,7 @@
 A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubuntu.
 
 - [x] Insanely fast
-- [x] Asynchronous
+- [x] Single Threaded
 - [x] Beautiful syntax
 - [x] Type safe
 
