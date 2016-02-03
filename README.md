@@ -17,7 +17,7 @@ This is a work in progress and will likely change frequently, pull requests are 
 
 ## Server
 
-Starting the server takes two lines.
+Starting the server is as simple as express.
 
 `main.swift`
 ```swift
