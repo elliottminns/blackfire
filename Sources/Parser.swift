@@ -15,18 +15,21 @@ enum ParserError: ErrorType {
 class Parser {
     
     func readHttpRequest(socket: Socket) throws -> Request {
+        
         let statusLine = try socket.readLine()
+        
         let statusLineTokens = statusLine.split(" ")
+        
         if statusLineTokens.count < 3 {
             throw ParserError.InvalidStatusLine(statusLine)
         }
 
-
         let method = Request.Method(rawValue: statusLineTokens[0]) ?? .Unknown
         let request = Request(method: method)
+        
         request.path = statusLineTokens[1]
-        request.data = self.extractQueryParams(request.path)
-        request.headers = try self.readHeaders(socket)
+        request.data = extractQueryParams(request.path)
+        request.headers = try readHeaders(socket)
 
         if let cookieString = request.headers["cookie"] {
             let cookies = cookieString.split(";")
@@ -39,22 +42,45 @@ class Parser {
             }
         }
 
-        if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength) {
-            let body = try readBody(socket, size: contentLengthValue)
+        if let contentLength = request.headers["content-length"],
             
-            if let bodyString = NSString(bytes: body, length: body.count, encoding: NSUTF8StringEncoding) {
-                let postArray = bodyString.description.split("&")
-                for postItem in postArray {
-                    let pair = postItem.split("=")
-                    if pair.count == 2 {
-                        request.data[pair[0]] = pair[1]
+            let contentLengthValue = Int(contentLength) {
+                
+                let body = try readBody(socket, size: contentLengthValue)
+                
+                if let bodyString = NSString(bytes: body, length: body.count,
+                    encoding: NSUTF8StringEncoding) {
+                        let postArray = bodyString.description.split("&")
+                        for postItem in postArray {
+                            let pair = postItem.split("=")
+                            if pair.count == 2 {
+                                request.data[pair[0]] = pair[1]
+                            }
+                        }
+                }
+                
+                request.body = body
+                
+                if let parts = request.parseMultiPartFormData() {
+                    
+                    for part in parts {
+                        if let name = part.name {
+                            if let fileName = part.fileName {
+                                let file = MultipartFile(name: fileName, data: part.body)
+                                request.files[name] = file
+                            } else {
+                                
+                                let ptr = UnsafeMutablePointer<Void>(part.body)
+                                
+                                if let data = String(bytesNoCopy: ptr, length: part.body.count * sizeof(UInt8), encoding: NSUTF8StringEncoding, freeWhenDone: false) {
+                                    request.data[name] = data
+                                }
+                            }
+                            
+                        }
                     }
                 }
-            }
-
-            request.body = body
         }
-
 
         return request
     }

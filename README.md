@@ -152,7 +152,13 @@ To deploy to DigitalOcean, simply
 	- `wget` the .tar.gz from Apple
 	- Set the `export PATH` in your `~/.bashrc`
 	- (you may need to install `binutils` as well if you see `ar not found`)
-- Clone your fork of the `vapor-example` repository to the server
+- Set Blackfish as a dependency of your project in your Package.swift
+    ```swift
+    dependencies:[
+        // ...Previous dependencies
+        .Package(url: "https://github.com/elliottminns/blackfish", majorVersion: 0)
+    ]
+    ```
 - `cd` into the repository
 	- Run `swift build`
 	- Run `.build/debug/MyApp`
