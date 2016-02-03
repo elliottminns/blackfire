@@ -5,7 +5,7 @@ protocol Routing {
     func delete(path: String, handler: Route.Handler)
     func post(path: String, handler: Route.Handler)
     func patch(path: String, handler: Route.Handler)
-    func any(path: String, handler: Route.Handler)
+    func all(path: String, handler: Route.Handler)
 }
 
 public class Router: Routing {
@@ -15,7 +15,7 @@ public class Router: Routing {
     var deletes: [String: Route.Handler] = [:]
     var posts: [String: Route.Handler] = [:]
     var patches: [String: Route.Handler] = [:]
-    var anys: [String: Route.Handler] = [:]
+    var alls: [String: Route.Handler] = [:]
     
     public func get(path: String, handler: Route.Handler) {
         gets[path] = handler
@@ -37,7 +37,7 @@ public class Router: Routing {
         patches[path] = handler;
     }
     
-    public func any(path: String, handler: Route.Handler) {
-        anys[path] = handler;
+    public func all(path: String, handler: Route.Handler) {
+        alls[path] = handler;
     }
 }
