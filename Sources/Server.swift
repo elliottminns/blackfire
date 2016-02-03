@@ -10,7 +10,7 @@ public class Blackfish: SocketServer {
 
     private let router = RouteManager()
 
-    override func dispatch(method: Request.Method, path: String) -> ((Request, Response) -> Void) {
+    override func dispatch(method: Request.Method, path: String) -> (Route.Handler) {
         //check in routes
         if let result = router.route(method, path: path) {
             return result

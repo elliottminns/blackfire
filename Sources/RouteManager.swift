@@ -8,7 +8,7 @@ class RouteManager {
     
     private class Node {
         var nodes = [String: Node]()
-        var handler: ((Request, Response) -> Void)? = nil
+        var handler: Route.Handler? = nil
     }
     
     private var rootNode = Node()
@@ -32,7 +32,7 @@ class RouteManager {
         return result
     }
     
-    func register(method: String?, path: String, handler: ((Request, Response) -> Void)?) {
+    func register(method: String?, path: String, handler: Route.Handler?) {
         var pathSegments = stripQuery(path).split("/")
         if let method = method {
             pathSegments.insert(method, atIndex: 0)
@@ -43,7 +43,7 @@ class RouteManager {
         inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
     }
     
-    func route(method: Request.Method?, path: String) -> ((Request, Response) -> Void)? {
+    func route(method: Request.Method?, path: String) -> Route.Handler? {
         if let method = method {
             let pathSegments = (method.rawValue + "/" + stripQuery(path)).split("/")
             var pathSegmentsGenerator = pathSegments.generate()
@@ -73,7 +73,7 @@ class RouteManager {
         return node
     }
     
-    private func findHandler(inout node: Node, inout params: [String: String], inout generator: IndexingGenerator<[String]>) -> ((Request, Response) -> Void)? {
+    private func findHandler(inout node: Node, inout params: [String: String], inout generator: IndexingGenerator<[String]>) -> (Route.Handler)? {
         guard let pathToken = generator.next() else {
             return node.handler
         }

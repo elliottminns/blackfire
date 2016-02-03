@@ -97,7 +97,7 @@ public class SocketServer {
                 request.parameters = [:]
                 
                 let response = Response(request: request, responder: self, socket: socket)
-                handler(request, response)
+                handler(request: request, response: response)
             }
         }
     }
@@ -107,7 +107,7 @@ public class SocketServer {
 
         - returns: DispatchResponse
     */
-    func dispatch(method: Request.Method, path: String) -> ((Request, Response) -> Void) {
+    func dispatch(method: Request.Method, path: String) -> Route.Handler {
         return { request, response in
             
             response.status = .NotFound
