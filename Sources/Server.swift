@@ -102,8 +102,8 @@ extension Blackfish: Routing {
         Route.patch(path, handler: handler)
     }
     
-    public func any(path: String, handler: Route.Handler) {
-        Route.any(path, handler: handler)
+    public func all(path: String, handler: Route.Handler) {
+        Route.all(path, handler: handler)
     }
     
 }

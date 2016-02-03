@@ -22,7 +22,7 @@ public class Route {
         addHandlers(router.puts, toRoutesWithFunction: put, withPath: path)
         addHandlers(router.deletes, toRoutesWithFunction: delete, withPath: path)
         addHandlers(router.patches, toRoutesWithFunction: patch, withPath: path)
-        addHandlers(router.anys, toRoutesWithFunction: any, withPath: path)
+        addHandlers(router.alls, toRoutesWithFunction: all, withPath: path)
     }
     
     class func addHandlers(handlers: [String: Handler],
@@ -54,7 +54,7 @@ public class Route {
 		let _ = Route(method: .Delete, path: path, handler: handler)
 	}
 
-	class func any(path: String, handler: Handler) {
+	class func all(path: String, handler: Handler) {
 		self.get(path, handler: handler)
 		self.post(path, handler: handler)
 		self.put(path, handler: handler)
