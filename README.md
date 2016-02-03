@@ -40,7 +40,7 @@ If you are having trouble connecting, make sure your ports are open. Check out `
 
 ## Routing
 
-Routing in Express is simple and very similar to Express.
+Routing in Blackfish is simple and very similar to Express.
 
 `main.swift`
 ```swift
