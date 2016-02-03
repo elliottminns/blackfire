@@ -8,12 +8,21 @@ public class Blackfish: SocketServer {
 
     public static let VERSION = "0.1.4"
 
-    private let router = Router()
+    private let router = RouteManager()
 
+    override func dispatch(method: Request.Method, path: String) -> ((Request, Response) -> Void) {
+        //check in routes
+        if let result = router.route(method, path: path) {
+            return result
+        }
+
+        return super.dispatch(method, path: path)
+    }
+    
     func parseRoutes() {
         for route in Route.routes {
             self.router.register(route.method.rawValue, path: route.path) { request, response in
-
+                
                 //grab request params
                 let routePaths = route.path.split("?")[0].split("/")
                 for (index, path) in routePaths.enumerate() {
@@ -26,20 +35,25 @@ public class Blackfish: SocketServer {
                         }
                     }
                 }
-
+                
                 Session.start(request)
-
+                
                 route.handler(request: request, response: response)
             }
         }
     }
+}
 
+// MARK: - Public Methods
+
+extension Blackfish {
+    
     public func listen(port inPort: Int = 80, handler: ((error: ErrorType?) -> ())? = nil) {
         
         self.parseRoutes()
-
+        
         var port = inPort
-
+        
         if Process.arguments.count >= 2 {
             let secondArg = Process.arguments[1]
             if secondArg.hasPrefix("--port=") {
@@ -58,21 +72,15 @@ public class Blackfish: SocketServer {
             handler?(error: error)
         }
     }
-
-    override func dispatch(method: Request.Method, path: String) -> ((Request, Response) -> Void) {
-        //check in routes
-        if let result = router.route(method, path: path) {
-            return result
-        }
-
-        return super.dispatch(method, path: path)
+    
+    public func use(path path: String, router: Router) {
+        Route.createRoutesFromRouter(router, withPath: path)
     }
-
 }
 
 // MARK: - Routing
 
-extension Blackfish {
+extension Blackfish: Routing {
     
     public func get(path: String, handler: Route.Handler) {
         Route.get(path, handler: handler)
@@ -92,6 +100,10 @@ extension Blackfish {
     
     public func patch(path: String, handler: Route.Handler) {
         Route.patch(path, handler: handler)
+    }
+    
+    public func any(path: String, handler: Route.Handler) {
+        Route.any(path, handler: handler)
     }
     
 }
