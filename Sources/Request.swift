@@ -22,17 +22,25 @@ public class Request {
 
     ///HTTP Method used for request
     public let method: Method
+    
     ///URL parameters (ex: `:id`)
     public var parameters: [String: String] = [:]
+    
     ///GET or POST data
     public var data: [String: String] = [:]
 
     public var cookies: [String: String] = [:]
     
     public var path: String = ""
+    
     var headers: [String: String] = [:]
+    
     var body: [UInt8] = []
+    
     var address: String? = ""
+    
+    var files: [String: MultipartFile] = [:]
+    
     public var session: Session = Session()
 
     init(method: Method) {
@@ -40,13 +48,12 @@ public class Request {
     }
     
     func parseUrlencodedForm() -> [(String, String)] {
-        guard let contentTypeHeader = headers["content-type"] else {
-            return []
-        }
+        guard let contentTypeHeader = headers["content-type"] else { return [] }
+        
         let contentTypeHeaderTokens = contentTypeHeader.split(";").map { $0.trim() }
-        guard let contentType = contentTypeHeaderTokens.first where contentType == "application/x-www-form-urlencoded" else {
-            return []
-        }
+        
+        guard let contentType = contentTypeHeaderTokens.first where contentType == "application/x-www-form-urlencoded" else { return [] }
+        
         return String.fromUInt8(body).split("&").map { (param: String) -> (String, String) in
             let tokens = param.split("=")
             if let name = tokens.first, value = tokens.last where tokens.count == 2 {
@@ -60,6 +67,7 @@ public class Request {
     struct MultiPart {
         
         let headers: [String: String]
+        
         let body: [UInt8]
         
         var name: String? {
@@ -87,13 +95,13 @@ public class Request {
         }
     }
     
-    func parseMultiPartFormData() -> [MultiPart] {
+    func parseMultiPartFormData() -> [MultiPart]? {
         guard let contentTypeHeader = headers["content-type"] else {
-            return []
+            return nil
         }
         let contentTypeHeaderTokens = contentTypeHeader.split(";").map { $0.trim() }
         guard let contentType = contentTypeHeaderTokens.first where contentType == "multipart/form-data" else {
-            return []
+            return nil
         }
         var boundary: String? = nil
         contentTypeHeaderTokens.forEach({
@@ -105,7 +113,7 @@ public class Request {
         if let boundary = boundary where boundary.utf8.count > 0 {
             return parseMultiPartFormData(body, boundary: "--\(boundary)")
         }
-        return []
+        return nil
     }
     
     private func parseMultiPartFormData(data: [UInt8], boundary: String) -> [MultiPart] {
