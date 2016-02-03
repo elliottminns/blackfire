@@ -151,8 +151,8 @@ extension SocketServer: Responder {
         
         let socket = response.socket
         
-        defer { [socket]
-            Session.close(request: response.request, response: response)
+        defer { socket
+//            Session.close(request: response.request, response: response)
             socket.release()
         }
         
