@@ -2,7 +2,7 @@ public class Route {
 
 	static var routes: [Route] = []
 
-	public typealias Handler = ((request: Request, response: Response) -> Void)
+    public typealias Handler = ((request: Request, response: Response) -> Void)
 
 	let method: Request.Method
 	let path: String
