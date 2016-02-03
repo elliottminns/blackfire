@@ -1,7 +1,7 @@
 import Foundation
 
-public protocol ResponseWriter {
-    func write(data: [UInt8])
+public protocol Responder: class {
+    func sendResponse(response: Response)
 }
 
 /**
@@ -16,18 +16,17 @@ public class Response {
         case NotSupported
     }
 
-    typealias WriteClosure = (ResponseWriter) throws -> Void
-    typealias Writer = Socket throws -> Void
-
+    public var contentType: ContentType
     public var status: Status
     public var body: [UInt8]
-    var contentType: ContentType
     public var cookies: [String: String] = [:]
+    
     unowned let request: Request
-    unowned let socket: Socket
+    unowned let responder: Responder
+    let socket: Socket
 
-    enum ContentType {
-        case Text, Html, Json, None
+    public enum ContentType {
+        case Text, HTML, JSON, None
     }
 
     public enum Status {
@@ -91,12 +90,6 @@ public class Response {
         }
     }
 
-    func content() -> (length: Int, writeClosure: WriteClosure?) {
-        return (self.body.count, { writer in
-            writer.write(self.body)
-        })
-    }
-
     func headers() -> [String: String] {
         var headers = ["Server" : "Blackfish \(Blackfish.VERSION)"]
 
@@ -113,9 +106,9 @@ public class Response {
         }
 
         switch self.contentType {
-        case .Json:
+        case .JSON:
             headers["Content-Type"] = "application/json"
-        case .Html:
+        case .HTML:
             headers["Content-Type"] = "text/html"
         default:
             break
@@ -124,11 +117,12 @@ public class Response {
         return headers
     }
 
-    init(request: Request, socket: Socket) {
+    init(request: Request, responder: Responder, socket: Socket) {
         self.request = request
         self.status = .OK
         self.contentType = .Text
         self.body = []
+        self.responder = responder
         self.socket = socket
     }
 }
@@ -139,35 +133,7 @@ extension Response {
 
     public func send() {
         
-        defer {
-//            Session.close(request: request, response: self)
-            socket.release()
-        }
-        
-        do {
-            try socket.writeUTF8("HTTP/1.1 \(status.code) \(reasonPhrase)\r\n")
-            
-            var headers = self.headers()
-            
-            if body.count >= 0 {
-                headers["Content-Length"] = "\(body.count)"
-            }
-            
-            if true && body.count != -1 {
-                headers["Connection"] = "keep-alive"
-            }
-            
-            for (name, value) in headers {
-                try socket.writeUTF8("\(name): \(value)\r\n")
-            }
-            
-            try socket.writeUTF8("\r\n")
-            
-            try socket.writeUInt8(body)
-            
-        } catch {
-            print(error)
-        }
+        responder.sendResponse(self)
     }
 
     public func send(text text: String) {
@@ -182,7 +148,7 @@ extension Response {
         
         let text = "{\n\t\"error\": true,\n\t\"message\":\"\(error)\"\n}"
         body = [UInt8](text.utf8)
-        contentType = .Json
+        contentType = .JSON
         status = .Error
         send()
     }
@@ -191,9 +157,41 @@ extension Response {
         
         let serialised = "<html><meta charset=\"UTF-8\"><body>\(html)</body></html>"
         body = [UInt8](serialised.utf8)
-        contentType = .Html
+        contentType = .HTML
         status = .OK
         send()
+    }
+    
+    public func send(json json: Any) {
+        
+        let data: [UInt8]
+        
+        if let jsonObject = json as? AnyObject {
+            
+            guard NSJSONSerialization.isValidJSONObject(jsonObject) else {
+                self.send(error: "Server error")
+                return
+            }
+            
+            do {
+                let json = try NSJSONSerialization.dataWithJSONObject(jsonObject, options: NSJSONWritingOptions.PrettyPrinted)
+                data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
+            } catch {
+                self.send(error: "Server error")
+                return
+            }
+        } else {
+            //fall back to manual serializer
+            let string = JSONSerializer.serialize(json)
+            data = [UInt8](string.utf8)
+        }
+        
+        
+        contentType = .JSON
+        status = .OK
+        body = data
+        
+        self.send()
     }
     
     public func render(path: String) {
@@ -202,7 +200,7 @@ extension Response {
         
         do {
             body = try htmlView.render("Resources/" + path)
-            contentType = .Html
+            contentType = .HTML
             status = .OK
         } catch {
             status = .Error
