@@ -10,15 +10,16 @@ import Foundation
 
 public class SocketServer {
 
-    ///A socket open to the port the server is listening on. Usually 80.
+    /// A socket open to the port the server is listening on. Usually 80.
     private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
 
-    ///A set of connected client sockets.
+    /// A set of connected client sockets.
     private var clientSockets: Set<Socket> = []
 
-    ///The shared lock for notifying new connections.
+    /// The shared lock for notifying new connections.
     private let clientSocketsLock = NSLock()
     
+    /// The queue to dispatch requests on.
     private var queue: dispatch_queue_t
     
     init() {
@@ -95,18 +96,8 @@ public class SocketServer {
             request.address = address
             request.parameters = [:]
 
-            let response = Response(request: request, socket: socket)
+            let response = Response(request: request, responder: self, socket: socket)
             handler(request, response)
-//            
-//            var keepConnection = parser.supportsKeepAlive(request.headers)
-//            
-//            do {
-//                keepConnection = try self.respond(socket, response: response, keepAlive: keepConnection)
-//            } catch {
-//                print("Failed to send response: \(error)")
-//                break
-//            }
-//            if !keepConnection { break }
         }
     }
 
@@ -151,5 +142,42 @@ public class SocketServer {
         handle.lock()
         closure()
         handle.unlock();
+    }
+}
+
+extension SocketServer: Responder {
+    public func sendResponse(response: Response) {
+        
+        let socket = response.socket
+        
+        defer { [socket]
+            Session.close(request: response.request, response: response)
+            socket.release()
+        }
+        
+        do {
+            try socket.writeUTF8("HTTP/1.1 \(response.status.code) \(response.reasonPhrase)\r\n")
+            
+            var headers = response.headers()
+            
+            if response.body.count >= 0 {
+                headers["Content-Length"] = "\(response.body.count)"
+            }
+            
+            if true && response.body.count != -1 {
+                headers["Connection"] = "keep-alive"
+            }
+            
+            for (name, value) in headers {
+                try socket.writeUTF8("\(name): \(value)\r\n")
+            }
+            
+            try socket.writeUTF8("\r\n")
+            
+            try socket.writeUInt8(response.body)
+            
+        } catch {
+            print(error)
+        }
     }
 }
