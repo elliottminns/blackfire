@@ -1,5 +1,6 @@
 
 protocol Routing {
+    func use(middleware middleware: Middleware)
     func get(path: String, handler: Route.Handler)
     func put(path: String, handler: Route.Handler)
     func delete(path: String, handler: Route.Handler)
@@ -10,12 +11,17 @@ protocol Routing {
 
 public class Router: Routing {
     
+    var middleware: [Middleware] = []
     var gets: [String: Route.Handler] = [:]
     var puts: [String: Route.Handler] = [:]
     var deletes: [String: Route.Handler] = [:]
     var posts: [String: Route.Handler] = [:]
     var patches: [String: Route.Handler] = [:]
     var alls: [String: Route.Handler] = [:]
+    
+    public func use(middleware middleware: Middleware) {
+        self.middleware.append(middleware)
+    }
     
     public func get(path: String, handler: Route.Handler) {
         gets[path] = handler
