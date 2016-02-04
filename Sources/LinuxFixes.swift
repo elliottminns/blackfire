@@ -119,7 +119,7 @@ var _module_dispatch = true
 #if os(Linux)
     import Glibc
     
-    typealias dispatch_queue_t = Int
+    public typealias dispatch_queue_t = Int
     
     public let DISPATCH_QUEUE_CONCURRENT = 0, DISPATCH_QUEUE_PRIORITY_HIGH = 0, DISPATCH_QUEUE_PRIORITY_LOW = 0, DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0, DISPATCH_QUEUE_SERIAL = 0
     
