@@ -31,25 +31,20 @@ class MiddlewareManager {
     
     func route(method: Request.Method?, path: String) -> [Middleware.Handler] {
         
-        if let method = method {
-            let pathSegments = (method.rawValue + "/" + stripQuery(path)).split("/")
-            var pathSegmentsGenerator = pathSegments.generate()
-            var params = [String:String]()
-            if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
-                return [handler]
-            }
-        }
+        let pathSegments: [String]
         
-        let pathSegments = ("*/" + stripQuery(path)).split("/")
+        if let method = method {
+            pathSegments = (method.rawValue + "/" + stripQuery(path)).split("/")
+        } else {
+            pathSegments = ("*/" + stripQuery(path)).split("/")
+        }
         
         var pathSegmentsGenerator = pathSegments.generate()
         
         var params = [String:String]()
         
-        if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
-            return [handler]
-        }
-        return []
+        return findHandlers(&rootNode, params: &params, generator: &pathSegmentsGenerator,
+            handlers: []).reverse()
     }
     
     private func inflate(inout node: Node, inout generator: IndexingGenerator<[String]>) -> Node {
@@ -70,27 +65,44 @@ class MiddlewareManager {
         return node
     }
     
-    private func findHandler(inout node: Node, inout params: [String: String],
-        inout generator: IndexingGenerator<[String]>) -> (Middleware.Handler)? {
+    private func findHandlers(inout node: Node, inout params: [String: String],
+        inout generator: IndexingGenerator<[String]>, handlers: [Middleware.Handler]) -> [Middleware.Handler] {
             
-            guard let pathToken = generator.next() else { return node.handler }
+            var handlers = handlers
+            
+            guard let pathToken = generator.next() else {
+                return handlers
+            }
             
             let variableNodes = node.nodes.filter { $0.0.characters.first == ":" }
             
             if let variableNode = variableNodes.first {
                 params[variableNode.0] = pathToken
-                return findHandler(&node.nodes[variableNode.0]!, params: &params, generator: &generator)
+                return findHandlers(&node.nodes[variableNode.0]!, params: &params, generator: &generator, handlers: handlers)
             }
             
-            if let _ = node.nodes[pathToken] {
-                return findHandler(&node.nodes[pathToken]!, params: &params, generator: &generator)
+            if let handlerNode = node.nodes[pathToken] {
+                
+                if let handler = handlerNode.handler {
+                    handlers.append(handler)
+                }
+                
+                let nextHandlers = findHandlers(&node.nodes[pathToken]!, params: &params, generator: &generator, handlers: handlers)
+                
+                return nextHandlers
             }
             
-            if let _ = node.nodes["*"] {
-                return findHandler(&node.nodes["*"]!, params: &params, generator: &generator)
+            if let handlerNode = node.nodes["*"] {
+                
+                if let handler = handlerNode.handler {
+                    handlers.append(handler)
+                }
+                let nextHandlers = findHandlers(&node.nodes["*"]!, params: &params, generator: &generator,
+                    handlers: handlers)
+                return nextHandlers
             }
             
-            return nil
+            return handlers
     }
     
     private func stripQuery(path: String) -> String {
