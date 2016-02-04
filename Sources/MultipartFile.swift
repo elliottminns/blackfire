@@ -17,10 +17,9 @@ struct MultipartFile {
     func saveToTemporaryDirectory(filename: String, completion: ((path: String?, error: ErrorType?) -> Void)) {
         
         #if os(Linux)
-            
-            let path = NSTemporaryDirectory() + "\(filename)"
-        #else
             let path = "/var/tmp"
+        #else
+            let path = NSTemporaryDirectory() + "\(filename)"
         #endif
     
         saveToPath(path, completion: completion)
