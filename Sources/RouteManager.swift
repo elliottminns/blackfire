@@ -11,39 +11,54 @@ class RouteManager {
         var handler: Route.Handler? = nil
     }
     
-    private var rootNode = Node()
+    private var rootNode: Node
+    
+    init() {
+        rootNode = Node()
+    }
 
-    func routes() -> [String] {
+    var routes: [String] {
+        
         var routes = [String]()
+        
         for (_, child) in rootNode.nodes {
             routes.appendContentsOf(routesForNode(child));
         }
+        
         return routes
     }
     
     private func routesForNode(node: Node, prefix: String = "") -> [String] {
         var result = [String]()
+        
         if node.handler != nil {
             result.append(prefix)
         }
+        
         for (key, child) in node.nodes {
             result.appendContentsOf(routesForNode(child, prefix: prefix + "/" + key));
         }
+        
         return result
     }
     
     func register(method: String?, path: String, handler: Route.Handler?) {
+        
         var pathSegments = stripQuery(path).split("/")
+        
         if let method = method {
             pathSegments.insert(method, atIndex: 0)
         } else {
             pathSegments.insert("*", atIndex: 0)
         }
+        
         var pathSegmentsGenerator = pathSegments.generate()
+        
         inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
     }
     
     func route(method: Request.Method?, path: String) -> Route.Handler? {
+        
         if let method = method {
             let pathSegments = (method.rawValue + "/" + stripQuery(path)).split("/")
             var pathSegmentsGenerator = pathSegments.generate()
@@ -52,9 +67,13 @@ class RouteManager {
                 return handler
             }
         }
+        
         let pathSegments = ("*/" + stripQuery(path)).split("/")
+        
         var pathSegmentsGenerator = pathSegments.generate()
+        
         var params = [String:String]()
+        
         if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
             return handler
         }
@@ -73,21 +92,26 @@ class RouteManager {
         return node
     }
     
-    private func findHandler(inout node: Node, inout params: [String: String], inout generator: IndexingGenerator<[String]>) -> (Route.Handler)? {
-        guard let pathToken = generator.next() else {
-            return node.handler
-        }
+    private func findHandler(inout node: Node, inout params: [String: String],
+        inout generator: IndexingGenerator<[String]>) -> (Route.Handler)? {
+            
+        guard let pathToken = generator.next() else { return node.handler }
+            
         let variableNodes = node.nodes.filter { $0.0.characters.first == ":" }
+            
         if let variableNode = variableNodes.first {
             params[variableNode.0] = pathToken
             return findHandler(&node.nodes[variableNode.0]!, params: &params, generator: &generator)
         }
+            
         if let _ = node.nodes[pathToken] {
             return findHandler(&node.nodes[pathToken]!, params: &params, generator: &generator)
         }
+            
         if let _ = node.nodes["*"] {
             return findHandler(&node.nodes["*"]!, params: &params, generator: &generator)
         }
+            
         return nil
     }
     

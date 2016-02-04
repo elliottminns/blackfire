@@ -89,15 +89,11 @@ public class SocketServer {
             
             dispatch_async(dispatch_get_main_queue()) {
                 
-                //dispatch the server to handle the request
-                let handler = self.dispatch(request.method, path: request.path)
-                
-                //add parameters to request
                 request.address = address
                 request.parameters = [:]
                 
                 let response = Response(request: request, responder: self, socket: socket)
-                handler(request: request, response: response)
+                self.dispatch(request: request, response: response, handlers: nil)
             }
         }
     }
@@ -107,13 +103,9 @@ public class SocketServer {
 
         - returns: DispatchResponse
     */
-    func dispatch(method: Request.Method, path: String) -> Route.Handler {
-        return { request, response in
-            
-            response.status = .NotFound
-            response.send(text: "Page not found")
-            
-        }
+    func dispatch(request request: Request, response: Response, handlers: [Middleware.Handler]?) {
+        response.status = .NotFound
+        response.send(text: "Page not found")
     }
 
     /**
