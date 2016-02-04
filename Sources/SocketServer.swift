@@ -22,7 +22,10 @@ public class SocketServer {
     /// The queue to dispatch requests on.
     private var queue: dispatch_queue_t
     
+    private var mainqueue: dispatch_queue_t
+    
     init() {
+        mainqueue = dispatch_get_main_queue()
         queue = dispatch_queue_create("blackfish.queue.request", DISPATCH_QUEUE_CONCURRENT)
     }
 
@@ -89,7 +92,7 @@ public class SocketServer {
 
         if let request = try? parser.readHttpRequest(socket) {
             
-            dispatch_async(dispatch_get_main_queue()) {
+            dispatch_async(mainqueue) {
                 
                 //dispatch the server to handle the request
                 let handler = self.dispatch(request.method, path: request.path)

@@ -121,13 +121,13 @@ var _module_dispatch = true
     
     typealias dispatch_queue_t = Int
     
-    public let DISPATCH_QUEUE_CONCURRENT = 0, DISPATCH_QUEUE_PRIORITY_HIGH = 0, DISPATCH_QUEUE_PRIORITY_LOW = 0, DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0
+    public let DISPATCH_QUEUE_CONCURRENT = 0, DISPATCH_QUEUE_PRIORITY_HIGH = 0, DISPATCH_QUEUE_PRIORITY_LOW = 0, DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0, DISPATCH_QUEUE_SERIAL = 0
     
-    public func dispatch_get_global_queue( type: Int, _ flags: Int ) -> Int {
+    public func dispatch_get_global_queue( type: Int, _ flags: Int ) -> dispatch_queue_t {
         return type
     }
     
-    public func dispatch_queue_create( name: String, _ type: Int ) -> Int {
+    public func dispatch_queue_create( name: String, _ type: Int ) -> dispatch_queue_t {
         return type
     }
     
@@ -151,7 +151,7 @@ var _module_dispatch = true
         return arg
     }
     
-    public func dispatch_async( queue: Int, _ block: () -> () ) {
+    public func dispatch_async( queue: dispatch_queue_t, _ block: () -> () ) {
         let holder = Unmanaged.passRetained( pthreadBlock( block: block ) )
         let pointer = UnsafeMutablePointer<Void>( holder.toOpaque() )
         #if os(Linux)
@@ -178,6 +178,10 @@ var _module_dispatch = true
             sleep( UInt32(Int(delay)/NSEC_PER_SEC) )
             block()
         } )
+    }
+    
+    public func dispatch_get_main_queue() -> dispatch_queue_t {
+        return 0
     }
     
 #endif
