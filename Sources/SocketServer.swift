@@ -31,6 +31,7 @@ public class SocketServer {
         - parameter listenPort: The port to listen on.
     */
     func start(listenPort: Int) throws {
+
         
         // Stop the server if it's running
         self.stop()
