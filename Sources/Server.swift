@@ -6,15 +6,15 @@ import Foundation
 
 public class Blackfish: SocketServer {
 
-    public static let VERSION = "0.1.4"
+    public static let VERSION = "0.1.2"
 
     private let middlewareManager: MiddlewareManager
     
-    private let router: RouteManager
+    private let routeManager: RouteManager
 
     public override init() {
         middlewareManager = MiddlewareManager()
-        router = RouteManager()
+        routeManager = RouteManager()
         super.init()
     }
     
@@ -29,7 +29,7 @@ public class Blackfish: SocketServer {
                 })
                 
             } else {
-                if let result = router.route(request.method, path: request.path) {
+                if let result = routeManager.routeSingle(request) {
                     result(request: request, response: response)
                 } else {
                     super.dispatch(request: request, response: response, handlers: nil)
@@ -37,7 +37,7 @@ public class Blackfish: SocketServer {
             }
             
         } else {
-            let handlers = middlewareManager.route(request.method, path: request.path)
+            let handlers = middlewareManager.route(request)
             dispatch(request: request, response: response, handlers: handlers)
         }
     }
@@ -46,7 +46,7 @@ public class Blackfish: SocketServer {
         
         for route in Route.routes {
             
-            self.router.register(route.method.rawValue, path: route.path) { request, response in
+            self.routeManager.register(route.method.rawValue, driver: route) { request, response in
                 
                 // Grab request params
                 let routePaths = route.path.split("?")[0].split("/")
@@ -109,7 +109,7 @@ extension Blackfish {
 extension Blackfish: Routing {
     
     public func use(middleware middleware: Middleware) {
-        middlewareManager.register(middleware: middleware)
+        middlewareManager.register(middleware)
     }
     
     public func get(path: String, handler: Route.Handler) {
