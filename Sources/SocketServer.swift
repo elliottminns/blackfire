@@ -99,7 +99,7 @@ public class SocketServer {
             dispatch_async(mainqueue) {
                 
                 #if os(Linux)
-                    mainLock.lock()
+                    self.mainLock.lock()
                 #endif
                 
                 request.address = address
@@ -109,7 +109,7 @@ public class SocketServer {
                 self.dispatch(request: request, response: response, handlers: nil)
                 
                 #if os(Linux)
-                    mainLock.unlock()
+                    self.mainLock.unlock()
                 #endif
             }
         }
