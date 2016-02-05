@@ -1,6 +1,3 @@
-//
-// Based on HttpServer from Swifter (https://github.com/glock45/swifter) by Damian Kołakowski.
-//
 
 import Foundation
 
@@ -20,7 +17,9 @@ public class Blackfish: SocketServer {
     
     override func dispatch(request request: Request, response: Response, handlers: [Middleware.Handler]?) {
         
-        if var handlers = handlers {
+        if let handlers = handlers {
+            
+            var handlers = handlers
             
             if let handler = handlers.popLast() {
                 
