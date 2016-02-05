@@ -1,34 +1,55 @@
-//
-// Based on HttpServer from Swifter (https://github.com/glock45/swifter) by Damian Kołakowski.
-//
 
 import Foundation
 
 public class Blackfish: SocketServer {
 
-    public static let VERSION = "0.1.4"
+    public static let VERSION = "0.1.2"
 
-    private let router = RouteManager()
+    private let middlewareManager: MiddlewareManager
+    
+    private let routeManager: RouteManager
 
     public override init() {
+        middlewareManager = MiddlewareManager()
+        routeManager = RouteManager()
         super.init()
     }
-
-    override func dispatch(method: Request.Method, path: String) -> (Route.Handler) {
-        //check in routes
-        if let result = router.route(method, path: path) {
-            return result
+    
+    override func dispatch(request request: Request, response: Response, handlers: [Middleware.Handler]?) {
+        
+        if let handlers = handlers {
+            
+            var handlers = handlers
+            
+            if let handler = handlers.popLast() {
+                
+                handler(request: request, response: response, next: { () -> () in
+                    self.dispatch(request: request, response: response, handlers: handlers)
+                })
+                
+            } else {
+                if let result = routeManager.routeSingle(request) {
+                    result(request: request, response: response)
+                } else {
+                    super.dispatch(request: request, response: response, handlers: nil)
+                }
+            }
+            
+        } else {
+            let handlers = middlewareManager.route(request)
+            dispatch(request: request, response: response, handlers: handlers)
         }
-
-        return super.dispatch(method, path: path)
     }
     
     func parseRoutes() {
+        
         for route in Route.routes {
-            self.router.register(route.method.rawValue, path: route.path) { request, response in
+            
+            self.routeManager.register(route.method.rawValue, driver: route) { request, response in
                 
-                //grab request params
+                // Grab request params
                 let routePaths = route.path.split("?")[0].split("/")
+                
                 for (index, path) in routePaths.enumerate() {
                     if path.hasPrefix(":") {
                         let requestPaths = request.path.split("/")
@@ -54,7 +75,7 @@ extension Blackfish {
     
     public func listen(port inPort: Int = 80, handler: ((error: ErrorType?) -> ())? = nil) {
         
-        self.parseRoutes()
+        parseRoutes()
         
         var port = inPort
         
@@ -85,6 +106,10 @@ extension Blackfish {
 // MARK: - Routing
 
 extension Blackfish: Routing {
+    
+    public func use(middleware middleware: Middleware) {
+        middlewareManager.register(middleware)
+    }
     
     public func get(path: String, handler: Route.Handler) {
         Route.get(path, handler: handler)

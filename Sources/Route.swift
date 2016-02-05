@@ -63,3 +63,7 @@ public class Route {
 	}
 
 }
+
+extension Route: Driver {
+
+}

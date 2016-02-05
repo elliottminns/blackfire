@@ -154,6 +154,45 @@ var cookies: [String: String]
 var session: Session
 ```
 
+### Middleware
+
+Similar to Express, Blackfish provides Middleware which can be used to extend the request stack.
+
+Below is an example of a validation Middleware, that validates every request before passing it down the stack.
+
+```swift
+
+let validator = Middleware { (request, response, next) in
+    
+    // Some validation logic
+    if validator.validate(request) {
+
+        // Go to the next call in the stack.
+        next()
+
+    } else {
+
+        // Return an error and don't call anything else in the stack.
+        response.send(error: "Request was unauthorized")
+    }
+}
+
+```
+
+You can also use middleware on a path which will add it to that path and further on.
+
+```swift
+
+let userDetail = Middleware(path: "/user") { (request, response, next) in {
+    let user = findUserById(request.data["userId"])
+    request.data["user"] = user
+    next()
+}
+
+```
+
+Using Middleware can allow you endless possibilities with a simple interface.
+
 ### Session
 
 Sessions will be kept track of using the `blackfish-session` cookie. The default (and currently only) session driver is `.Memory`.

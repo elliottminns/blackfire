@@ -39,7 +39,7 @@ public class Request {
     
     var address: String? = ""
     
-    var files: [String: MultipartFile] = [:]
+    var files: [String: [MultipartFile]] = [:]
     
     public var session: Session = Session()
 
