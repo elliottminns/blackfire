@@ -11,4 +11,8 @@ class MiddlewareManager {
 
 extension MiddlewareManager: RouteDriver {
     
+    func hasMultiples() -> Bool {
+        return true
+    }
+    
 }

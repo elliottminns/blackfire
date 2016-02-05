@@ -13,8 +13,13 @@ class RouteManager {
     init() {
         pathTree = PathTree<Route.Handler>()
     }
+    
 }
 
 extension RouteManager: RouteDriver {
+    
+    func hasMultiples() -> Bool {
+        return false
+    }
     
 }

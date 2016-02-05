@@ -10,15 +10,20 @@ import Foundation
 
 private class Node<T> {
     var nodes = [String: Node<T>]()
-    var handler: T? = nil
+    var handler: [T] = []
 }
 
 class PathTree<T> {
     
     private var rootNode = Node<T>()
     
-    func addHandler(handler: T, toPath path: String) {
-        inflateTreeToPath(path).handler = handler
+    func addHandler(handler: T, toPath path: String, overwrite: Bool) {
+        let node = inflateTreeToPath(path)
+        if overwrite {
+            node.handler = [handler]
+        } else {
+            node.handler.append(handler)
+        }
     }
     
     private func inflateTreeToPath(path: String) -> Node<T> {
@@ -70,9 +75,7 @@ class PathTree<T> {
             
             guard let pathToken = generator.next() else {
                 if exclude {
-                    if let handler = node.handler {
-                        values.append(handler)
-                    }
+                    values.appendContentsOf(node.handler)
                 }
                 return values
             }
@@ -87,9 +90,7 @@ class PathTree<T> {
             if let handlerNode = node.nodes[pathToken] {
                 
                 if !exclude {
-                    if let handler = handlerNode.handler {
-                        values.append(handler)
-                    }
+                    values.appendContentsOf(handlerNode.handler)
                 }
                 
                 let nextValues = findValues(&node.nodes[pathToken]!, params: &params, generator: &generator, values: values, exclude: exclude)
@@ -99,9 +100,7 @@ class PathTree<T> {
             
             if let handlerNode = node.nodes["*"] {
                 if !exclude {
-                    if let value = handlerNode.handler {
-                        values.append(value)
-                    }
+                    values.appendContentsOf(handlerNode.handler)
                 }
                 let nextValues = findValues(&node.nodes["*"]!, params: &params, generator: &generator,
                     values: values, exclude: exclude)

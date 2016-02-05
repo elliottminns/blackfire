@@ -14,13 +14,15 @@ protocol RouteDriver {
     typealias DriverType: Driver
     
     var pathTree: PathTree<DriverType.Handler> { get }
+    
+    func hasMultiples() -> Bool
 }
 
 extension RouteDriver {
     
     func register(driver: DriverType) {
         let path = "*/" + driver.path
-        pathTree.addHandler(driver.handler, toPath: path)
+        pathTree.addHandler(driver.handler, toPath: path, overwrite: !hasMultiples())
     }
     
     func register(method: String?, driver: DriverType, handler: DriverType.Handler) {
@@ -32,7 +34,7 @@ extension RouteDriver {
             path = "*/" + driver.path
         }
         
-        pathTree.addHandler(handler, toPath: path)
+        pathTree.addHandler(handler, toPath: path, overwrite: hasMultiples())
     }
     
     func routeSingle(request: Request) -> DriverType.Handler? {
