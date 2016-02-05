@@ -36,7 +36,15 @@ extension RouteDriver {
     }
     
     func routeSingle(request: Request) -> DriverType.Handler? {
-        return self.route(request).last
+        let path: String
+        
+        if request.method != Request.Method.Unknown {
+            path = request.method.rawValue + "/" + request.path
+        } else {
+            path = "*/" + request.path
+        }
+        
+        return pathTree.findValue(path)
     }
 
     func route(request: Request) -> [DriverType.Handler] {
