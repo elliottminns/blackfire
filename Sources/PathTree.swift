@@ -47,6 +47,14 @@ class PathTree<T> {
         return node
     }
     
+    func findValue(path: String) -> T? {
+        var generator = segmentsForPath(path)
+        
+        var params = [String:String]()
+        
+        return findValues(&rootNode, params: &params, generator: &generator, values: [], exclude: true).first
+    }
+    
     func findValues(path: String) -> [T] {
         
         var generator = segmentsForPath(path)
@@ -56,11 +64,16 @@ class PathTree<T> {
         return findValues(&rootNode, params: &params, generator: &generator, values: [])
     }
     
-    private func findValues(inout node: Node<T>, inout params: [String: String], inout generator: IndexingGenerator<[String]>, values: [T]) -> [T] {
+    private func findValues(inout node: Node<T>, inout params: [String: String], inout generator: IndexingGenerator<[String]>, values: [T], exclude: Bool = false) -> [T] {
             
             var values = values
             
             guard let pathToken = generator.next() else {
+                if exclude {
+                    if let handler = node.handler {
+                        values.append(handler)
+                    }
+                }
                 return values
             }
             
@@ -73,8 +86,10 @@ class PathTree<T> {
             
             if let handlerNode = node.nodes[pathToken] {
                 
-                if let handler = handlerNode.handler {
-                    values.append(handler)
+                if !exclude {
+                    if let handler = handlerNode.handler {
+                        values.append(handler)
+                    }
                 }
                 
                 let nextValues = findValues(&node.nodes[pathToken]!, params: &params, generator: &generator, values: values)
@@ -83,9 +98,10 @@ class PathTree<T> {
             }
             
             if let handlerNode = node.nodes["*"] {
-                
-                if let value = handlerNode.handler {
-                    values.append(value)
+                if !exclude {
+                    if let value = handlerNode.handler {
+                        values.append(value)
+                    }
                 }
                 let nextValues = findValues(&node.nodes["*"]!, params: &params, generator: &generator,
                     values: values)
