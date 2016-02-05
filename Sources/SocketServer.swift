@@ -19,6 +19,10 @@ public class SocketServer {
     /// The shared lock for notifying new connections.
     private let clientSocketsLock = NSLock()
     
+    #if os(Linux)
+    private let mainLock = NSLock()
+    #endif
+    
     /// The queue to dispatch requests on.
     private var queue: dispatch_queue_t
     
@@ -94,11 +98,19 @@ public class SocketServer {
             
             dispatch_async(mainqueue) {
                 
+                #if os(Linux)
+                    mainLock.lock()
+                #endif
+                
                 request.address = address
                 request.parameters = [:]
                 
                 let response = Response(request: request, responder: self, socket: socket)
                 self.dispatch(request: request, response: response, handlers: nil)
+                
+                #if os(Linux)
+                    mainLock.unlock()
+                #endif
             }
         }
     }
