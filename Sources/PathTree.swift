@@ -81,7 +81,7 @@ class PathTree<T> {
             
             if let variableNode = variableNodes.first {
                 params[variableNode.0] = pathToken
-                return findValues(&node.nodes[variableNode.0]!, params: &params, generator: &generator, values: values)
+                return findValues(&node.nodes[variableNode.0]!, params: &params, generator: &generator, values: values, exclude: exclude)
             }
             
             if let handlerNode = node.nodes[pathToken] {
@@ -92,7 +92,7 @@ class PathTree<T> {
                     }
                 }
                 
-                let nextValues = findValues(&node.nodes[pathToken]!, params: &params, generator: &generator, values: values)
+                let nextValues = findValues(&node.nodes[pathToken]!, params: &params, generator: &generator, values: values, exclude: exclude)
                 
                 return nextValues
             }
@@ -104,7 +104,7 @@ class PathTree<T> {
                     }
                 }
                 let nextValues = findValues(&node.nodes["*"]!, params: &params, generator: &generator,
-                    values: values)
+                    values: values, exclude: exclude)
                 return nextValues
             }
             
