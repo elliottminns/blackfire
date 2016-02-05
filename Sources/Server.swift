@@ -12,7 +12,7 @@ public class Blackfish: SocketServer {
     
     private let router: RouteManager
 
-    override init() {
+    public override init() {
         middlewareManager = MiddlewareManager()
         router = RouteManager()
         super.init()
