@@ -1,0 +1,617 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4F6A6DC31C657DFE00368F5D /* Blackfish-OSX.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6A6DC21C657DFE00368F5D /* Blackfish-OSX.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F6A6DCA1C657DFE00368F5D /* Blackfish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F6A6DC01C657DFE00368F5D /* Blackfish.framework */; };
+		4F6A6DD71C657E4800368F5D /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC20F1C639AAD006FC98B /* Middleware.swift */; };
+		4F6A6DD81C657E4800368F5D /* MiddlewareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2101C639AAD006FC98B /* MiddlewareManager.swift */; };
+		4F6A6DD91C657E4800368F5D /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E3E1C60C9AB00CDF49D /* Renderer.swift */; };
+		4F6A6DDA1C657E4800368F5D /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E1D1C60C55200CDF49D /* JSONSerializer.swift */; };
+		4F6A6DDB1C657E4800368F5D /* LinuxFixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E1E1C60C55200CDF49D /* LinuxFixes.swift */; };
+		4F6A6DDC1C657E4800368F5D /* MemorySessionDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E1F1C60C55200CDF49D /* MemorySessionDriver.swift */; };
+		4F6A6DDD1C657E4800368F5D /* MultipartFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2051C625FBE006FC98B /* MultipartFile.swift */; };
+		4F6A6DDE1C657E4800368F5D /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E201C60C55200CDF49D /* Parser.swift */; };
+		4F6A6DDF1C657E4800368F5D /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E211C60C55200CDF49D /* Request.swift */; };
+		4F6A6DE01C657E4800368F5D /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E221C60C55200CDF49D /* Response.swift */; };
+		4F6A6DE11C657E4800368F5D /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E241C60C55200CDF49D /* Route.swift */; };
+		4F6A6DE21C657E4800368F5D /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2071C62B09E006FC98B /* Router.swift */; };
+		4F6A6DE31C657E4800368F5D /* RouteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E251C60C55200CDF49D /* RouteManager.swift */; };
+		4F6A6DE41C657E4800368F5D /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E261C60C55200CDF49D /* Server.swift */; };
+		4F6A6DE51C657E4800368F5D /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E271C60C55200CDF49D /* Session.swift */; };
+		4F6A6DE61C657E4800368F5D /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E281C60C55200CDF49D /* Socket.swift */; };
+		4F6A6DE71C657E4800368F5D /* SocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E291C60C55200CDF49D /* SocketServer.swift */; };
+		4F6A6DE81C657E4800368F5D /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E2A1C60C55200CDF49D /* StringExtensions.swift */; };
+		4F6A6DE91C657E4800368F5D /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E2B1C60C55200CDF49D /* Tests.swift */; };
+		4F6A6DEA1C657E4800368F5D /* RouteDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2131C64E17A006FC98B /* RouteDriver.swift */; };
+		4F6A6DEB1C657E4800368F5D /* PathTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2151C64E31A006FC98B /* PathTree.swift */; };
+		4F6A6DED1C657EDC00368F5D /* PublicInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6A6DEC1C657EDC00368F5D /* PublicInterfaceTests.swift */; };
+		4FDAC2061C625FBE006FC98B /* MultipartFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2051C625FBE006FC98B /* MultipartFile.swift */; };
+		4FDAC2081C62B09E006FC98B /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2071C62B09E006FC98B /* Router.swift */; };
+		4FDAC2111C639AAD006FC98B /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC20F1C639AAD006FC98B /* Middleware.swift */; };
+		4FDAC2121C639AAD006FC98B /* MiddlewareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2101C639AAD006FC98B /* MiddlewareManager.swift */; };
+		4FDAC2141C64E17A006FC98B /* RouteDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2131C64E17A006FC98B /* RouteDriver.swift */; };
+		4FDAC2161C64E31A006FC98B /* PathTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2151C64E31A006FC98B /* PathTree.swift */; };
+		4FE66DCC1C60C29800CDF49D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66DCB1C60C29800CDF49D /* main.swift */; };
+		4FE66E2E1C60C55200CDF49D /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E1D1C60C55200CDF49D /* JSONSerializer.swift */; };
+		4FE66E2F1C60C55200CDF49D /* LinuxFixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E1E1C60C55200CDF49D /* LinuxFixes.swift */; };
+		4FE66E301C60C55200CDF49D /* MemorySessionDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E1F1C60C55200CDF49D /* MemorySessionDriver.swift */; };
+		4FE66E311C60C55200CDF49D /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E201C60C55200CDF49D /* Parser.swift */; };
+		4FE66E321C60C55200CDF49D /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E211C60C55200CDF49D /* Request.swift */; };
+		4FE66E331C60C55200CDF49D /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E221C60C55200CDF49D /* Response.swift */; };
+		4FE66E351C60C55200CDF49D /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E241C60C55200CDF49D /* Route.swift */; };
+		4FE66E361C60C55200CDF49D /* RouteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E251C60C55200CDF49D /* RouteManager.swift */; };
+		4FE66E371C60C55200CDF49D /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E261C60C55200CDF49D /* Server.swift */; };
+		4FE66E381C60C55200CDF49D /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E271C60C55200CDF49D /* Session.swift */; };
+		4FE66E391C60C55200CDF49D /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E281C60C55200CDF49D /* Socket.swift */; };
+		4FE66E3A1C60C55200CDF49D /* SocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E291C60C55200CDF49D /* SocketServer.swift */; };
+		4FE66E3B1C60C55200CDF49D /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E2A1C60C55200CDF49D /* StringExtensions.swift */; };
+		4FE66E3C1C60C55200CDF49D /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E2B1C60C55200CDF49D /* Tests.swift */; };
+		4FE66E3F1C60C9AB00CDF49D /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E3E1C60C9AB00CDF49D /* Renderer.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4F6A6DCB1C657DFE00368F5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FE66DC01C60C29800CDF49D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F6A6DBF1C657DFE00368F5D;
+			remoteInfo = "Blackfish-OSX";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4FE66DC61C60C29800CDF49D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4F6A6DC01C657DFE00368F5D /* Blackfish.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Blackfish.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F6A6DC21C657DFE00368F5D /* Blackfish-OSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blackfish-OSX.h"; sourceTree = "<group>"; };
+		4F6A6DC41C657DFE00368F5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F6A6DC91C657DFE00368F5D /* Blackfish_OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blackfish_OSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F6A6DD01C657DFE00368F5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../../Tests/Info.plist; sourceTree = "<group>"; };
+		4F6A6DEC1C657EDC00368F5D /* PublicInterfaceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PublicInterfaceTests.swift; path = ../../Tests/PublicInterfaceTests.swift; sourceTree = "<group>"; };
+		4FDAC2051C625FBE006FC98B /* MultipartFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipartFile.swift; sourceTree = "<group>"; };
+		4FDAC2071C62B09E006FC98B /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		4FDAC20F1C639AAD006FC98B /* Middleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
+		4FDAC2101C639AAD006FC98B /* MiddlewareManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiddlewareManager.swift; sourceTree = "<group>"; };
+		4FDAC2131C64E17A006FC98B /* RouteDriver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteDriver.swift; sourceTree = "<group>"; };
+		4FDAC2151C64E31A006FC98B /* PathTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathTree.swift; sourceTree = "<group>"; };
+		4FE66DC81C60C29800CDF49D /* Blackfish */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Blackfish; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FE66DCB1C60C29800CDF49D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		4FE66E1D1C60C55200CDF49D /* JSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
+		4FE66E1E1C60C55200CDF49D /* LinuxFixes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxFixes.swift; sourceTree = "<group>"; };
+		4FE66E1F1C60C55200CDF49D /* MemorySessionDriver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemorySessionDriver.swift; sourceTree = "<group>"; };
+		4FE66E201C60C55200CDF49D /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		4FE66E211C60C55200CDF49D /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		4FE66E221C60C55200CDF49D /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		4FE66E241C60C55200CDF49D /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
+		4FE66E251C60C55200CDF49D /* RouteManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteManager.swift; sourceTree = "<group>"; };
+		4FE66E261C60C55200CDF49D /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
+		4FE66E271C60C55200CDF49D /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		4FE66E281C60C55200CDF49D /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
+		4FE66E291C60C55200CDF49D /* SocketServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketServer.swift; sourceTree = "<group>"; };
+		4FE66E2A1C60C55200CDF49D /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		4FE66E2B1C60C55200CDF49D /* Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		4FE66E3E1C60C9AB00CDF49D /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4F6A6DBC1C657DFE00368F5D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F6A6DC61C657DFE00368F5D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F6A6DCA1C657DFE00368F5D /* Blackfish.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FE66DC51C60C29800CDF49D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4F6A6DC11C657DFE00368F5D /* Blackfish-OSX */ = {
+			isa = PBXGroup;
+			children = (
+				4F6A6DC21C657DFE00368F5D /* Blackfish-OSX.h */,
+				4F6A6DC41C657DFE00368F5D /* Info.plist */,
+			);
+			path = "Blackfish-OSX";
+			sourceTree = "<group>";
+		};
+		4F6A6DCD1C657DFE00368F5D /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4F6A6DD01C657DFE00368F5D /* Info.plist */,
+				4F6A6DEC1C657EDC00368F5D /* PublicInterfaceTests.swift */,
+			);
+			name = Tests;
+			path = "Blackfish-OSXTests";
+			sourceTree = "<group>";
+		};
+		4FE66DBF1C60C29800CDF49D = {
+			isa = PBXGroup;
+			children = (
+				4FE66E1B1C60C55200CDF49D /* Sources */,
+				4FE66DCA1C60C29800CDF49D /* Blackfish */,
+				4F6A6DC11C657DFE00368F5D /* Blackfish-OSX */,
+				4F6A6DCD1C657DFE00368F5D /* Tests */,
+				4FE66DC91C60C29800CDF49D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4FE66DC91C60C29800CDF49D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4FE66DC81C60C29800CDF49D /* Blackfish */,
+				4F6A6DC01C657DFE00368F5D /* Blackfish.framework */,
+				4F6A6DC91C657DFE00368F5D /* Blackfish_OSXTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4FE66DCA1C60C29800CDF49D /* Blackfish */ = {
+			isa = PBXGroup;
+			children = (
+				4FE66DCB1C60C29800CDF49D /* main.swift */,
+			);
+			path = Blackfish;
+			sourceTree = "<group>";
+		};
+		4FE66E1B1C60C55200CDF49D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				4FDAC20F1C639AAD006FC98B /* Middleware.swift */,
+				4FDAC2101C639AAD006FC98B /* MiddlewareManager.swift */,
+				4FE66E3E1C60C9AB00CDF49D /* Renderer.swift */,
+				4FE66E1D1C60C55200CDF49D /* JSONSerializer.swift */,
+				4FE66E1E1C60C55200CDF49D /* LinuxFixes.swift */,
+				4FE66E1F1C60C55200CDF49D /* MemorySessionDriver.swift */,
+				4FDAC2051C625FBE006FC98B /* MultipartFile.swift */,
+				4FE66E201C60C55200CDF49D /* Parser.swift */,
+				4FE66E211C60C55200CDF49D /* Request.swift */,
+				4FE66E221C60C55200CDF49D /* Response.swift */,
+				4FE66E241C60C55200CDF49D /* Route.swift */,
+				4FDAC2071C62B09E006FC98B /* Router.swift */,
+				4FE66E251C60C55200CDF49D /* RouteManager.swift */,
+				4FE66E261C60C55200CDF49D /* Server.swift */,
+				4FE66E271C60C55200CDF49D /* Session.swift */,
+				4FE66E281C60C55200CDF49D /* Socket.swift */,
+				4FE66E291C60C55200CDF49D /* SocketServer.swift */,
+				4FE66E2A1C60C55200CDF49D /* StringExtensions.swift */,
+				4FE66E2B1C60C55200CDF49D /* Tests.swift */,
+				4FDAC2131C64E17A006FC98B /* RouteDriver.swift */,
+				4FDAC2151C64E31A006FC98B /* PathTree.swift */,
+			);
+			name = Sources;
+			path = ../Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4F6A6DBD1C657DFE00368F5D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F6A6DC31C657DFE00368F5D /* Blackfish-OSX.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4F6A6DBF1C657DFE00368F5D /* Blackfish_OSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F6A6DD11C657DFE00368F5D /* Build configuration list for PBXNativeTarget "Blackfish_OSX" */;
+			buildPhases = (
+				4F6A6DBB1C657DFE00368F5D /* Sources */,
+				4F6A6DBC1C657DFE00368F5D /* Frameworks */,
+				4F6A6DBD1C657DFE00368F5D /* Headers */,
+				4F6A6DBE1C657DFE00368F5D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Blackfish_OSX;
+			productName = "Blackfish-OSX";
+			productReference = 4F6A6DC01C657DFE00368F5D /* Blackfish.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		4F6A6DC81C657DFE00368F5D /* Blackfish_OSXTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F6A6DD41C657DFE00368F5D /* Build configuration list for PBXNativeTarget "Blackfish_OSXTests" */;
+			buildPhases = (
+				4F6A6DC51C657DFE00368F5D /* Sources */,
+				4F6A6DC61C657DFE00368F5D /* Frameworks */,
+				4F6A6DC71C657DFE00368F5D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F6A6DCC1C657DFE00368F5D /* PBXTargetDependency */,
+			);
+			name = Blackfish_OSXTests;
+			productName = "Blackfish-OSXTests";
+			productReference = 4F6A6DC91C657DFE00368F5D /* Blackfish_OSXTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4FE66DC71C60C29800CDF49D /* Blackfish */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FE66DCF1C60C29800CDF49D /* Build configuration list for PBXNativeTarget "Blackfish" */;
+			buildPhases = (
+				4FE66DC41C60C29800CDF49D /* Sources */,
+				4FE66DC51C60C29800CDF49D /* Frameworks */,
+				4FE66DC61C60C29800CDF49D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Blackfish;
+			productName = blackfish;
+			productReference = 4FE66DC81C60C29800CDF49D /* Blackfish */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4FE66DC01C60C29800CDF49D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Elliott Minns";
+				TargetAttributes = {
+					4F6A6DBF1C657DFE00368F5D = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+					4F6A6DC81C657DFE00368F5D = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+					4FE66DC71C60C29800CDF49D = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
+			};
+			buildConfigurationList = 4FE66DC31C60C29800CDF49D /* Build configuration list for PBXProject "Blackfish" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4FE66DBF1C60C29800CDF49D;
+			productRefGroup = 4FE66DC91C60C29800CDF49D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4FE66DC71C60C29800CDF49D /* Blackfish */,
+				4F6A6DBF1C657DFE00368F5D /* Blackfish_OSX */,
+				4F6A6DC81C657DFE00368F5D /* Blackfish_OSXTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4F6A6DBE1C657DFE00368F5D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F6A6DC71C657DFE00368F5D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4F6A6DBB1C657DFE00368F5D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F6A6DE61C657E4800368F5D /* Socket.swift in Sources */,
+				4F6A6DE91C657E4800368F5D /* Tests.swift in Sources */,
+				4F6A6DE41C657E4800368F5D /* Server.swift in Sources */,
+				4F6A6DD71C657E4800368F5D /* Middleware.swift in Sources */,
+				4F6A6DDC1C657E4800368F5D /* MemorySessionDriver.swift in Sources */,
+				4F6A6DE11C657E4800368F5D /* Route.swift in Sources */,
+				4F6A6DDD1C657E4800368F5D /* MultipartFile.swift in Sources */,
+				4F6A6DE51C657E4800368F5D /* Session.swift in Sources */,
+				4F6A6DE21C657E4800368F5D /* Router.swift in Sources */,
+				4F6A6DDB1C657E4800368F5D /* LinuxFixes.swift in Sources */,
+				4F6A6DE31C657E4800368F5D /* RouteManager.swift in Sources */,
+				4F6A6DE01C657E4800368F5D /* Response.swift in Sources */,
+				4F6A6DDE1C657E4800368F5D /* Parser.swift in Sources */,
+				4F6A6DE81C657E4800368F5D /* StringExtensions.swift in Sources */,
+				4F6A6DD91C657E4800368F5D /* Renderer.swift in Sources */,
+				4F6A6DD81C657E4800368F5D /* MiddlewareManager.swift in Sources */,
+				4F6A6DE71C657E4800368F5D /* SocketServer.swift in Sources */,
+				4F6A6DEB1C657E4800368F5D /* PathTree.swift in Sources */,
+				4F6A6DDF1C657E4800368F5D /* Request.swift in Sources */,
+				4F6A6DDA1C657E4800368F5D /* JSONSerializer.swift in Sources */,
+				4F6A6DEA1C657E4800368F5D /* RouteDriver.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F6A6DC51C657DFE00368F5D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F6A6DED1C657EDC00368F5D /* PublicInterfaceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FE66DC41C60C29800CDF49D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FDAC2111C639AAD006FC98B /* Middleware.swift in Sources */,
+				4FE66E361C60C55200CDF49D /* RouteManager.swift in Sources */,
+				4FE66E331C60C55200CDF49D /* Response.swift in Sources */,
+				4FE66DCC1C60C29800CDF49D /* main.swift in Sources */,
+				4FDAC2141C64E17A006FC98B /* RouteDriver.swift in Sources */,
+				4FE66E351C60C55200CDF49D /* Route.swift in Sources */,
+				4FDAC2081C62B09E006FC98B /* Router.swift in Sources */,
+				4FE66E2E1C60C55200CDF49D /* JSONSerializer.swift in Sources */,
+				4FE66E3A1C60C55200CDF49D /* SocketServer.swift in Sources */,
+				4FE66E311C60C55200CDF49D /* Parser.swift in Sources */,
+				4FE66E3B1C60C55200CDF49D /* StringExtensions.swift in Sources */,
+				4FE66E381C60C55200CDF49D /* Session.swift in Sources */,
+				4FE66E391C60C55200CDF49D /* Socket.swift in Sources */,
+				4FDAC2061C625FBE006FC98B /* MultipartFile.swift in Sources */,
+				4FE66E2F1C60C55200CDF49D /* LinuxFixes.swift in Sources */,
+				4FE66E321C60C55200CDF49D /* Request.swift in Sources */,
+				4FDAC2121C639AAD006FC98B /* MiddlewareManager.swift in Sources */,
+				4FDAC2161C64E31A006FC98B /* PathTree.swift in Sources */,
+				4FE66E371C60C55200CDF49D /* Server.swift in Sources */,
+				4FE66E3F1C60C9AB00CDF49D /* Renderer.swift in Sources */,
+				4FE66E301C60C55200CDF49D /* MemorySessionDriver.swift in Sources */,
+				4FE66E3C1C60C55200CDF49D /* Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4F6A6DCC1C657DFE00368F5D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F6A6DBF1C657DFE00368F5D /* Blackfish_OSX */;
+			targetProxy = 4F6A6DCB1C657DFE00368F5D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4F6A6DD21C657DFE00368F5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "Blackfish-OSX/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.eliottminns.Blackfish-OSX";
+				PRODUCT_NAME = Blackfish;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4F6A6DD31C657DFE00368F5D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "Blackfish-OSX/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.eliottminns.Blackfish-OSX";
+				PRODUCT_NAME = Blackfish;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		4F6A6DD51C657DFE00368F5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/../Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.eliottminns.Blackfish-OSXTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4F6A6DD61C657DFE00368F5D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/../Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.eliottminns.Blackfish-OSXTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		4FE66DCD1C60C29800CDF49D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4FE66DCE1C60C29800CDF49D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		4FE66DD01C60C29800CDF49D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4FE66DD11C60C29800CDF49D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4F6A6DD11C657DFE00368F5D /* Build configuration list for PBXNativeTarget "Blackfish_OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F6A6DD21C657DFE00368F5D /* Debug */,
+				4F6A6DD31C657DFE00368F5D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4F6A6DD41C657DFE00368F5D /* Build configuration list for PBXNativeTarget "Blackfish_OSXTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F6A6DD51C657DFE00368F5D /* Debug */,
+				4F6A6DD61C657DFE00368F5D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4FE66DC31C60C29800CDF49D /* Build configuration list for PBXProject "Blackfish" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FE66DCD1C60C29800CDF49D /* Debug */,
+				4FE66DCE1C60C29800CDF49D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4FE66DCF1C60C29800CDF49D /* Build configuration list for PBXNativeTarget "Blackfish" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FE66DD01C60C29800CDF49D /* Debug */,
+				4FE66DD11C60C29800CDF49D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4FE66DC01C60C29800CDF49D /* Project object */;
+}
