@@ -67,11 +67,13 @@ class Parser {
                         if let name = part.name {
                             if let fileName = part.fileName where fileName.characters.count > 0 {
                                 let file = MultipartFile(name: fileName, data: part.body)
-                                if let _ = request.files[name] {
-                                    request.files[name]?.append(file )
-                                } else {
+                                
+                                if request.files[name] == nil {
                                     request.files[name] = []
                                 }
+                                
+                                request.files[name]?.append(file )
+                            
                             } else {
                                 
                                 let ptr = UnsafeMutablePointer<Void>(part.body)
