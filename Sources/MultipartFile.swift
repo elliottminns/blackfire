@@ -8,13 +8,13 @@ enum FileError: ErrorType {
     case WriteError
 }
 
-struct MultipartFile {
+public struct MultipartFile {
     
-    let name: String
+    public let name: String
     
-    let data: [UInt8]
+    public let data: [UInt8]
     
-    func saveToTemporaryDirectory(filename: String, completion: ((path: String?, error: ErrorType?) -> Void)) {
+    public func saveToTemporaryDirectory(filename: String, completion: ((path: String?, error: ErrorType?) -> Void)) {
         
         #if os(Linux)
             let path = "/var/tmp"
@@ -25,7 +25,7 @@ struct MultipartFile {
         saveToPath(path, completion: completion)
     }
     
-    func saveToPath(path: String, completion: ((path: String?, error: ErrorType?) -> Void)) {
+    public func saveToPath(path: String, completion: ((path: String?, error: ErrorType?) -> Void)) {
     
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
             
