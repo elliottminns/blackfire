@@ -31,12 +31,10 @@ public struct MultipartFile {
     
     public func saveToPath(path: String, completion: ((path: String?, error: ErrorType?) -> Void),
                            synchronous: Bool = false) {
-    
-        let queue = synchronous ? dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0) : DISPATCH_CURRENT_QUEUE_LABEL
-        dispatch_async(queue) {
-            
+        
+        let block = {
             let raw = NSData(bytesNoCopy: UnsafeMutablePointer<Void>(self.data),
-                length: self.data.count * sizeof(UInt8), freeWhenDone: false)
+                             length: self.data.count * sizeof(UInt8), freeWhenDone: false)
             
             if raw.writeToFile(path, atomically: true) {
                 
@@ -45,6 +43,15 @@ public struct MultipartFile {
             } else {
                 
                 completion(path: nil, error: FileError.WriteError)
+            }
+        }
+        
+        if synchronous {
+            block()
+        } else {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+                
+                block()
             }
         }
     }
