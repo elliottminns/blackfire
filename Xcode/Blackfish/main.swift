@@ -30,15 +30,6 @@ app.get("/") { (request, response) -> Void in
     response.render("som-trainer.html")
 }
 
-let validator = Middleware { (request, response, next) in
-    
-    // Do validation.
-    
-    // Failed...
-    print("Unauthorised")
-    response.send(error: "Unauthorised")
-}
-
 let clock = Middleware { (request, response, next) in
     print("The time is \(NSDate())")
     next()
@@ -49,28 +40,9 @@ let logger = Middleware { (request, response, next) in
     next()
 }
 
-Middleware(path: "/user") { (request, response, next) -> Void in
-    
-}
-
 app.use(middleware: clock)
 app.use(middleware: logger)
-app.use(middleware: validator)
-/*
-let john = Middleware(path: "/john") { (request, response, next) -> Void in
-    print("This is John to Major Tom")
-    next()
-}
 
-app.use(middleware: john)
-
-let broked = Middleware(path: "/john") { (request, response, next) -> Void in
-    print("Broked")
-    next()
-}
-
-app.use(middleware: broked)
-*/
 app.post("/") { (request, response) in
     
     response.render("som-trainer.html")

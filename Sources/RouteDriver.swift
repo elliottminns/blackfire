@@ -3,7 +3,7 @@ import Foundation
 
 protocol Driver {
     
-    typealias Handler
+    associatedtype Handler
     
     var path: String { get }
     var handler: Handler { get }
@@ -11,7 +11,7 @@ protocol Driver {
 
 protocol RouteDriver {
     
-    typealias DriverType: Driver
+    associatedtype DriverType: Driver
     
     var pathTree: PathTree<DriverType.Handler> { get }
     
