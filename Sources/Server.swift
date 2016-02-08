@@ -3,7 +3,7 @@ import Foundation
 
 public class Blackfish: SocketServer {
 
-    public static let VERSION = "0.1.2"
+    public static let VERSION = "0.1.3"
 
     private let middlewareManager: MiddlewareManager
     
@@ -16,6 +16,26 @@ public class Blackfish: SocketServer {
     }
     
     override func dispatch(request request: Request, response: Response, handlers: [Middleware.Handler]?) {
+        
+        //check in file system
+        let filePath = "Public" + request.path
+        
+        let fileManager = NSFileManager.defaultManager()
+        var isDir: ObjCBool = false
+        
+        if fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) {
+            // File exists
+            if let fileBody = NSData(contentsOfFile: filePath) {
+                var array = [UInt8](count: fileBody.length, repeatedValue: 0)
+                fileBody.getBytes(&array, length: fileBody.length)
+                
+                response.status = .OK
+                response.body = array
+                response.contentType = .Text
+                response.send()
+                return
+            }
+        }
         
         if let handlers = handlers {
             
