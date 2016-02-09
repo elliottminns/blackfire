@@ -3,7 +3,7 @@ import Foundation
 let resourceDir: String = "Resources"
 
 protocol Renderer {
-    func render(path: String) throws -> [UInt8]
+    func render(path: String, data: [String: Any]?) throws -> [UInt8]
 }
 
 extension Renderer {
@@ -19,7 +19,7 @@ public class HTMLRenderer: Renderer {
         case InvalidPath
     }
     
-    func render(path: String) throws -> [UInt8]  {
+    func render(path: String, data: [String: Any]? = nil) throws -> [UInt8]  {
         
         guard let fileBody = NSData(contentsOfFile: path) else {
             throw Error.InvalidPath
