@@ -19,27 +19,35 @@ public class Router: Routing {
     var patches: [String: Route.Handler] = [:]
     var alls: [String: Route.Handler] = [:]
     
-    public func use(middleware middleware: Middleware) {
+    public init() {
+        self.setupRoutes()
+    }
+    
+    public func setupRoutes() {
+        
+    }
+    
+    final public func use(middleware middleware: Middleware) {
         self.middleware.append(middleware)
     }
     
-    public func get(path: String, handler: Route.Handler) {
+    final public func get(path: String, handler: Route.Handler) {
         gets[path] = handler
     }
     
-    public func put(path: String, handler: Route.Handler) {
+    final public func put(path: String, handler: Route.Handler) {
         puts[path] = handler
     }
     
-    public func delete(path: String, handler: Route.Handler) {
+    final public func delete(path: String, handler: Route.Handler) {
         deletes[path] = handler;
     }
     
-    public func post(path: String, handler: Route.Handler) {
+    final public func post(path: String, handler: Route.Handler) {
         posts[path] = handler;
     }
     
-    public func patch(path: String, handler: Route.Handler) {
+    final public func patch(path: String, handler: Route.Handler) {
         patches[path] = handler;
     }
     
