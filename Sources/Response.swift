@@ -21,6 +21,8 @@ public class Response {
     public var body: [UInt8]
     public var cookies: [String: String] = [:]
     
+    public var additionalHeaders: [String: String] = [:]
+    
     unowned let request: Request
     unowned let responder: Responder
     let socket: Socket
@@ -113,6 +115,10 @@ public class Response {
         default:
             break
         }
+        
+        for (key, value) in additionalHeaders {
+            headers[key] = value
+        }
 
         return headers
     }
@@ -162,19 +168,20 @@ extension Response {
         send()
     }
     
-    public func send(json json: Any) {
+    public func redirect(path: String) {
+        status = .MovedPermanently
+        additionalHeaders["Location"] = path
+        send()
+    }
+    
+    public func send(json json: AnyObject) {
         
         let data: [UInt8]
         
-        if let jsonObject = json as? AnyObject {
-            
-            guard NSJSONSerialization.isValidJSONObject(jsonObject) else {
-                self.send(error: "Server error")
-                return
-            }
+        if NSJSONSerialization.isValidJSONObject(json) {
             
             do {
-                let json = try NSJSONSerialization.dataWithJSONObject(jsonObject, options: NSJSONWritingOptions.PrettyPrinted)
+                let json = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
                 data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
             } catch {
                 self.send(error: "Server error")
