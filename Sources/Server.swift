@@ -8,11 +8,16 @@ public class Blackfish: SocketServer {
     private let middlewareManager: MiddlewareManager
     
     private let routeManager: RouteManager
+    
+    private var renderers: [String: Renderer]
 
     public override init() {
         middlewareManager = MiddlewareManager()
         routeManager = RouteManager()
+        renderers = [:]
         super.init()
+        
+        renderers[".html"] = HTMLRenderer()
     }
     
     override func dispatch(request request: Request, response: Response, handlers: [Middleware.Handler]?) {
@@ -121,6 +126,10 @@ extension Blackfish {
     public func use(path path: String, router: Router) {
         Route.createRoutesFromRouter(router, withPath: path)
     }
+    
+    public func use(renderer renderer: Renderer, ext: String) {
+        renderers[ext] = renderer
+    }
 }
 
 // MARK: - Routing
@@ -155,4 +164,19 @@ extension Blackfish: Routing {
         Route.all(path, handler: handler)
     }
     
+}
+
+// MARK: - RendererSupplier
+
+extension Blackfish: RendererSupplier {
+    public func rendererForFile(filename: String) -> Renderer? {
+        
+        for (key, value) in renderers {
+            if filename.hasSuffix(key) {
+                return value
+            }
+        }
+        
+        return nil
+    }
 }

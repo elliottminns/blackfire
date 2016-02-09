@@ -4,6 +4,10 @@ public protocol Responder: class {
     func sendResponse(response: Response)
 }
 
+public protocol RendererSupplier: class {
+    func rendererForFile(filename: String) -> Renderer?
+}
+
 /**
     Responses are objects responsible for returning
     data to the HTTP request such as the body, status
@@ -20,11 +24,12 @@ public class Response {
     public var status: Status
     public var body: [UInt8]
     public var cookies: [String: String] = [:]
-    
     public var additionalHeaders: [String: String] = [:]
     
     unowned let request: Request
     unowned let responder: Responder
+    weak var renderSupplier: RendererSupplier?
+    
     let socket: Socket
 
     public enum ContentType {
@@ -202,11 +207,21 @@ extension Response {
     }
     
     public func render(path: String) {
-        
-        let htmlView = HTMLRenderer()
+        render(path, data: nil)
+    }
+    
+    public func render(path: String, data: [String: Any]?) {
+    
+        guard let renderer = self.renderSupplier?.rendererForFile(path) else {
+            status = .Error
+            contentType = .Text
+            body = [UInt8]("No renderer for this view type of \(path)".utf8)
+            send()
+            return
+        }
         
         do {
-            body = try htmlView.renderToBytes(path, data: nil)
+            body = try renderer.renderToBytes(path, data: data)
             contentType = .HTML
             status = .OK
         } catch {
