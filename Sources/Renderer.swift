@@ -28,12 +28,8 @@ extension Renderer {
     private func convertToBytes(data: String) -> [UInt8] {
         return [UInt8](data.utf8)
     }
-}
-
-class HTMLRenderer: Renderer {
-
-    func render(path: String, data: [String: Any]? = nil) throws -> String  {
-        
+    
+    public func stringFromFile(path: String) throws -> String {
         guard let fileBody = NSData(contentsOfFile: path) else {
             throw RendererError.InvalidPath
         }
@@ -43,6 +39,14 @@ class HTMLRenderer: Renderer {
         }
         
         return body
+    }
+}
+
+class HTMLRenderer: Renderer {
+
+    func render(path: String, data: [String: Any]? = nil) throws -> String  {
+        
+        return try stringFromFile(path)
     }
 
 }
