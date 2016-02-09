@@ -19,17 +19,10 @@ public class SocketServer {
     /// The shared lock for notifying new connections.
     private let clientSocketsLock = NSLock()
     
-    #if os(Linux)
-    private let mainLock = NSLock()
-    #endif
-    
     /// The queue to dispatch requests on.
     private var queue: dispatch_queue_t
     
-    private var mainqueue: dispatch_queue_t
-    
     init() {
-        mainqueue = dispatch_get_main_queue()
         queue = dispatch_queue_create("blackfish.queue.request", DISPATCH_QUEUE_CONCURRENT)
     }
 
@@ -74,29 +67,29 @@ public class SocketServer {
         waits for inbound connections.
     */
     func loop() {
-//        #if os(Linux)
-        var eventMutex = pthread_mutex_t()
-        pthread_mutex_init(&mainEventMutex, nil)
-        pthread_mutex_init(&eventMutex, nil)
-        pthread_cond_init (&mainEventQueueCond, nil)
-        
-        pthread_mutex_lock(&eventMutex)
-        
-        while true {
+        #if os(Linux)
+            var eventMutex = pthread_mutex_t()
+            pthread_mutex_init(&mainEventMutex, nil)
+            pthread_mutex_init(&eventMutex, nil)
+            pthread_cond_init (&mainEventQueueCond, nil)
             
-            pthread_cond_wait(&mainEventQueueCond, &eventMutex)
+            pthread_mutex_lock(&eventMutex)
             
-            while mainEventQueue.count > 0 {
-                pthread_mutex_lock(&mainEventMutex)
-                let block = mainEventQueue.removeFirst()
-                pthread_mutex_unlock(&mainEventMutex)
-                block()
+            while true {
+                
+                pthread_cond_wait(&mainEventQueueCond, &eventMutex)
+                
+                while mainEventQueue.count > 0 {
+                    pthread_mutex_lock(&mainEventMutex)
+                    let event = mainEventQueue.removeFirst()
+                    pthread_mutex_unlock(&mainEventMutex)
+                    event()
+                }
             }
-        }
     
-//        #else
-//            NSRunLoop.mainRunLoop().run()
-//        #endif
+        #else
+            NSRunLoop.mainRunLoop().run()
+        #endif
     }
 
     func handleConnection(socket: Socket) {
@@ -108,7 +101,7 @@ public class SocketServer {
 
         if let request = try? parser.readHttpRequest(socket) {
             
-            dispatch_async(mainqueue) {
+            dispatch_async(dispatch_get_main_queue()) {
                 
                 request.address = address
                 request.parameters = [:]

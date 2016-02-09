@@ -122,6 +122,8 @@ var _module_dispatch = true
     import Darwin
 #endif
 
+#if os(Linux)
+
 public typealias EventBlock = (() -> ())
 
 var mainEventMutex = pthread_mutex_t()
@@ -129,6 +131,7 @@ var mainEventQueue = [EventBlock]()
 var mainEventQueueCond = pthread_cond_t()
 
 enum QueueType: Int {
+    case Background = 0
     case Main = 10
 }
 
@@ -137,11 +140,11 @@ public typealias dispatch_queue_t = Int
 public let DISPATCH_QUEUE_CONCURRENT = 0, DISPATCH_QUEUE_PRIORITY_HIGH = 0, DISPATCH_QUEUE_PRIORITY_LOW = 0, DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0, DISPATCH_QUEUE_SERIAL = 0
 
 public func dispatch_get_global_queue( type: Int, _ flags: Int ) -> dispatch_queue_t {
-    return type
+    return QueueType.Background.rawValue
 }
 
 public func dispatch_queue_create( name: String, _ type: Int ) -> dispatch_queue_t {
-    return type
+    return QueueType.Background.rawValue
 }
 
 public func dispatch_sync( queue: Int, _ block: () -> () ) {
@@ -166,8 +169,16 @@ private func pthreadRunner( arg: UnsafeMutablePointer<Void> ) -> UnsafeMutablePo
 
 public func dispatch_async( queue: dispatch_queue_t, _ block: () -> () ) {
     
-    if queue != dispatch_get_main_queue() {
+    if queue == dispatch_get_main_queue() {
         
+        // Add to the main event loop
+        pthread_mutex_lock(&mainEventMutex)
+        mainEventQueue.append(block)
+        pthread_mutex_unlock(&mainEventMutex)
+        pthread_cond_signal(&mainEventQueueCond)
+        
+    } else {
+    
         let holder = Unmanaged.passRetained( pthreadBlock( block: block ) )
         
         let pointer = UnsafeMutablePointer<Void>( holder.toOpaque() )
@@ -183,12 +194,6 @@ public func dispatch_async( queue: dispatch_queue_t, _ block: () -> () ) {
         else {
             print( "pthread_create() error" )
         }
-    } else {
-        // Dispatch on the main queue.
-        pthread_mutex_lock(&mainEventMutex)
-        mainEventQueue.append(block)
-        pthread_mutex_unlock(&mainEventMutex)
-        pthread_cond_signal(&mainEventQueueCond)
     }
 }
 
@@ -209,4 +214,4 @@ public func dispatch_get_main_queue() -> dispatch_queue_t {
     return QueueType.Main.rawValue
 }
 
-//#endif
+#endif
