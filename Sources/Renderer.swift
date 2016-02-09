@@ -2,8 +2,14 @@ import Foundation
 
 let resourceDir: String = "Resources"
 
-protocol Renderer {
-    func render(path: String, data: [String: Any]?) throws -> [UInt8]
+enum RendererError: ErrorType {
+    case InvalidPath
+    case ParseError
+}
+
+public protocol Renderer {
+    
+    func render(path: String, data: [String: Any]?) throws -> String
 }
 
 extension Renderer {
@@ -11,24 +17,32 @@ extension Renderer {
     func resourcePath(fileName: String) -> String {
         return resourceDir + "/" + fileName
     }
-}
-
-public class HTMLRenderer: Renderer {
-
-    enum Error: ErrorType {
-        case InvalidPath
+    
+    func renderToBytes(path: String, data: [String: Any]?) throws -> [UInt8] {
+        
+        let body = try render(path, data: data)
+        
+        return convertToBytes(body)
     }
     
-    func render(path: String, data: [String: Any]? = nil) throws -> [UInt8]  {
+    func convertToBytes(data: String) -> [UInt8] {
+        return [UInt8](data.utf8)
+    }
+}
+
+class HTMLRenderer: Renderer {
+
+    func render(path: String, data: [String: Any]? = nil) throws -> String  {
         
         guard let fileBody = NSData(contentsOfFile: path) else {
-            throw Error.InvalidPath
+            throw RendererError.InvalidPath
         }
-
-        //TODO: Implement range
-        var array = [UInt8](count: fileBody.length, repeatedValue: 0)
-        fileBody.getBytes(&array, length: fileBody.length)
-        return array
+        
+        guard let body = String(data: fileBody, encoding: NSUTF8StringEncoding) else {
+            throw RendererError.ParseError
+        }
+        
+        return body
     }
 
 }
