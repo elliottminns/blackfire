@@ -174,14 +174,14 @@
 		4FE66E1B1C60C55200CDF49D /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				4FDAC20F1C639AAD006FC98B /* Middleware.swift */,
-				4FDAC2101C639AAD006FC98B /* MiddlewareManager.swift */,
-				4FE66E3E1C60C9AB00CDF49D /* Renderer.swift */,
 				4FE66E1D1C60C55200CDF49D /* JSONSerializer.swift */,
 				4FE66E1E1C60C55200CDF49D /* LinuxFixes.swift */,
 				4FE66E1F1C60C55200CDF49D /* MemorySessionDriver.swift */,
+				4FDAC20F1C639AAD006FC98B /* Middleware.swift */,
+				4FDAC2101C639AAD006FC98B /* MiddlewareManager.swift */,
 				4FDAC2051C625FBE006FC98B /* MultipartFile.swift */,
 				4FE66E201C60C55200CDF49D /* Parser.swift */,
+				4FE66E3E1C60C9AB00CDF49D /* Renderer.swift */,
 				4FE66E211C60C55200CDF49D /* Request.swift */,
 				4FE66E221C60C55200CDF49D /* Response.swift */,
 				4FE66E241C60C55200CDF49D /* Route.swift */,
