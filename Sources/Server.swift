@@ -22,6 +22,8 @@ public class Blackfish: SocketServer {
     
     override func dispatch(request request: Request, response: Response, handlers: [Middleware.Handler]?) {
         
+        response.renderSupplier = self
+        
         //check in file system
         let filePath = "Public" + request.path
         
