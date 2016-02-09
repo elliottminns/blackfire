@@ -206,7 +206,7 @@ extension Response {
         let htmlView = HTMLRenderer()
         
         do {
-            body = try htmlView.render("Resources/" + path)
+            body = try htmlView.renderToBytes(path, data: nil)
             contentType = .HTML
             status = .OK
         } catch {

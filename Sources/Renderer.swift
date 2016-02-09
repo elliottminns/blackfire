@@ -14,18 +14,18 @@ public protocol Renderer {
 
 extension Renderer {
     
-    func resourcePath(fileName: String) -> String {
+    private func resourcePath(fileName: String) -> String {
         return resourceDir + "/" + fileName
     }
     
     func renderToBytes(path: String, data: [String: Any]?) throws -> [UInt8] {
         
-        let body = try render(path, data: data)
+        let body = try render(resourcePath(path), data: data)
         
         return convertToBytes(body)
     }
     
-    func convertToBytes(data: String) -> [UInt8] {
+    private func convertToBytes(data: String) -> [UInt8] {
         return [UInt8](data.utf8)
     }
 }
