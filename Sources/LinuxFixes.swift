@@ -118,42 +118,60 @@ var _module_dispatch = true
 
 #if os(Linux)
     import Glibc
+#else
+    import Darwin
+#endif
+
+public typealias EventBlock = (() -> ())
+
+var mainEventMutex = pthread_mutex_t()
+var mainEventQueue = [EventBlock]()
+var mainEventQueueCond = pthread_cond_t()
+
+enum QueueType: Int {
+    case Main = 10
+}
+
+public typealias dispatch_queue_t = Int
+
+public let DISPATCH_QUEUE_CONCURRENT = 0, DISPATCH_QUEUE_PRIORITY_HIGH = 0, DISPATCH_QUEUE_PRIORITY_LOW = 0, DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0, DISPATCH_QUEUE_SERIAL = 0
+
+public func dispatch_get_global_queue( type: Int, _ flags: Int ) -> dispatch_queue_t {
+    return type
+}
+
+public func dispatch_queue_create( name: String, _ type: Int ) -> dispatch_queue_t {
+    return type
+}
+
+public func dispatch_sync( queue: Int, _ block: () -> () ) {
+    block()
+}
+
+private class pthreadBlock {
     
-    public typealias dispatch_queue_t = Int
+    let block: () -> ()
     
-    public let DISPATCH_QUEUE_CONCURRENT = 0, DISPATCH_QUEUE_PRIORITY_HIGH = 0, DISPATCH_QUEUE_PRIORITY_LOW = 0, DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0, DISPATCH_QUEUE_SERIAL = 0
-    
-    public func dispatch_get_global_queue( type: Int, _ flags: Int ) -> dispatch_queue_t {
-        return type
+    init( block: () -> () ) {
+        self.block = block
     }
+}
+
+private func pthreadRunner( arg: UnsafeMutablePointer<Void> ) -> UnsafeMutablePointer<Void> {
+    let unmanaged = Unmanaged<pthreadBlock>.fromOpaque( COpaquePointer( arg ) )
+    unmanaged.takeUnretainedValue().block()
+    unmanaged.release()
+    return arg
+}
+
+public func dispatch_async( queue: dispatch_queue_t, _ block: () -> () ) {
     
-    public func dispatch_queue_create( name: String, _ type: Int ) -> dispatch_queue_t {
-        return type
-    }
-    
-    public func dispatch_sync( queue: Int, _ block: () -> () ) {
-        block()
-    }
-    
-    private class pthreadBlock {
+    if queue != dispatch_get_main_queue() {
         
-        let block: () -> ()
-        
-        init( block: () -> () ) {
-            self.block = block
-        }
-    }
-    
-    private func pthreadRunner( arg: UnsafeMutablePointer<Void> ) -> UnsafeMutablePointer<Void> {
-        let unmanaged = Unmanaged<pthreadBlock>.fromOpaque( COpaquePointer( arg ) )
-        unmanaged.takeUnretainedValue().block()
-        unmanaged.release()
-        return arg
-    }
-    
-    public func dispatch_async( queue: dispatch_queue_t, _ block: () -> () ) {
         let holder = Unmanaged.passRetained( pthreadBlock( block: block ) )
+        
         let pointer = UnsafeMutablePointer<Void>( holder.toOpaque() )
+        
         #if os(Linux)
             var pthread: pthread_t = 0
         #else
@@ -165,23 +183,30 @@ var _module_dispatch = true
         else {
             print( "pthread_create() error" )
         }
+    } else {
+        // Dispatch on the main queue.
+        pthread_mutex_lock(&mainEventMutex)
+        mainEventQueue.append(block)
+        pthread_mutex_unlock(&mainEventMutex)
+        pthread_cond_signal(&mainEventQueueCond)
     }
-    
-    public let DISPATCH_TIME_NOW = 0, NSEC_PER_SEC = 1_000_000_000
-    
-    public func dispatch_time( now: Int, _ nsec: Int64 ) -> Int64 {
-        return nsec
-    }
-    
-    public func dispatch_after( delay: Int64, _ queue: Int, _ block: () -> () ) {
-        dispatch_async( queue, {
-            sleep( UInt32(Int(delay)/NSEC_PER_SEC) )
-            block()
-        } )
-    }
-    
-    public func dispatch_get_main_queue() -> dispatch_queue_t {
-        return 0
-    }
-    
-#endif
+}
+
+public let DISPATCH_TIME_NOW = 0, NSEC_PER_SEC = 1_000_000_000
+
+public func dispatch_time( now: Int, _ nsec: Int64 ) -> Int64 {
+    return nsec
+}
+
+public func dispatch_after( delay: Int64, _ queue: Int, _ block: () -> () ) {
+    dispatch_async( queue, {
+        sleep( UInt32(Int(delay)/NSEC_PER_SEC) )
+        block()
+    } )
+}
+
+public func dispatch_get_main_queue() -> dispatch_queue_t {
+    return QueueType.Main.rawValue
+}
+
+//#endif

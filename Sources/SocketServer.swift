@@ -39,7 +39,6 @@ public class SocketServer {
     */
     func start(listenPort: Int) throws {
 
-        
         // Stop the server if it's running
         self.stop()
 
@@ -59,9 +58,6 @@ public class SocketServer {
 
                 dispatch_async(self.queue) {
                     self.handleConnection(socket)
-                }
-                    
-                dispatch_async(self.queue) {
                     self.lock(self.clientSocketsLock) {
                         self.clientSockets.remove(socket)
                     }
@@ -78,13 +74,29 @@ public class SocketServer {
         waits for inbound connections.
     */
     func loop() {
-        #if os(Linux)
-            while true {
-                sleep(1)
+//        #if os(Linux)
+        var eventMutex = pthread_mutex_t()
+        pthread_mutex_init(&mainEventMutex, nil)
+        pthread_mutex_init(&eventMutex, nil)
+        pthread_cond_init (&mainEventQueueCond, nil)
+        
+        pthread_mutex_lock(&eventMutex)
+        
+        while true {
+            
+            pthread_cond_wait(&mainEventQueueCond, &eventMutex)
+            
+            while mainEventQueue.count > 0 {
+                pthread_mutex_lock(&mainEventMutex)
+                let block = mainEventQueue.removeFirst()
+                pthread_mutex_unlock(&mainEventMutex)
+                block()
             }
-        #else
-            NSRunLoop.mainRunLoop().run()
-        #endif
+        }
+    
+//        #else
+//            NSRunLoop.mainRunLoop().run()
+//        #endif
     }
 
     func handleConnection(socket: Socket) {
@@ -98,19 +110,11 @@ public class SocketServer {
             
             dispatch_async(mainqueue) {
                 
-                #if os(Linux)
-                    self.mainLock.lock()
-                #endif
-                
                 request.address = address
                 request.parameters = [:]
                 
                 let response = Response(request: request, responder: self, socket: socket)
                 self.dispatch(request: request, response: response, handlers: nil)
-                
-                #if os(Linux)
-                    self.mainLock.unlock()
-                #endif
             }
         }
     }
