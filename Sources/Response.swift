@@ -21,6 +21,8 @@ public class Response {
     public var body: [UInt8]
     public var cookies: [String: String] = [:]
     
+    public var additionalHeaders: [String: String] = [:]
+    
     unowned let request: Request
     unowned let responder: Responder
     let socket: Socket
@@ -113,6 +115,10 @@ public class Response {
         default:
             break
         }
+        
+        for (key, value) in additionalHeaders {
+            headers[key] = value
+        }
 
         return headers
     }
@@ -159,6 +165,12 @@ extension Response {
         body = [UInt8](serialised.utf8)
         contentType = .HTML
         status = .OK
+        send()
+    }
+    
+    public func redirect(path: String) {
+        status = .MovedPermanently
+        additionalHeaders["Location"] = path
         send()
     }
     
