@@ -174,6 +174,7 @@ extension Blackfish: RendererSupplier {
     public func rendererForFile(filename: String) -> Renderer? {
         
         for (key, value) in renderers {
+            print(key)
             if filename.hasSuffix(key) {
                 return value
             }
