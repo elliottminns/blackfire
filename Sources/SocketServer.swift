@@ -97,7 +97,7 @@ public class SocketServer {
         let address = try? socket.peername()
 
         //create a request parser
-        let parser = Parser()
+        let parser = SocketParser()
 
         if let request = try? parser.readHttpRequest(socket) {
             
