@@ -98,11 +98,29 @@ You can also respond with HTML pages.
 
 ```swift
 app.get("/") { request, response in
-    response.render("index.html") 
+    response.render("index.html")
 }
 ```
 
 Just put the file in the `Resources` folder at the root of your project and it will be served.
+
+You can also create your own renderers to use within Blackfish. A renderer for [Stencil](https://github.com/kylef/Stencil) is already available here [Blackfish Stencil](https://github.com/elliottminns/blackfish-stencil).
+
+```
+index.stencil
+```
+
+```html
+<html>
+    <h1>{{ title }}</h1>
+</html>
+```
+
+```swift
+app.get("/") { request, response in
+    res.render("index.stencil", data:["title": "Hello world"])
+}
+```
 
 ### Response
 
@@ -163,7 +181,7 @@ Below is an example of a validation Middleware, that validates every request bef
 ```swift
 
 let validator = Middleware { (request, response, next) in
-    
+
     // Some validation logic
     if validator.validate(request) {
 
@@ -199,7 +217,7 @@ Sessions will be kept track of using the `blackfish-session` cookie. The default
 
 ```swift
 if let name = request.session.data["name"] {
-	//name was in session	
+	//name was in session
 }
 
 //store name in session
@@ -208,9 +226,9 @@ request.session.data["name"] = "Blackfish"
 
 ## Deploying
 
-Vapor has been successfully tested on Ubuntu 14.04 LTS (DigitalOcean) and Ubuntu 15.10 (VirtualBox). 
+Vapor has been successfully tested on Ubuntu 14.04 LTS (DigitalOcean) and Ubuntu 15.10 (VirtualBox).
 
-To deploy to DigitalOcean, simply 
+To deploy to DigitalOcean, simply
 
 - Install Swift 2.2
 	- `wget` the .tar.gz from Apple
