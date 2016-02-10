@@ -17,7 +17,7 @@
 		4F6A6DDB1C657E4800368F5D /* LinuxFixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E1E1C60C55200CDF49D /* LinuxFixes.swift */; };
 		4F6A6DDC1C657E4800368F5D /* MemorySessionDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E1F1C60C55200CDF49D /* MemorySessionDriver.swift */; };
 		4F6A6DDD1C657E4800368F5D /* MultipartFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2051C625FBE006FC98B /* MultipartFile.swift */; };
-		4F6A6DDE1C657E4800368F5D /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E201C60C55200CDF49D /* Parser.swift */; };
+		4F6A6DDE1C657E4800368F5D /* SocketParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E201C60C55200CDF49D /* SocketParser.swift */; };
 		4F6A6DDF1C657E4800368F5D /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E211C60C55200CDF49D /* Request.swift */; };
 		4F6A6DE01C657E4800368F5D /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E221C60C55200CDF49D /* Response.swift */; };
 		4F6A6DE11C657E4800368F5D /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E241C60C55200CDF49D /* Route.swift */; };
@@ -82,7 +82,7 @@
 		4FE66E1D1C60C55200CDF49D /* JSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
 		4FE66E1E1C60C55200CDF49D /* LinuxFixes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxFixes.swift; sourceTree = "<group>"; };
 		4FE66E1F1C60C55200CDF49D /* MemorySessionDriver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemorySessionDriver.swift; sourceTree = "<group>"; };
-		4FE66E201C60C55200CDF49D /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		4FE66E201C60C55200CDF49D /* SocketParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketParser.swift; sourceTree = "<group>"; };
 		4FE66E211C60C55200CDF49D /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		4FE66E221C60C55200CDF49D /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		4FE66E241C60C55200CDF49D /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
@@ -180,7 +180,7 @@
 				4FDAC20F1C639AAD006FC98B /* Middleware.swift */,
 				4FDAC2101C639AAD006FC98B /* MiddlewareManager.swift */,
 				4FDAC2051C625FBE006FC98B /* MultipartFile.swift */,
-				4FE66E201C60C55200CDF49D /* Parser.swift */,
+				4FE66E201C60C55200CDF49D /* SocketParser.swift */,
 				4FE66E3E1C60C9AB00CDF49D /* Renderer.swift */,
 				4FE66E211C60C55200CDF49D /* Request.swift */,
 				4FE66E221C60C55200CDF49D /* Response.swift */,
@@ -342,7 +342,7 @@
 				4F6A6DDB1C657E4800368F5D /* LinuxFixes.swift in Sources */,
 				4F6A6DE31C657E4800368F5D /* RouteManager.swift in Sources */,
 				4F6A6DE01C657E4800368F5D /* Response.swift in Sources */,
-				4F6A6DDE1C657E4800368F5D /* Parser.swift in Sources */,
+				4F6A6DDE1C657E4800368F5D /* SocketParser.swift in Sources */,
 				4F6A6DE81C657E4800368F5D /* StringExtensions.swift in Sources */,
 				4F6A6DD91C657E4800368F5D /* Renderer.swift in Sources */,
 				4F6A6DD81C657E4800368F5D /* MiddlewareManager.swift in Sources */,

@@ -8,11 +8,11 @@
 
 import Foundation
 
-enum ParserError: ErrorType {
+enum SocketParserError: ErrorType {
     case InvalidStatusLine(String)
 }
 
-class Parser {
+class SocketParser {
     
     func readHttpRequest(socket: Socket) throws -> Request {
         
@@ -21,7 +21,7 @@ class Parser {
         let statusLineTokens = statusLine.split(" ")
         
         if statusLineTokens.count < 3 {
-            throw ParserError.InvalidStatusLine(statusLine)
+            throw SocketParserError.InvalidStatusLine(statusLine)
         }
 
         let method = Request.Method(rawValue: statusLineTokens[0]) ?? .Unknown
