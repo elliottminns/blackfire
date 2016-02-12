@@ -1,5 +1,7 @@
 
 import Foundation
+import Echo
+
 #if os(Linux)
     import Glibc
 #endif
