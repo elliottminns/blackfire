@@ -3,29 +3,29 @@ var _module_nsstring = true
 #if os(Linux)
     import Foundation
     import Glibc
-    
+
     private let O = "0".ord, A = "A".ord, percent = "%".ord
-    
+
     private func unhex( char: Int8 ) -> Int8 {
         return char < A ? char - O : char - A + 10
     }
-    
+
     extension String {
-        
+
         var ord: Int8 {
             return Int8(utf8.first!)
         }
-        
+
         var stringByRemovingPercentEncoding: String? {
             var arr = [Int8]( count: 100000, repeatedValue: 0 )
             var out = UnsafeMutablePointer<Int8>( arr )
-            
+
             withCString { (bytes) in
                 var bytes = UnsafeMutablePointer<Int8>(bytes)
-                
+
                 while out < &arr + arr.count {
                     let start = strchr( bytes, Int32(percent) ) - UnsafeMutablePointer<Int8>( bytes )
-                    
+
                     let extralen = start < 0 ? Int(strlen( bytes )) : start + 1
                     let required = out - UnsafeMutablePointer<Int8>(arr) + extralen
                     if required > arr.count {
@@ -34,12 +34,12 @@ var _module_nsstring = true
                         arr = newarr
                         out = &arr + Int(strlen( arr ))
                     }
-                    
+
                     if start < 0 {
                         strcat( out, bytes )
                         break
                     }
-                    
+
                     bytes[start] = 0
                     strcat( out, bytes )
                     bytes += start + 3
@@ -47,25 +47,25 @@ var _module_nsstring = true
                     out[-1] = (unhex( bytes[-2] ) << 4) + unhex( bytes[-1] )
                 }
             }
-            
+
             return String.fromCString( arr )
         }
-        
+
         func stringByAddingPercentEscapesUsingEncoding( encoding: UInt ) -> String? {
             return self
         }
-        
+
         func stringByTrimmingCharactersInSet( cset: NSCharacterSet ) -> String {
             return self
         }
-        
+
         func componentsSeparatedByString( sep: String ) -> [String] {
             var out = [String]()
-            
+
             withCString { (bytes) in
                 sep.withCString { (sbytes) in
                     var bytes = UnsafeMutablePointer<Int8>( bytes )
-                    
+
                     while true {
                         let start = strstr( bytes, sbytes ) - UnsafeMutablePointer<Int8>( bytes )
                         if start < 0 {
@@ -78,10 +78,10 @@ var _module_nsstring = true
                     }
                 }
             }
-            
+
             return out
         }
-        
+
         func rangeOfString( str: String ) -> Range<Int>? {
             var start = -1
             withCString { (bytes) in
@@ -91,7 +91,7 @@ var _module_nsstring = true
             }
             return start < 0 ? nil : start..<start+str.utf8.count
         }
-        
+
         func substringToIndex( index: Int ) -> String {
             var out = self
             withCString { (bytes) in
@@ -101,7 +101,7 @@ var _module_nsstring = true
             }
             return out
         }
-        
+
         func substringFromIndex( index: Int ) -> String {
             var out = self
             withCString { (bytes) in
@@ -109,109 +109,6 @@ var _module_nsstring = true
             }
             return out
         }
-        
+
     }
-#endif
-
-
-var _module_dispatch = true
-
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin
-#endif
-
-#if os(Linux)
-
-public typealias EventBlock = (() -> ())
-
-var mainEventMutex = pthread_mutex_t()
-var mainEventQueue = [EventBlock]()
-var mainEventQueueCond = pthread_cond_t()
-
-enum QueueType: Int {
-    case Background = 0
-    case Main = 10
-}
-
-public typealias dispatch_queue_t = Int
-
-public let DISPATCH_QUEUE_CONCURRENT = 0, DISPATCH_QUEUE_PRIORITY_HIGH = 0, DISPATCH_QUEUE_PRIORITY_LOW = 0, DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0, DISPATCH_QUEUE_SERIAL = 0
-
-public func dispatch_get_global_queue( type: Int, _ flags: Int ) -> dispatch_queue_t {
-    return QueueType.Background.rawValue
-}
-
-public func dispatch_queue_create( name: String, _ type: Int ) -> dispatch_queue_t {
-    return QueueType.Background.rawValue
-}
-
-public func dispatch_sync( queue: Int, _ block: () -> () ) {
-    block()
-}
-
-private class pthreadBlock {
-    
-    let block: () -> ()
-    
-    init( block: () -> () ) {
-        self.block = block
-    }
-}
-
-private func pthreadRunner( arg: UnsafeMutablePointer<Void> ) -> UnsafeMutablePointer<Void> {
-    let unmanaged = Unmanaged<pthreadBlock>.fromOpaque( COpaquePointer( arg ) )
-    unmanaged.takeUnretainedValue().block()
-    unmanaged.release()
-    return arg
-}
-
-public func dispatch_async( queue: dispatch_queue_t, _ block: () -> () ) {
-    
-    if queue == dispatch_get_main_queue() {
-        
-        // Add to the main event loop
-        pthread_mutex_lock(&mainEventMutex)
-        mainEventQueue.append(block)
-        pthread_mutex_unlock(&mainEventMutex)
-        pthread_cond_signal(&mainEventQueueCond)
-        
-    } else {
-    
-        let holder = Unmanaged.passRetained( pthreadBlock( block: block ) )
-        
-        let pointer = UnsafeMutablePointer<Void>( holder.toOpaque() )
-        
-        #if os(Linux)
-            var pthread: pthread_t = 0
-        #else
-            var pthread: pthread_t = nil
-        #endif
-        if pthread_create( &pthread, nil, pthreadRunner, pointer ) == 0 {
-            pthread_detach( pthread )
-        }
-        else {
-            print( "pthread_create() error" )
-        }
-    }
-}
-
-public let DISPATCH_TIME_NOW = 0, NSEC_PER_SEC = 1_000_000_000
-
-public func dispatch_time( now: Int, _ nsec: Int64 ) -> Int64 {
-    return nsec
-}
-
-public func dispatch_after( delay: Int64, _ queue: Int, _ block: () -> () ) {
-    dispatch_async( queue, {
-        sleep( UInt32(Int(delay)/NSEC_PER_SEC) )
-        block()
-    } )
-}
-
-public func dispatch_get_main_queue() -> dispatch_queue_t {
-    return QueueType.Main.rawValue
-}
-
 #endif
