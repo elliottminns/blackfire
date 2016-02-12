@@ -17,6 +17,8 @@ public class SocketServer {
     /// A set of connected client sockets.
     private var clientSockets: Set<Socket> = []
 
+    private var clientSocketsLock = NSLock()
+
     /// The queue to dispatch requests on.
     private var queue: dispatch_queue_t
 
