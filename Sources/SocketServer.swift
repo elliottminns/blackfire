@@ -1,8 +1,6 @@
-//
-// Based on HttpServerIO from Swifter (https://github.com/glock45/swifter) by Damian Kołakowski.
-//
 
 import Echo
+import Foundation
 
 #if os(Linux)
     import Glibc
