@@ -1,5 +1,7 @@
 # Blackfish
 
+![alt tag](http://i.imgur.com/CV0YLLn.png)
+
 A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubuntu.
 
 ![Travis Badge](https://travis-ci.org/elliottminns/blackfish.svg?branch=master)
