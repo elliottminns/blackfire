@@ -2,7 +2,7 @@
 // Based on HttpServerIO from Swifter (https://github.com/glock45/swifter) by Damian Kołakowski.
 //
 
-import Foundation
+import Echo
 
 #if os(Linux)
     import Glibc
@@ -16,12 +16,9 @@ public class SocketServer {
     /// A set of connected client sockets.
     private var clientSockets: Set<Socket> = []
 
-    /// The shared lock for notifying new connections.
-    private let clientSocketsLock = NSLock()
-    
     /// The queue to dispatch requests on.
     private var queue: dispatch_queue_t
-    
+
     init() {
         queue = dispatch_queue_create("blackfish.queue.request", DISPATCH_QUEUE_CONCURRENT)
     }
@@ -43,17 +40,10 @@ public class SocketServer {
             //creates the infinite loop that will wait for client connections
             while let socket = try? self.listenSocket.acceptClientSocket() {
 
-                //wait for lock to notify a new connection
-                self.lock(self.clientSocketsLock) {
-                    //keep track of open sockets
-                    self.clientSockets.insert(socket)
-                }
-
                 dispatch_async(self.queue) {
+                    self.clientSockets.insert(socket)
                     self.handleConnection(socket)
-                    self.lock(self.clientSocketsLock) {
-                        self.clientSockets.remove(socket)
-                    }
+                    self.clientSockets.remove(socket)
                 }
             }
 
@@ -67,29 +57,7 @@ public class SocketServer {
         waits for inbound connections.
     */
     func loop() {
-        #if os(Linux)
-            var eventMutex = pthread_mutex_t()
-            pthread_mutex_init(&mainEventMutex, nil)
-            pthread_mutex_init(&eventMutex, nil)
-            pthread_cond_init (&mainEventQueueCond, nil)
-            
-            pthread_mutex_lock(&eventMutex)
-            
-            while true {
-                
-                pthread_cond_wait(&mainEventQueueCond, &eventMutex)
-                
-                while mainEventQueue.count > 0 {
-                    pthread_mutex_lock(&mainEventMutex)
-                    let event = mainEventQueue.removeFirst()
-                    pthread_mutex_unlock(&mainEventMutex)
-                    event()
-                }
-            }
-    
-        #else
-            NSRunLoop.mainRunLoop().run()
-        #endif
+        Echo.beginEventLoop()
     }
 
     func handleConnection(socket: Socket) {
@@ -100,13 +68,14 @@ public class SocketServer {
         let parser = SocketParser()
 
         if let request = try? parser.readHttpRequest(socket) {
-            
+
             dispatch_async(dispatch_get_main_queue()) {
-                
+
                 request.address = address
                 request.parameters = [:]
-                
+
                 let response = Response(request: request, responder: self, socket: socket)
+
                 self.dispatch(request: request, response: response, handlers: nil)
             }
         }
@@ -129,60 +98,46 @@ public class SocketServer {
         //free the port
         self.listenSocket.release()
 
-        //shutdown all client sockets
-        self.lock(self.clientSocketsLock) {
+        dispatch_async(queue) {
             for socket in self.clientSockets {
                 socket.shutdwn()
             }
             self.clientSockets.removeAll(keepCapacity: true)
         }
     }
-
-    /**
-        Locking mechanism for holding thread until a
-        new socket connection is ready.
-
-        - parameter handle: NSLock
-        - parameter closure: Code that will run when the lock has been altered.
-    */
-    private func lock(handle: NSLock, closure: () -> ()) {
-        handle.lock()
-        closure()
-        handle.unlock();
-    }
 }
 
 extension SocketServer: Responder {
     public func sendResponse(response: Response) {
-        
+
         let socket = response.socket
-        
+
         defer { socket
 //            Session.close(request: response.request, response: response)
             socket.release()
         }
-        
+
         do {
             try socket.writeUTF8("HTTP/1.1 \(response.status.code) \(response.reasonPhrase)\r\n")
-            
+
             var headers = response.headers()
-            
+
             if response.body.count >= 0 {
                 headers["Content-Length"] = "\(response.body.count)"
             }
-            
+
             if true && response.body.count != -1 {
                 headers["Connection"] = "keep-alive"
             }
-            
+
             for (name, value) in headers {
                 try socket.writeUTF8("\(name): \(value)\r\n")
             }
-            
+
             try socket.writeUTF8("\r\n")
-            
+
             try socket.writeUInt8(response.body)
-            
+
         } catch {
             print(error)
         }
