@@ -1,3 +1,6 @@
+//
+// Based on HttpServerIO from Swifter (https://github.com/glock45/swifter) by Damian Kołakowski.
+//
 
 import Echo
 import Foundation
@@ -38,10 +41,17 @@ public class SocketServer {
             //creates the infinite loop that will wait for client connections
             while let socket = try? self.listenSocket.acceptClientSocket() {
 
-                dispatch_async(self.queue) {
+                //wait for lock to notify a new connection
+                self.lock(self.clientSocketsLock) {
+                    //keep track of open sockets
                     self.clientSockets.insert(socket)
+                }
+
+                dispatch_async(self.queue) {
                     self.handleConnection(socket)
-                    self.clientSockets.remove(socket)
+                    self.lock(self.clientSocketsLock) {
+                        self.clientSockets.remove(socket)
+                    }
                 }
             }
 
@@ -73,7 +83,6 @@ public class SocketServer {
                 request.parameters = [:]
 
                 let response = Response(request: request, responder: self, socket: socket)
-
                 self.dispatch(request: request, response: response, handlers: nil)
             }
         }
@@ -96,12 +105,26 @@ public class SocketServer {
         //free the port
         self.listenSocket.release()
 
-        dispatch_async(queue) {
+        //shutdown all client sockets
+        self.lock(self.clientSocketsLock) {
             for socket in self.clientSockets {
                 socket.shutdwn()
             }
             self.clientSockets.removeAll(keepCapacity: true)
         }
+    }
+
+    /**
+        Locking mechanism for holding thread until a
+        new socket connection is ready.
+
+        - parameter handle: NSLock
+        - parameter closure: Code that will run when the lock has been altered.
+    */
+    private func lock(handle: NSLock, closure: () -> ()) {
+        handle.lock()
+        closure()
+        handle.unlock();
     }
 }
 
