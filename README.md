@@ -8,6 +8,7 @@ A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubu
 - [x] Single Threaded
 - [x] Beautiful syntax
 - [x] Type safe
+- [x] Powered by [Echo](https://github.com/elliottminns/echo)
 
 ## Getting Started
 
