@@ -1,4 +1,4 @@
-# Blackfish
+#
 
 ![alt tag](http://i.imgur.com/UdfQW2T.png =250x)
 
