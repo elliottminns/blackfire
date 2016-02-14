@@ -172,6 +172,12 @@ var cookies: [String: String]
 var session: Session
 ```
 
+### Database
+
+Blackfish works best with any event based based database, especially if powered by [Echo](https://github.com/elliottminns/echo).
+
+Currently, [Orca](https://github.com/elliottminns/orca) is recommended, which allows for asynchronous, non-blocking data persistence.
+
 ### Middleware
 
 Similar to Express, Blackfish provides Middleware which can be used to extend the request stack.
