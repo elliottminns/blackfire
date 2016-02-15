@@ -159,6 +159,12 @@ let status: Status = .Custom(420) //https://dev.twitter.com/overview/api/respons
 
 All files put in the `Public` folder at the root of your project will be available at the root of your domain. This is a great place to put your assets (`.css`, `.js`, `.png`, etc).
 
+## Database
+
+Blackfish works best with any event based based database, especially if powered by [Echo](https://github.com/elliottminns/echo).
+
+Currently, [Orca](https://github.com/elliottminns/orca) is recommended, which allows for asynchronous, non-blocking data persistence.
+
 ## Request
 
 Every route call gets passed a `Request` object. This can be used to grab query and path parameters.
@@ -172,12 +178,6 @@ var data: [String: String] //GET or POST data
 var cookies: [String: String]
 var session: Session
 ```
-
-### Database
-
-Blackfish works best with any event based based database, especially if powered by [Echo](https://github.com/elliottminns/echo).
-
-Currently, [Orca](https://github.com/elliottminns/orca) is recommended, which allows for asynchronous, non-blocking data persistence.
 
 ### Middleware
 
