@@ -1,6 +1,6 @@
 #
 
-![Blackfish](http://i.imgur.com/7pG1zRb.png)
+![Blackfish](http://i.imgur.com/zQRSr1H.png)
 
 A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubuntu.
 
