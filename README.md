@@ -12,6 +12,26 @@ A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubu
 - [x] Type safe
 - [x] Powered by [Echo](https://github.com/elliottminns/echo)
 
+Table of Contents
+=================
+
+* [Getting Started](#getting-started)
+  * [Work in Progress](#work-in-progress)
+* [Server](#server)
+* [Routing](#routing)
+  * [Router](#router)
+  * [Controller](#controller)
+  * [JSON](#json)
+  * [Views](#views)
+  * [Response](#response)
+  * [Public](#public)
+* [Database](#database)
+* [Request](#request)
+  * [Middleware](#middleware)
+  * [Session](#session)
+* [Deploying](#deploying)
+* [Attributions](#attributions)
+
 ## Getting Started
 
 You must have Swift 2.2 or later installed. You can learn more about Swift 2.2 at [Swift.org](http://swift.org)
