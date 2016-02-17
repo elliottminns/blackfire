@@ -4,3 +4,4 @@ Sources/main.swift
 Public
 Resources
 .DS_Store
+Carthage/

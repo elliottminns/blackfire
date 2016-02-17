@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F477ED71C750BD200F458F4 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F477ED61C750BD200F458F4 /* Controller.swift */; };
+		4F477EE41C750E6A00F458F4 /* Echo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F477EDF1C750E4900F458F4 /* Echo.framework */; };
 		4F5EF3BC1C68E5BD000295DF /* Blackfish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F6A6DC01C657DFE00368F5D /* Blackfish.framework */; };
 		4F6A6DC31C657DFE00368F5D /* Blackfish-OSX.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6A6DC21C657DFE00368F5D /* Blackfish-OSX.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F6A6DCA1C657DFE00368F5D /* Blackfish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F6A6DC01C657DFE00368F5D /* Blackfish.framework */; };
@@ -36,6 +38,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4F477EDE1C750E4900F458F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F477ED81C750E4900F458F4 /* Echo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F59CFC71C6E460E008D87E6;
+			remoteInfo = Echo;
+		};
+		4F477EE01C750E4900F458F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F477ED81C750E4900F458F4 /* Echo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F59CFD11C6E460E008D87E6;
+			remoteInfo = EchoTests;
+		};
+		4F477EE21C750E4900F458F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F477ED81C750E4900F458F4 /* Echo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F59CFEC1C6E462E008D87E6;
+			remoteInfo = "Echo-Example";
+		};
+		4F477EE51C750E6D00F458F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F477ED81C750E4900F458F4 /* Echo.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F59CFC61C6E460E008D87E6;
+			remoteInfo = Echo;
+		};
 		4F5EF3BA1C68E559000295DF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4FE66DC01C60C29800CDF49D /* Project object */;
@@ -65,6 +95,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F477ED61C750BD200F458F4 /* Controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
+		4F477ED81C750E4900F458F4 /* Echo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Echo.xcodeproj; path = ../../echo/Xcode/Echo/Echo.xcodeproj; sourceTree = "<group>"; };
 		4F6A6DC01C657DFE00368F5D /* Blackfish.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Blackfish.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F6A6DC21C657DFE00368F5D /* Blackfish-OSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blackfish-OSX.h"; sourceTree = "<group>"; };
 		4F6A6DC41C657DFE00368F5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -101,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F477EE41C750E6A00F458F4 /* Echo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +156,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F477ED91C750E4900F458F4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4F477EDF1C750E4900F458F4 /* Echo.framework */,
+				4F477EE11C750E4900F458F4 /* EchoTests.xctest */,
+				4F477EE31C750E4900F458F4 /* Echo-Example */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4F6A6DC11C657DFE00368F5D /* Blackfish-OSX */ = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +188,7 @@
 		4FE66DBF1C60C29800CDF49D = {
 			isa = PBXGroup;
 			children = (
+				4F477ED81C750E4900F458F4 /* Echo.xcodeproj */,
 				4FE66E1B1C60C55200CDF49D /* Sources */,
 				4FE66DCA1C60C29800CDF49D /* Blackfish */,
 				4F6A6DC11C657DFE00368F5D /* Blackfish-OSX */,
@@ -195,6 +239,7 @@
 				4FE66E2B1C60C55200CDF49D /* Tests.swift */,
 				4FDAC2131C64E17A006FC98B /* RouteDriver.swift */,
 				4FDAC2151C64E31A006FC98B /* PathTree.swift */,
+				4F477ED61C750BD200F458F4 /* Controller.swift */,
 			);
 			name = Sources;
 			path = ../Sources;
@@ -226,6 +271,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4F477EE61C750E6D00F458F4 /* PBXTargetDependency */,
 			);
 			name = Blackfish_OSX;
 			productName = "Blackfish-OSX";
@@ -299,6 +345,12 @@
 			mainGroup = 4FE66DBF1C60C29800CDF49D;
 			productRefGroup = 4FE66DC91C60C29800CDF49D /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4F477ED91C750E4900F458F4 /* Products */;
+					ProjectRef = 4F477ED81C750E4900F458F4 /* Echo.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4FE66DC71C60C29800CDF49D /* Blackfish-Test */,
@@ -307,6 +359,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4F477EDF1C750E4900F458F4 /* Echo.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Echo.framework;
+			remoteRef = 4F477EDE1C750E4900F458F4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F477EE11C750E4900F458F4 /* EchoTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = EchoTests.xctest;
+			remoteRef = 4F477EE01C750E4900F458F4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F477EE31C750E4900F458F4 /* Echo-Example */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = "Echo-Example";
+			remoteRef = 4F477EE21C750E4900F458F4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4F6A6DBE1C657DFE00368F5D /* Resources */ = {
@@ -343,6 +419,7 @@
 				4F6A6DE31C657E4800368F5D /* RouteManager.swift in Sources */,
 				4F6A6DE01C657E4800368F5D /* Response.swift in Sources */,
 				4F6A6DDE1C657E4800368F5D /* SocketParser.swift in Sources */,
+				4F477ED71C750BD200F458F4 /* Controller.swift in Sources */,
 				4F6A6DE81C657E4800368F5D /* StringExtensions.swift in Sources */,
 				4F6A6DD91C657E4800368F5D /* Renderer.swift in Sources */,
 				4F6A6DD81C657E4800368F5D /* MiddlewareManager.swift in Sources */,
@@ -373,6 +450,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4F477EE61C750E6D00F458F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Echo;
+			targetProxy = 4F477EE51C750E6D00F458F4 /* PBXContainerItemProxy */;
+		};
 		4F5EF3BB1C68E559000295DF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4F6A6DBF1C657DFE00368F5D /* Blackfish_OSX */;
