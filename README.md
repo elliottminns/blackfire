@@ -82,6 +82,57 @@ app.use(path: "/birds", router: router)
 
 Navigating to `http://example.com/birds` will show a page with `Bird is the word` and navigating to `http://example.com/birds/about` will show a page with `"Don't you know, about the bird?"`.
 
+### Controller
+
+You can also use controllers to define your paths. All you need to do is extend from the `Controller` protocol and implement your routes in `func routes(router: Router)` to the router object passed in:
+
+```
+MyController.swift
+```
+
+```swift
+class MyController: Controller {
+    
+    func routes(router: Router) {
+        router.get("/", handler: index)
+        router.post("/update", handler: formUpdate)
+    }
+    
+    var index: Route.Handler {
+        return { request, response in
+            response.send(text: "Hello Index")
+        }
+    }
+    
+    func formUpdate(request: Request, response: Response) {
+        response.send(text: "Form updated")
+    }
+}
+```
+
+Routes can be either functions with the correct parameters or Route.Handler objects themselves.
+
+Then we just need to add the controller to the server:
+
+```
+main.swift
+```
+
+```swift
+let app = Blackfish()
+
+app.use(path: "/test", controller: Test())
+
+app.listen(port: 3000) { error in
+    if error == nil {
+        print("App listening on port 3000")
+    } else {
+        print("Error")
+    }
+}
+```
+
+Now our `/test` and `/test/update` paths will be correct populated
 
 ### JSON
 
