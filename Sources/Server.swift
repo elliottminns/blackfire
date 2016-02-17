@@ -124,20 +124,26 @@ extension Blackfish {
             handler?(error: error)
         }
     }
-
-    public func use(path path: String, router: Router) {
-        Route.createRoutesFromRouter(router, withPath: path)
-    }
-
-    public func use(renderer renderer: Renderer, ext: String) {
-        renderers[ext] = renderer
-    }
 }
 
 // MARK: - Routing
 
 extension Blackfish: Routing {
 
+    public func use(path path: String, router: Router) {
+        Route.createRoutesFromRouter(router, withPath: path)
+    }
+    
+    public func use(renderer renderer: Renderer, ext: String) {
+        renderers[ext] = renderer
+    }
+    
+    public func use(path path: String, controller: Controller) {
+        let router = Router()
+        controller.routes(router)
+        Route.createRoutesFromRouter(router, withPath: path)
+    }
+    
     public func use(middleware middleware: Middleware) {
         middlewareManager.register(middleware)
     }
