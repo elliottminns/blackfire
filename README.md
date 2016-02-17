@@ -16,6 +16,8 @@ A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubu
 
 You must have Swift 2.2 or later installed. You can learn more about Swift 2.2 at [Swift.org](http://swift.org)
 
+Blackfish is tested using the latest Swift **Development** snapshots, with current testing using snapshot [February 8, 2016](https://swift.org/download/)
+
 ### Work in Progress
 
 This is a work in progress and will likely change frequently, pull requests are welcome!
