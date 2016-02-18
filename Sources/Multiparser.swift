@@ -3,7 +3,7 @@ import Foundation
 import Echo
 
 #if os(Linux)
-    import GlibC
+    import Glibc
 #else
     import Darwin
 #endif
