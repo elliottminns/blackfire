@@ -12,8 +12,6 @@ public class Route {
 		self.method = method
 		self.path = path
 		self.handler = handler
-
-		Route.routes.append(self)
 	}
     
     class func createRoutesFromRouter(router: Router, withPath path: String) {
@@ -25,6 +23,11 @@ public class Route {
         addHandlers(router.alls, toRoutesWithFunction: all, withPath: path)
     }
     
+    class func add(method method: Request.Method, path: String, handler: Handler) {
+        let route = Route(method: method, path: path, handler: handler)
+        self.routes.append(route)
+    }
+
     class func addHandlers(handlers: [String: Handler],
         toRoutesWithFunction function: ((path: String, handler: Handler) -> Void),
         withPath path: String) {
@@ -35,23 +38,23 @@ public class Route {
     }
 
 	class func get(path: String, handler: Handler) {
-		let _ = Route(method: .Get, path: path, handler: handler)
+        self.add(method: .Get, path: path, handler: handler)
 	}
 
 	class func post(path: String, handler: Handler) {
-		let _ = Route(method: .Post, path: path, handler: handler)
+        self.add(method: .Post, path: path, handler: handler)
 	}
 
 	class func put(path: String, handler: Handler) {
-		let _ = Route(method: .Put, path: path, handler: handler)
+        self.add(method: .Put, path: path, handler: handler)
 	}
 
 	class func patch(path: String, handler: Handler) {
-		let _ = Route(method: .Patch, path: path, handler: handler)
+		self.add(method: .Patch, path: path, handler: handler)
 	}
 
 	class func delete(path: String, handler: Handler) {
-		let _ = Route(method: .Delete, path: path, handler: handler)
+		self.add(method: .Delete, path: path, handler: handler)
 	}
 
 	class func all(path: String, handler: Handler) {

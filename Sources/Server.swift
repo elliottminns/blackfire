@@ -11,10 +11,17 @@ public class Blackfish: SocketServer {
 
     private var renderers: [String: Renderer]
 
+    public var port: Int {
+        return runningPort
+    }
+
+    private var runningPort: Int
+
     public override init() {
         middlewareManager = HandlerManager<MiddlewareHandler>(allowsMultiplesPerPath: false)
         routeManager = HandlerManager<Route>(allowsMultiplesPerPath: true)
         renderers = [:]
+        runningPort = 3000
         super.init()
 
         renderers[".html"] = HTMLRenderer()
@@ -102,6 +109,7 @@ extension Blackfish {
 
         do {
             try self.start(port)
+            runningPort = port
             handler?(error: nil)
             self.loop()
         } catch {
