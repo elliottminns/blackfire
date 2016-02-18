@@ -5,3 +5,4 @@ Public
 Resources
 .DS_Store
 Carthage/
+xcuserdata/*
