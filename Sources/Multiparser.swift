@@ -24,7 +24,7 @@ public class Multiparser: Middleware {
             self.directory = directory
         } else {
             #if os(Linux)
-            self.directory = "/var/tmp"
+            self.directory = "/var/tmp/"
             #else
             self.directory = NSTemporaryDirectory()
             #endif
@@ -78,7 +78,7 @@ public class Multiparser: Middleware {
                         let size = multipart.body.count
                         let mimetype = MimeType.forExtension(ext)
                         
-                        let path = self.directory + "/name" + "." + ext
+                        let path = self.directory + name + "." + ext
                         do {
                             try self.writeData(multipart.body, toPath: path)
                             let file = MultipartFile(name: name, ext: ext, size: size,
@@ -129,9 +129,9 @@ public class Multiparser: Middleware {
         
         randomString = randomCharacters.joinWithSeparator("")
         
-        let time = NSDate().timeIntervalSinceReferenceDate
+        let time = "\(NSDate().timeIntervalSinceReferenceDate)"
         
-        return "\(randomString)\(time)"
+        return "\(randomString)\(time.split(".").joinWithSeparator(""))"
     }
     
     struct MultiPart {
