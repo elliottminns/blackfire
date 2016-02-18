@@ -9,3 +9,4 @@ install:
 
 script:
     - env PATH=$(pwd)/swift/swift-DEVELOPMENT-SNAPSHOT-2016-02-08-a-ubuntu14.04/usr/bin:$PATH swift build
+    - env PATH=$(pwd)/swift/swift-DEVELOPMENT-SNAPSHOT-2016-02-08-a-ubuntu14.04/usr/bin:$PATH swift build -c release
