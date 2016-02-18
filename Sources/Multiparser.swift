@@ -119,7 +119,7 @@ public class Multiparser: Middleware {
         
         let randomCharacters = (0 ..< length).map { i -> String in
             #if os(Linux)
-                let offset = rand() % lettersLength;
+                let offset = Int(UInt32(rand()) % UInt32(lettersLength))
             #else
                 let offset = Int(arc4random_uniform(lettersLength))
             #endif
