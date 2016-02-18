@@ -144,8 +144,15 @@ class Socket: Hashable, Equatable {
         } while n != Socket.NL
         return characters
     }
+
+    var cachedPeerName: String?
     
     func peername() throws -> String {
+    
+        if let name = cachedPeerName {
+            return name
+        }
+
         var addr = sockaddr(), len: socklen_t = socklen_t(sizeof(sockaddr))
         if getpeername(self.socketFileDescriptor, &addr, &len) != 0 {
             throw SocketError.GetPeerNameFailed(Socket.descriptionOfLastError())
@@ -157,6 +164,9 @@ class Socket: Hashable, Equatable {
         guard let name = String.fromCString(hostBuffer) else {
             throw SocketError.ConvertingPeerNameFailed
         }
+
+        cachedPeerName = name
+
         return name
     }
     
@@ -194,7 +204,7 @@ class Socket: Hashable, Equatable {
     
     private class func htonsPort(port: in_port_t) -> in_port_t {
         #if os(Linux)
-            return htons(port)
+            return port.bigEndian //use htons(). LLVM Crash currently
         #else
             let isLittleEndian = Int(OSHostByteOrder()) == OSLittleEndian
             return isLittleEndian ? _OSSwapInt16(port) : port
