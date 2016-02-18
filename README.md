@@ -240,6 +240,12 @@ Blackfish works best with any event based based database, especially if powered 
 
 Currently, [Orca](https://github.com/elliottminns/orca) is recommended, which allows for asynchronous, non-blocking data persistence.
 
+Orca currently supports
+
+- [SQLite](https://github.com/elliottminns/orca-sqlite)
+- [MongoDB](https://github.com/elliottminns/orca-mongo)
+
+
 ## Request
 
 Every route call gets passed a `Request` object. This can be used to grab query and path parameters.
