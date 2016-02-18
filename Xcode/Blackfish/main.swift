@@ -1,30 +1,37 @@
 import Blackfish
 
-class Test: Controller {
+class Index: Controller {
     
     func routes(router: Router) {
         router.get("/", handler: index)
-        router.post("/update", handler: formUpdate)
+        router.post("/", handler: formUpdate)
     }
     
     var index: Route.Handler {
         return { request, response in
-            response.send(text: "Hello Index")
+            response.render("welcome.html")
         }
     }
     
     func formUpdate(request: Request, response: Response) {
-        response.send(text: "Form updated")
+        
+        print("Files: \(request.files.count)")
+        response.redirect("/")
+    }
+}
+
+class Logger: Middleware {
+    func handle(request: Request, response: Response, next: (() -> ())) {
+        print(request.path)
+        next()
     }
 }
 
 let app = Blackfish()
 
-app.use(path: "/test", controller: Test())
-
-app.get("/") { request, response in
-    response.send(text: "Hello World")
-}
+app.use(path: "/", controller: Index())
+app.use(path: "/", middleware: Logger())
+app.use(middleware: Multiparser())
 
 app.listen(port: 3000) { error in
     if error == nil {
