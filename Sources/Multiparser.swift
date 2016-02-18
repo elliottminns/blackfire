@@ -16,11 +16,15 @@ public class Multiparser: Middleware {
     let directory: String
     
     public init(directory: String? = nil) {
+        #if os(Linux)
+            srand(UInt32(time(nil)))
+        #endif
+        
         if let directory = directory {
             self.directory = directory
         } else {
             #if os(Linux)
-            self.direction = "/var/tmp"
+            self.directory = "/var/tmp"
             #else
             self.directory = NSTemporaryDirectory()
             #endif
@@ -114,7 +118,11 @@ public class Multiparser: Middleware {
         let lettersLength = UInt32(letters.count)
         
         let randomCharacters = (0 ..< length).map { i -> String in
-            let offset = Int(arc4random_uniform(lettersLength))
+            #if os(Linux)
+                let offset = rand() % lettersLength;
+            #else
+                let offset = Int(arc4random_uniform(lettersLength))
+            #endif
             let c = letters[letters.startIndex.advancedBy(offset)]
             return String(c)
         }
