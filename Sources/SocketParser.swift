@@ -60,32 +60,6 @@ class SocketParser {
                 }
                 
                 request.body = body
-                
-                if let parts = request.parseMultiPartFormData() {
-                    
-                    for part in parts {
-                        if let name = part.name {
-                            if let fileName = part.fileName where fileName.characters.count > 0 {
-                                let file = MultipartFile(name: fileName, data: part.body)
-                                
-                                if request.files[name] == nil {
-                                    request.files[name] = []
-                                }
-                                
-                                request.files[name]?.append(file )
-                            
-                            } else {
-                                
-                                let ptr = UnsafeMutablePointer<Void>(part.body)
-                                
-                                if let data = String(bytesNoCopy: ptr, length: part.body.count * sizeof(UInt8), encoding: NSUTF8StringEncoding, freeWhenDone: false) {
-                                    request.data[name] = data
-                                }
-                            }
-                            
-                        }
-                    }
-                }
         }
 
         return request

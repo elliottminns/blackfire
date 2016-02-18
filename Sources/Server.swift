@@ -5,22 +5,22 @@ public class Blackfish: SocketServer {
 
     public static let VERSION = "0.1.3"
 
-    private let middlewareManager: MiddlewareManager
+    private let middlewareManager: HandlerManager<MiddlewareHandler>
 
-    private let routeManager: RouteManager
+    private let routeManager: HandlerManager<Route>
 
     private var renderers: [String: Renderer]
 
     public override init() {
-        middlewareManager = MiddlewareManager()
-        routeManager = RouteManager()
+        middlewareManager = HandlerManager<MiddlewareHandler>(allowsMultiplesPerPath: false)
+        routeManager = HandlerManager<Route>(allowsMultiplesPerPath: true)
         renderers = [:]
         super.init()
 
         renderers[".html"] = HTMLRenderer()
     }
 
-    override func dispatch(request request: Request, response: Response, handlers: [Middleware.Handler]?) {
+    override func dispatch(request request: Request, response: Response, handlers: [Handler]?) {
 
         response.renderSupplier = self
 
@@ -50,13 +50,16 @@ public class Blackfish: SocketServer {
 
             if let handler = handlers.popLast() {
 
-                handler(request: request, response: response, next: { () -> () in
+                handler.handle(request: request, response: response, next: { () -> () in
                     self.dispatch(request: request, response: response, handlers: handlers)
                 })
 
             } else {
+                
                 if let result = routeManager.routeSingle(request) {
-                    result(request: request, response: response)
+                    result.handle(request: request, response: response, next: { 
+                        
+                    })
                 } else {
                     super.dispatch(request: request, response: response, handlers: nil)
                 }
@@ -71,27 +74,8 @@ public class Blackfish: SocketServer {
     func parseRoutes() {
 
         for route in Route.routes {
-
-            self.routeManager.register(route.method.rawValue, driver: route) { request, response in
-
-                // Grab request params
-                let routePaths = route.path.split("?")[0].split("/")
-
-                for (index, path) in routePaths.enumerate() {
-                    if path.hasPrefix(":") {
-                        let requestPaths = request.path.split("/")
-                        if requestPaths.count > index {
-                            var trimPath = path
-                            trimPath.removeAtIndex(path.startIndex)
-                            request.parameters[trimPath] = requestPaths[index]
-                        }
-                    }
-                }
-
-                Session.start(request)
-
-                route.handler(request: request, response: response)
-            }
+            
+            self.routeManager.register(route.method.rawValue, handler: route)
         }
     }
 }
@@ -144,8 +128,18 @@ extension Blackfish: Routing {
         Route.createRoutesFromRouter(router, withPath: path)
     }
     
+//    public func use(middleware middleware: ((request: Request, response: Response, next: () -> ()) -> ())) {
+//        
+//    }
+    
     public func use(middleware middleware: Middleware) {
-        middlewareManager.register(middleware)
+        use(path: "/", middleware: middleware)
+    }
+    
+    public func use(path path: String, middleware: Middleware) {
+        let middlewareHandler = MiddlewareHandler(middleware: middleware,
+                                                  path: path)
+        middlewareManager.register(middlewareHandler)
     }
 
     public func get(path: String, handler: Route.Handler) {
