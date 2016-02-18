@@ -143,7 +143,7 @@ main.swift
 ```swift
 let app = Blackfish()
 
-app.use(path: "/test", controller: Test())
+app.use(path: "/test", controller: MyController())
 
 app.listen(port: 3000) { error in
     if error == nil {
