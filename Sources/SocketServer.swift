@@ -95,7 +95,7 @@ public class SocketServer {
 
         - returns: DispatchResponse
     */
-    func dispatch(request request: Request, response: Response, handlers: [Middleware.Handler]?) {
+    func dispatch(request request: Request, response: Response, handlers: [Handler]?) {
         response.status = .NotFound
         response.send(text: "Page not found")
     }
