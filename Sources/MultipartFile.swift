@@ -6,10 +6,6 @@ import Echo
     import Glibc
 #endif
 
-enum FileError: ErrorType {
-    case WriteError
-}
-
 
 public struct MultipartFile {
 
