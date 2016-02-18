@@ -28,6 +28,7 @@ Table of Contents
 * [Database](#database)
 * [Request](#request)
   * [Middleware](#middleware)
+  * [Multipart](#multipart)
   * [Session](#session)
 * [Deploying](#deploying)
 * [Attributions](#attributions)
@@ -300,6 +301,27 @@ let userDetail = Middleware(path: "/user") { (request, response, next) in {
 ```
 
 Using Middleware can allow you endless possibilities with a simple interface.
+
+### Multipart
+
+To allow multipart parsing of files and other data from `enctype="multitype/form-data" you need to add the `Multiparser` middleware to the stack:
+
+```swift
+app.use(middleware: Multiparser())
+```
+
+Following this, you can access all multipart text input under `request.data` and files under `request.files`.
+
+example:
+
+```swift
+app.use(middleware: Multiparser())
+
+app.post("/") { request, response in 
+   print(request.data["name"])
+   print(request.files["images"].first)
+}
+```
 
 ### Session
 
