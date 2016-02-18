@@ -5,4 +5,4 @@ Public
 Resources
 .DS_Store
 Carthage/
-xcuserdata/*
+Xcode/Blackfish.xcodeproj/project.xcworkspace/xcuserdata/
