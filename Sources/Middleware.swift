@@ -1,53 +1,24 @@
 
-public protocol MiddlewareHandler {
+
+public protocol Middleware {
     func handle(request: Request, response: Response, next: (() -> ())) -> Void
 }
 
-public class Middleware {
+class MiddlewareHandler {
     
-    public typealias Handler = (request: Request, response: Response, next: (() -> ())) -> Void
-    
+    let middleware: Middleware
     let path: String
     
-    var handler: Handler {
-        
-        if let handler = handlerStore {
-            return handler
-        } else {
-            return handle
-        }
-    }
-    
-    var handlerStore: Handler?
-    
-    public init(path: String, handler: Middleware.Handler) {
+    init(middleware: Middleware, path: String) {
         self.path = path
-        self.handlerStore = handler
+        self.middleware = middleware
     }
-    
-    public init(handler: Handler) {
-        self.path = "/"
-        self.handlerStore = handler
-    }
-    
-    public init(path: String) {
-        self.path = "/"
-        self.handlerStore = self.handle
-    }
-    
-    public init() {
-        self.path = "/"
-        self.handlerStore = self.handle
-    }
-}
-
-extension Middleware: Driver {
     
 }
 
-extension Middleware: MiddlewareHandler {
+extension MiddlewareHandler: Handler {
     
-    public func handle(request: Request, response: Response, next: (() -> ())) {
-
+    func handle(request request: Request, response: Response, next: (() -> ())) {
+        middleware.handle(request, response: response, next: next)
     }
 }
