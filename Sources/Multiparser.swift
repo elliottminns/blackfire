@@ -2,6 +2,12 @@
 import Foundation
 import Echo
 
+#if os(Linux)
+    import GlibC
+#else
+    import Darwin
+#endif
+
 public class Multiparser: Middleware {
     
     let multipartFormIdentifier = "multipart/form-data"
