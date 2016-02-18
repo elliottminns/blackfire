@@ -76,6 +76,8 @@ app.get("/welcome") { request, response in
 }
 
 app.post('/') { request, response in
+    // POST data
+    print(request.data)
     response.send(text: 'Got a POST request')
 });
 
