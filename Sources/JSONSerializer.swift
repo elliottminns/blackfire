@@ -54,6 +54,21 @@ class JSONSerializer {
             }
 
             return s + "]"
+            
+        } else if let arr = object as? [[String: Any]] {
+            
+            var s = "["
+            
+            for i in 0 ..< arr.count {
+                s += self.serialize(arr[i])
+                
+                if i != (arr.count - 1) {
+                    s += ","
+                }
+            }
+            
+            return s + "]"
+            
         } else if let arr = object as? [Int] {
             var s = "["
 
