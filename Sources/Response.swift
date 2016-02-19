@@ -183,7 +183,7 @@ extension Response {
         
         let data: [UInt8]
         
-        if let json = json as? AnyObject 
+        if let json = json as? AnyObject {
             if NSJSONSerialization.isValidJSONObject(json) {
             
             do {
