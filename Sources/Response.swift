@@ -188,8 +188,8 @@ extension Response {
             do {
                 let json = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
                 data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
-            } catch {
-                self.send(error: "Server error")
+            } catch let errorMessage {
+                self.send(error: "Server error: \(errorMessage)")
                 return
             }
         } else {
@@ -224,10 +224,10 @@ extension Response {
             body = try renderer.renderToBytes(path, data: data)
             contentType = .HTML
             status = .OK
-        } catch {
+        } catch let errorMessage {
             status = .Error
             contentType = .Text
-            body = [UInt8]("An error occured".utf8)
+            body = [UInt8]("An error occured: \(errorMessage)".utf8)
         }
         
         send()
