@@ -193,6 +193,9 @@ extension Response {
                 self.send(error: "Server error: \(errorMessage)")
                 return
             }
+            } else {
+                self.send(error: "Server error: Invalid JSON")
+                return
             }
         } else {
             //fall back to manual serializer
