@@ -46,6 +46,8 @@ Blackfish is tested using the latest Swift **Development** snapshots, with curre
 
 This is a work in progress and will likely change frequently, pull requests are welcome!
 
+The [example project](https://github.com/elliottminns/blackfish-example) shows how easy it is to begin, and has an instance running on Heroku [here](https://blackfish-example.herokuapp.com)
+
 ## Server
 
 Starting the server is as simple as express.
