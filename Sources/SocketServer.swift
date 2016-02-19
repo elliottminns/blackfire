@@ -161,8 +161,8 @@ extension SocketServer: Responder {
 
             try socket.writeUInt8(response.body)
 
-        } catch {
-            print(error)
+        } catch let errorMessage {
+            print("Error: \(error), errorMessage: \(errorMessage)")
         }
     }
 }

@@ -91,8 +91,8 @@ public class Multiparser: Middleware {
                             }
                             
                             request.files[fieldName]!.append(file)
-                        } catch {
-                            
+                        } catch let errorMessage {
+                            print("Boundry Error: \(errorMessage)")
                         }
                         
                     } else {
