@@ -1,6 +1,6 @@
-
 import Foundation
 import Echo
+import Vaquita
 
 #if os(Linux)
     import Glibc
@@ -75,12 +75,13 @@ public class Multiparser: Middleware {
                         let fieldName = multipart.name {
                         
                         let name = self.randomStringWithLengthAndTime(10)
-                        let size = multipart.body.count
+                        let size = multipart.body.size
                         let mimetype = MimeType.forExtension(ext)
                         
                         let path = self.directory + name + "." + ext
                         do {
-                            try self.writeData(multipart.body, toPath: path)
+                            try Vaquita.writeDataSync(multipart.body, toFilePath: path)
+
                             let file = MultipartFile(name: name, ext: ext, size: size,
                                 mimetype: mimetype, originalName: fileName,
                                 fieldName: fieldName, path: path)
@@ -138,7 +139,7 @@ public class Multiparser: Middleware {
         
         let headers: [String: String]
         
-        let body: [UInt8]
+        let body: Data
         
         var name: String? {
             return valueFor("content-disposition", parameterName: "name")?.unquote()
@@ -149,9 +150,12 @@ public class Multiparser: Middleware {
         }
         
         var value: String? {
-            let string = String(bytesNoCopy: UnsafeMutablePointer<Void>(body),
-                                length: body.count * sizeof(UInt8), encoding: NSUTF8StringEncoding,
-                                freeWhenDone: false)
+            let string: String?
+            do {
+                string = try body.toString()
+            } catch {
+                string = nil
+            }
             
             if string?.characters.count > 0 {
                 return string
@@ -239,7 +243,7 @@ public class Multiparser: Middleware {
     static let CR = UInt8(13)
     static let NL = UInt8(10)
     
-    private func nextMultiPartBody(inout generator: IndexingGenerator<[UInt8]>, boundary: String) -> [UInt8]? {
+    private func nextMultiPartBody(inout generator: IndexingGenerator<[UInt8]>, boundary: String) -> Data? {
         
         var body = [UInt8]()
         
@@ -266,7 +270,7 @@ public class Multiparser: Middleware {
                     }
                 }
                 
-                return body
+                return Data(bytes: body)
             }
         }
         return nil
