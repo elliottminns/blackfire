@@ -11,6 +11,7 @@ A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubu
 - [x] Beautiful syntax
 - [x] Type safe
 - [x] Powered by [Echo](https://github.com/elliottminns/echo)
+- [x] Running on [Heroku](https://blackfish-example.herokuapp.com)
 
 Table of Contents
 =================
@@ -31,6 +32,8 @@ Table of Contents
   * [Multipart](#multipart)
   * [Session](#session)
 * [Deploying](#deploying)
+  * [Heroku](#heroku)
+  * [DigitialOcean](#digitalocean)
 * [Attributions](#attributions)
 
 ## Getting Started
@@ -338,7 +341,40 @@ request.session.data["name"] = "Blackfish"
 
 ## Deploying
 
-Vapor has been successfully tested on Ubuntu 14.04 LTS (DigitalOcean) and Ubuntu 15.10 (VirtualBox).
+### Heroku
+
+The [Blackfish Example](https://github.com/elliottminns/blackfish-example) app is successfully running on Heroku [here](https://blackfish-example.herokuapp.com)
+
+To set up on Heroku, use the [Swift Heroku Buildpack](https://github.com/kylef/heroku-buildpack-swift) by Kyle Fuller.
+
+Instructions for setting up are:
+
+Create a Procfile at the same level as your Package.swift
+
+
+```
+./Procfile
+```
+
+```
+web: <AppName> --port=$PORT
+```
+
+Then
+
+```
+$ heroku create --buildpack https://github.com/kylef/heroku-buildpack-swift.git
+
+$ git push heroku master
+```
+
+And you're good!
+
+For more information, see the [Blackfish Example](https://github.com/elliottminns/blackfish-example) project.
+
+### DigitalOcean
+
+Blackfish has been successfully tested on Ubuntu 14.04 LTS (DigitalOcean) and Ubuntu 15.10 (VirtualBox).
 
 To deploy to DigitalOcean, simply
 
@@ -350,7 +386,7 @@ To deploy to DigitalOcean, simply
     ```swift
     dependencies:[
         // ...Previous dependencies
-        .Package(url: "https://github.com/elliottminns/blackfish", majorVersion: 0)
+        .Package(url: "https://github.com/elliottminns/blackfish.git", majorVersion: 0)
     ]
     ```
 - `cd` into the repository
