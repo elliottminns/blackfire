@@ -136,7 +136,6 @@ extension SocketServer: Responder {
         let socket = response.socket
 
         defer { socket
-//            Session.close(request: response.request, response: response)
             socket.release()
         }
 
@@ -161,8 +160,11 @@ extension SocketServer: Responder {
 
             try socket.writeUInt8(response.body)
 
-        } catch let errorMessage {
-            print("Error: \(error), errorMessage: \(errorMessage)")
+        } catch let socketError as SocketError {
+
+            print("Error: \(socketError)")
+        } catch {
+            print("Error: \(error)")
         }
     }
 }
