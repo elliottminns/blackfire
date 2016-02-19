@@ -19,6 +19,31 @@ enum SocketError: ErrorType {
     case GetNameInfoFailed(String)
     case AcceptFailed(String)
     case RecvFailed(String)
+
+    var errorMessage: String? {
+        switch self {
+        case let .SocketCreationFailed(message):
+            return message
+        case let .SocketSettingReUseAddrFailed(message):
+            return message
+        case let .BindFailed(message):
+            return message
+        case let .ListenFailed(message):
+            return message
+        case let .WriteFailed(message):
+            return message
+        case let .GetPeerNameFailed(message):
+            return message
+        case let .GetNameInfoFailed(message):
+            return message
+        case let .AcceptFailed(message):
+            return message
+        case let .RecvFailed(message):
+            return message
+        default:
+            return nil
+        }
+    }
 }
 
 class Socket: Hashable, Equatable {

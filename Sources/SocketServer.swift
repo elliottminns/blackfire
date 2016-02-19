@@ -161,8 +161,11 @@ extension SocketServer: Responder {
             try socket.writeUInt8(response.body)
 
         } catch let socketError as SocketError {
-
-            print("Error: \(socketError)")
+            if let message = socketError.errorMessage {
+                print("Error: \(socketError) error message: \(message)")
+            } else {
+                print("Error: \(socketError)")
+            }
         } catch {
             print("Error: \(error)")
         }
