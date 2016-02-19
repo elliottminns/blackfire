@@ -106,8 +106,8 @@
 		4F6A6DC21C657DFE00368F5D /* Blackfish-OSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blackfish-OSX.h"; sourceTree = "<group>"; };
 		4F6A6DC41C657DFE00368F5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F6A6DC91C657DFE00368F5D /* Blackfish_OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blackfish_OSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F6A6DD01C657DFE00368F5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../../Tests/Info.plist; sourceTree = "<group>"; };
-		4F6A6DEC1C657EDC00368F5D /* PublicInterfaceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PublicInterfaceTests.swift; path = ../../Tests/PublicInterfaceTests.swift; sourceTree = "<group>"; };
+		4F6A6DD01C657DFE00368F5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F6A6DEC1C657EDC00368F5D /* PublicInterfaceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicInterfaceTests.swift; sourceTree = "<group>"; };
 		4FDAC2051C625FBE006FC98B /* MultipartFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipartFile.swift; sourceTree = "<group>"; };
 		4FDAC2071C62B09E006FC98B /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		4FDAC20F1C639AAD006FC98B /* Middleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
@@ -185,7 +185,7 @@
 				4F6A6DEC1C657EDC00368F5D /* PublicInterfaceTests.swift */,
 			);
 			name = Tests;
-			path = "Blackfish-OSXTests";
+			path = "../Tests";
 			sourceTree = "<group>";
 		};
 		4FE66DBF1C60C29800CDF49D = {
