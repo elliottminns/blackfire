@@ -22,3 +22,23 @@ extension MiddlewareHandler: Handler {
         middleware.handle(request, response: response, next: next)
     }
 }
+
+class MiddlewareClosureHandler {
+
+    let path: String
+    let handler: (request: Request, response: Response, next: () -> ()) -> ()
+    
+    init(path: String, handler: (request: Request, 
+        response: Response, next: () -> ()) -> ()) {
+        self.path = path
+        self.handler = handler
+    }
+
+}
+
+extension MiddlewareClosureHandler: Handler {
+
+    func handle(request request: Request, response: Response, next: () -> ()) {
+        self.handler(request: request, response: response, next: next)
+    }
+}
