@@ -179,11 +179,12 @@ extension Response {
         send()
     }
     
-    public func send(json json: AnyObject) {
+    public func send(json json: Any) {
         
         let data: [UInt8]
         
-        if NSJSONSerialization.isValidJSONObject(json) {
+        if let json = json as? AnyObject 
+            if NSJSONSerialization.isValidJSONObject(json) {
             
             do {
                 let json = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
@@ -191,6 +192,7 @@ extension Response {
             } catch let errorMessage {
                 self.send(error: "Server error: \(errorMessage)")
                 return
+            }
             }
         } else {
             //fall back to manual serializer
