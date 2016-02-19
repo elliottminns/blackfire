@@ -270,12 +270,16 @@ var session: Session
 
 Similar to Express, Blackfish provides Middleware which can be used to extend the request stack.
 
-Below is an example of a validation Middleware, that validates every request before passing it down the stack.
+You can either create a middleware class that conforms to the `Middleware` protocol, or pass a closure in to the Blackfish instance.
+
+Below is an example of a validation Middleware conforming class, that validates every request before passing it down the stack.
 
 ```swift
 
-let validator = Middleware { (request, response, next) in
+class Validator: Middleware {
 
+    func handle(request: Request, response: Response, next: () -> ()) {
+    
     // Some validation logic
     if validator.validate(request) {
 
@@ -286,8 +290,10 @@ let validator = Middleware { (request, response, next) in
 
         // Return an error and don't call anything else in the stack.
         response.send(error: "Request was unauthorized")
-    }
+    }	
 }
+
+app.use(middleware: Validator()) 
 
 ```
 
@@ -295,15 +301,18 @@ You can also use middleware on a path which will add it to that path and further
 
 ```swift
 
-let userDetail = Middleware(path: "/user") { (request, response, next) in {
+let userDetail = { (request, response, next) in 
     let user = findUserById(request.data["userId"])
     request.data["user"] = user
     next()
 }
 
+app.use(path: "/user", middleware: userDetail)
+app.use(path: "/dashboard", middleware: Validator())
+
 ```
 
-Using Middleware can allow you endless possibilities with a simple interface.
+Middleware is a powerful feature of Blackfish that can open up endless possibilities.
 
 ### Multipart
 
