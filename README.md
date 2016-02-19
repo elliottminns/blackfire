@@ -249,7 +249,7 @@ Currently, [Orca](https://github.com/elliottminns/orca) is recommended, which al
 Orca currently supports
 
 - [SQLite](https://github.com/elliottminns/orca-sqlite)
-- [MongoDB](https://github.com/elliottminns/orca-mongo)
+- [MongoDB](https://github.com/elliottminns/orca-mongodb)
 
 
 ## Request
