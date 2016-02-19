@@ -6,4 +6,5 @@ Resources
 .DS_Store
 Carthage/
 Xcode/Blackfish.xcodeproj/project.xcworkspace/xcuserdata/
+Xcode/Blackfish.xcodeproj/xcuserdata/
 *.swp
