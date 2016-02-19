@@ -135,10 +135,26 @@ extension Blackfish: Routing {
         controller.routes(router)
         Route.createRoutesFromRouter(router, withPath: path)
     }
-    
-//    public func use(middleware middleware: ((request: Request, response: Response, next: () -> ()) -> ())) {
-//        
-//    }
+
+    public func use(middleware middleware: (request: Request, 
+                    response: Response, next: () -> ()) -> ()) {
+        self.use(path: "/", middleware: middleware)
+    }
+
+    public func use(path: String,
+                    middleware: (request: Request, response: Response, 
+                                 next: () -> ()) -> ()) {
+        self.use(path: path, middleware: middleware)
+    }
+
+    public func use(path path: String, 
+        middleware: (request: Request, response: Response, 
+                     next: () -> ()) -> ()) {
+        let handler = MiddlewareClosureHandler(path: path, 
+                                               handler: middleware)
+        middlewareManager.register(handler)
+
+    }
     
     public func use(middleware middleware: Middleware) {
         use(path: "/", middleware: middleware)
