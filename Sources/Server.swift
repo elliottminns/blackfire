@@ -58,7 +58,9 @@ public class Blackfish: SocketServer {
             if let handler = handlers.popLast() {
 
                 handler.handle(request: request, response: response, next: { () -> () in
-                    self.dispatch(request: request, response: response, handlers: handlers)
+                    print("handling")
+                    self.dispatch(request: request, response: response, 
+                                  handlers: handlers)
                 })
 
             } else {
