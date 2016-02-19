@@ -185,7 +185,7 @@
 				4F6A6DEC1C657EDC00368F5D /* PublicInterfaceTests.swift */,
 			);
 			name = Tests;
-			path = "../Tests";
+			path = ../Tests;
 			sourceTree = "<group>";
 		};
 		4FE66DBF1C60C29800CDF49D = {
@@ -486,6 +486,7 @@
 				INFOPLIST_FILE = "Blackfish-OSX/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.eliottminns.Blackfish-OSX";
 				PRODUCT_NAME = Blackfish;
 				SKIP_INSTALL = YES;
@@ -508,6 +509,7 @@
 				INFOPLIST_FILE = "Blackfish-OSX/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.eliottminns.Blackfish-OSX";
 				PRODUCT_NAME = Blackfish;
 				SKIP_INSTALL = YES;
