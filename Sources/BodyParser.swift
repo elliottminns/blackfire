@@ -1,4 +1,3 @@
-import PureJsonSerializer
 
 class JSONParser: Middleware {
     
