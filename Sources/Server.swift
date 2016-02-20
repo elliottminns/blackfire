@@ -18,8 +18,8 @@ public class Blackfish: SocketServer {
     private var runningPort: Int
 
     public override init() {
-        middlewareManager = HandlerManager<MiddlewareHandler>(allowsMultiplesPerPath: false)
-        routeManager = HandlerManager<Route>(allowsMultiplesPerPath: true)
+        middlewareManager = HandlerManager<MiddlewareHandler>(allowsMultiplesPerPath: true)
+        routeManager = HandlerManager<Route>(allowsMultiplesPerPath: false)
         renderers = [:]
         runningPort = 3000
         super.init()
