@@ -176,6 +176,24 @@ app.get("version") { request, response in
 
 This responds to all requests to `http://example.com/version` with the JSON dictionary `{"version": "1.0"}` and `Content-Type: application/json`.
 
+Requesting with JSON is also supported:
+
+```swift
+app.post("/") { request, response in 
+
+    for (key, value) in request.data {
+         print("\(key): \(value)")
+    }
+    
+    response.send(text: "Hello")
+}
+```
+
+```
+$ curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d "{'json':{'data': 1}}" http://127.0.0.1:3000
+
+$ "json: ["data": 1]"
+```
 ### Views
 
 You can also respond with HTML pages.
