@@ -27,7 +27,7 @@ public class Request {
     public var parameters: [String: String] = [:]
     
     ///GET or POST data
-    public var data: [String: String] = [:]
+    public var data: [String: Any] = [:]
 
     public var cookies: [String: String] = [:]
     
