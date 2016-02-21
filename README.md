@@ -423,9 +423,3 @@ To deploy to DigitalOcean, simply
 	- Run `.build/debug/MyApp`
 	- (you may need to run as `sudo` to use certain ports)
 	- (you may need to install `ufw` to set appropriate ports)
-
-## Attributions
-
-This project is based on [Vapor](https://github.com/tannernelson/vapor) by Tanner Nelson. It uses compatibilty code from [NSLinux](https://github.com/johnno1962/NSLinux) by johnno1962.
-
-Go checkout and star their repos.
