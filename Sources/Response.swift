@@ -25,11 +25,11 @@ public class Response {
     public var body: [UInt8]
     public var cookies: [String: String] = [:]
     public var additionalHeaders: [String: String] = [:]
-    
+
     unowned let request: Request
     unowned let responder: Responder
     weak var renderSupplier: RendererSupplier?
-    
+
     let socket: Socket
 
     public enum ContentType {
@@ -37,7 +37,7 @@ public class Response {
     }
 
     public enum Status {
-        case OK, Created, Accepted
+        case OK, Created, Accepted, NoContent
         case MovedPermanently
         case BadRequest, Unauthorized, Forbidden, NotFound
         case Error
@@ -49,6 +49,7 @@ public class Response {
                 case .OK: return 200
                 case .Created: return 201
                 case .Accepted: return 202
+                case .NoContent: return 204
 
                 case .MovedPermanently: return 301
 
@@ -120,7 +121,7 @@ public class Response {
         default:
             break
         }
-        
+
         for (key, value) in additionalHeaders {
             headers[key] = value
         }
@@ -143,12 +144,12 @@ public class Response {
 extension Response {
 
     public func send() {
-        
+
         responder.sendResponse(self)
     }
 
     public func send(text text: String) {
-        
+
         body = [UInt8](text.utf8)
         contentType = .Text
         status = .OK
@@ -156,7 +157,7 @@ extension Response {
     }
 
     public func send(error error: String) {
-        
+
         let text = "{\n\t\"error\": true,\n\t\"message\":\"\(error)\"\n}"
         body = [UInt8](text.utf8)
         contentType = .JSON
@@ -165,27 +166,27 @@ extension Response {
     }
 
     public func send(html html: String) {
-        
+
         let serialised = "<html><meta charset=\"UTF-8\"><body>\(html)</body></html>"
         body = [UInt8](serialised.utf8)
         contentType = .HTML
         status = .OK
         send()
     }
-    
+
     public func redirect(path: String) {
         status = .MovedPermanently
         additionalHeaders["Location"] = path
         send()
     }
-    
+
     public func send(json json: Any) {
-        
+
         let data: [UInt8]
-        
+
         if let json = json as? AnyObject {
             if NSJSONSerialization.isValidJSONObject(json) {
-            
+
             do {
                 let json = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
                 data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
@@ -202,21 +203,21 @@ extension Response {
             let string = JSONSerializer.serialize(json)
             data = [UInt8](string.utf8)
         }
-        
-        
+
+
         contentType = .JSON
         status = .OK
         body = data
-        
+
         self.send()
     }
-    
+
     public func render(path: String) {
         render(path, data: nil)
     }
-    
+
     public func render(path: String, data: [String: Any]?) {
-    
+
         guard let renderer = self.renderSupplier?.rendererForFile(path) else {
             status = .Error
             contentType = .Text
@@ -224,7 +225,7 @@ extension Response {
             send()
             return
         }
-        
+
         do {
             body = try renderer.renderToBytes(path, data: data)
             contentType = .HTML
@@ -234,7 +235,7 @@ extension Response {
             contentType = .Text
             body = [UInt8]("An error occured: \(errorMessage)".utf8)
         }
-        
+
         send()
     }
 }
