@@ -34,7 +34,6 @@ Table of Contents
 * [Deploying](#deploying)
   * [Heroku](#heroku)
   * [DigitialOcean](#digitalocean)
-* [Attributions](#attributions)
 
 ## Getting Started
 
@@ -176,6 +175,24 @@ app.get("version") { request, response in
 
 This responds to all requests to `http://example.com/version` with the JSON dictionary `{"version": "1.0"}` and `Content-Type: application/json`.
 
+Requesting with JSON is also supported:
+
+```swift
+app.post("/") { request, response in 
+
+    for (key, value) in request.data {
+         print("\(key): \(value)")
+    }
+    
+    response.send(text: "Hello")
+}
+```
+
+```
+$ curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d "{'json':{'data': 1}}" http://127.0.0.1:3000
+
+$ "json: ["data": 1]"
+```
 ### Views
 
 You can also respond with HTML pages.
@@ -405,9 +422,3 @@ To deploy to DigitalOcean, simply
 	- Run `.build/debug/MyApp`
 	- (you may need to run as `sudo` to use certain ports)
 	- (you may need to install `ufw` to set appropriate ports)
-
-## Attributions
-
-This project is based on [Vapor](https://github.com/tannernelson/vapor) by Tanner Nelson. It uses compatibilty code from [NSLinux](https://github.com/johnno1962/NSLinux) by johnno1962.
-
-Go checkout and star their repos.

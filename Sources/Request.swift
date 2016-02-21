@@ -14,8 +14,9 @@ public class Request {
     public let method: Method
 
     public var parameters: [String: String] = [:]
-
-    public var data: [String: String] = [:]
+    
+    ///GET or POST data
+    public var data: [String: Any] = [:]
 
     public var cookies: [String: String] = [:]
 

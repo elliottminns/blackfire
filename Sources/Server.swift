@@ -25,6 +25,7 @@ public class Blackfish: SocketServer {
         super.init()
 
         renderers[".html"] = HTMLRenderer()
+        self.use(middleware: JSONParser())
     }
 
     override func dispatch(request request: Request, response: Response, handlers: [Handler]?) {
@@ -58,7 +59,6 @@ public class Blackfish: SocketServer {
             if let handler = handlers.popLast() {
 
                 handler.handle(request: request, response: response, next: { () -> () in
-                    print("handling")
                     self.dispatch(request: request, response: response, 
                                   handlers: handlers)
                 })
