@@ -75,6 +75,8 @@ public class Response {
             return "Created"
         case .Accepted:
             return "Accepted"
+        case .NoContent:
+            return "No Content"
 
         case .MovedPermanently:
             return "Moved Permanently"
