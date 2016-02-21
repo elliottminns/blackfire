@@ -65,8 +65,8 @@ class SocketParser {
         return request
     }
     
-    private func extractQueryParams(url: String) -> [String: String] {
-        var query = [String: String]()
+    private func extractQueryParams(url: String) -> [String: Any] {
+        var query = [String: Any]()
 
         var urlParts = url.split("?")
         if urlParts.count < 2 {
