@@ -1,9 +1,6 @@
-//
-// Based on HttpServerIO from Swifter (https://github.com/glock45/swifter) by Damian Kołakowski.
-//
-
 import Echo
 import Foundation
+import Vaquita
 
 #if os(Linux)
     import Glibc
@@ -11,8 +8,10 @@ import Foundation
 
 public class SocketServer {
 
+    let socketManager: SocketManager
+
     /// A socket open to the port the server is listening on. Usually 80.
-    private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
+    private var listenSocket: Socket = Socket(rawSocket: -1)
 
     /// A set of connected client sockets.
     private var clientSockets: Set<Socket> = []
@@ -23,6 +22,7 @@ public class SocketServer {
     private var queue: dispatch_queue_t
 
     init() {
+        socketManager = SocketManager()
         queue = dispatch_queue_create("blackfish.queue.request", DISPATCH_QUEUE_CONCURRENT)
     }
 
@@ -32,20 +32,15 @@ public class SocketServer {
     */
     func start(listenPort: Int) throws {
 
-        // Stop the server if it's running
         self.stop()
 
-        // Open a socket, might fail
-        self.listenSocket = try Socket.tcpSocketForListen(UInt16(listenPort))
+        self.listenSocket = try socketManager.createListenSocket(listenPort)
 
         dispatch_async(self.queue) {
 
-            //creates the infinite loop that will wait for client connections
             while let socket = try? self.listenSocket.acceptClientSocket() {
 
-                //wait for lock to notify a new connection
                 self.lock(self.clientSocketsLock) {
-                    //keep track of open sockets
                     self.clientSockets.insert(socket)
                 }
 
@@ -57,15 +52,10 @@ public class SocketServer {
                 }
             }
 
-            //stop the server in case something didn't work
             self.stop()
         }
     }
 
-    /**
-        Starts an infinite loop to keep the server alive while it
-        waits for inbound connections.
-    */
     func loop() {
         Echo.beginEventLoop()
     }
@@ -100,29 +90,18 @@ public class SocketServer {
         response.send(text: "Page not found")
     }
 
-    /**
-        Stops the server
-    */
     func stop() {
-        //free the port
+
         self.listenSocket.release()
 
-        //shutdown all client sockets
         self.lock(self.clientSocketsLock) {
             for socket in self.clientSockets {
-                socket.shutdwn()
+                socket.release()
             }
             self.clientSockets.removeAll(keepCapacity: true)
         }
     }
 
-    /**
-        Locking mechanism for holding thread until a
-        new socket connection is ready.
-
-        - parameter handle: NSLock
-        - parameter closure: Code that will run when the lock has been altered.
-    */
     private func lock(handle: NSLock, closure: () -> ()) {
         handle.lock()
         closure()
@@ -140,7 +119,7 @@ extension SocketServer: Responder {
         }
 
         do {
-            try socket.writeUTF8("HTTP/1.1 \(response.status.code) \(response.reasonPhrase)\r\n")
+            try socket.writeString("HTTP/1.1 \(response.status.code) \(response.reasonPhrase)\r\n")
 
             var headers = response.headers()
 
@@ -153,12 +132,12 @@ extension SocketServer: Responder {
             }
 
             for (name, value) in headers {
-                try socket.writeUTF8("\(name): \(value)\r\n")
+                try socket.writeString("\(name): \(value)\r\n")
             }
 
-            try socket.writeUTF8("\r\n")
+            try socket.writeString("\r\n")
 
-            try socket.writeUInt8(response.body)
+            try socket.writeData(Data(bytes: response.body))
 
         } catch let socketError as SocketError {
             if let message = socketError.errorMessage {
