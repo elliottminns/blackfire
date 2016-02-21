@@ -34,7 +34,6 @@ Table of Contents
 * [Deploying](#deploying)
   * [Heroku](#heroku)
   * [DigitialOcean](#digitalocean)
-* [Attributions](#attributions)
 
 ## Getting Started
 
