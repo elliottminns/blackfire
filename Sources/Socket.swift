@@ -1,12 +1,13 @@
-//
-// Based on HttpSocket from Swifter (https://github.com/glock45/swifter) by Damian Kołakowski.
-//
-
 #if os(Linux)
     import Glibc
 #else
     import Foundation
 #endif
+
+enum SocketType {
+    case TCP
+    case UDP
+}
 
 enum SocketError: ErrorType {
     case SocketCreationFailed(String)
@@ -46,7 +47,7 @@ enum SocketError: ErrorType {
     }
 }
 
-class Socket: Hashable, Equatable {
+struct Socket {
     
     class func tcpSocketForListen(port: in_port_t, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
         
@@ -106,14 +107,12 @@ class Socket: Hashable, Equatable {
         self.socketFileDescriptor = socketFileDescriptor
     }
     
-    var hashValue: Int { return Int(self.socketFileDescriptor) }
-    
     func release() {
         Socket.release(self.socketFileDescriptor)
     }
     
-    func shutdwn() {
-        Socket.shutdwn(self.socketFileDescriptor)
+    func shutdown() {
+        Socket.shutdown(self.socketFileDescriptor)
     }
     
     func acceptClientSocket() throws -> Socket {
@@ -235,6 +234,17 @@ class Socket: Hashable, Equatable {
             return isLittleEndian ? _OSSwapInt16(port) : port
         #endif
     }
+}
+
+extension Socket: Hashable {
+
+    var hashValue: Int {
+
+        return Int(self.socketFileDescriptor)
+    }
+}
+
+extension Socket: Equatable {
 }
 
 func ==(socket1: Socket, socket2: Socket) -> Bool {
