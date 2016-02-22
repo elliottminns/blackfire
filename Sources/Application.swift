@@ -1,7 +1,7 @@
 
 import Foundation
 
-public class Blackfish: SocketServer {
+final public class Blackfish {
 
     public static let VERSION = "0.1.3"
 
@@ -10,6 +10,10 @@ public class Blackfish: SocketServer {
     private let routeManager: HandlerManager<Route>
 
     private var renderers: [String: Renderer]
+    
+    private let server: SocketServer
+    
+    private let parameterManager: ParameterManager
 
     public var port: Int {
         return runningPort
@@ -17,66 +21,84 @@ public class Blackfish: SocketServer {
 
     private var runningPort: Int
 
-    public override init() {
+    public init() {
         middlewareManager = HandlerManager<MiddlewareHandler>(allowsMultiplesPerPath: true)
         routeManager = HandlerManager<Route>(allowsMultiplesPerPath: false)
         renderers = [:]
         runningPort = 3000
-        super.init()
-
+        server = SocketServer()
+        parameterManager = ParameterManager()
         renderers[".html"] = HTMLRenderer()
-        self.use(middleware: JSONParser())
+        use(middleware: StaticFileMiddleware())
+        use(middleware: JSONParser())
+        server.delegate = self
     }
-
-    override func dispatch(request request: Request, response: Response, handlers: [Handler]?) {
-
+    
+    func dispatch(request request: Request, response: Response, handlers: [Handler]?) {
         response.renderSupplier = self
+        let handlers = middlewareManager.route(request)
+        handleMiddleware(handlers, request: request, response: response)
 
-        //check in file system
-        let filePath = "Public" + request.path
-
-        let fileManager = NSFileManager.defaultManager()
-        var isDir: ObjCBool = false
-
-        if fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) {
-            // File exists
-            if let fileBody = NSData(contentsOfFile: filePath) {
-                var array = [UInt8](count: fileBody.length, repeatedValue: 0)
-                fileBody.getBytes(&array, length: fileBody.length)
-
-                response.status = .OK
-                response.body = array
-                response.contentType = .Text
-                response.send()
-                return
+    }
+    
+    func handleMiddleware(handlers: [Handler], request: Request, response: Response) {
+        
+        var handlers = handlers
+        
+        if let handler = handlers.popLast() {
+            
+            handler.handle(request: request, response: response) {
+                self.handleMiddleware(handlers, request: request, response: response)
             }
+            
+        } else {
+            
+            let params = routeManager.paramsForPath(request.path)
+            let paramHandlers = parameterManager.handlersForParams(params)
+            handleParams(paramHandlers, parameters: params, request: request, response: response)
         }
-
-        if let handlers = handlers {
-
-            var handlers = handlers
-
-            if let handler = handlers.popLast() {
-
-                handler.handle(request: request, response: response, next: { () -> () in
-                    self.dispatch(request: request, response: response, 
-                                  handlers: handlers)
-                })
-
+    }
+    
+    func handleParams(handlers: [String: [ParameterManager.Handler]],
+                      parameters: [String: String], request: Request, response: Response) {
+        
+        var handlers = handlers
+        var parameters = parameters
+        
+        if let param = parameters.first where handlers[param.0] != nil {
+            
+            let key = param.0
+            let value = param.1
+            
+            let handler = handlers[key]!.removeFirst()
+            
+            handler(request: request, response: response, param: value) {
+                self.handleParams(handlers, parameters: parameters,
+                                  request: request, response: response)
+            }
+        } else {
+            parameters.popFirst()
+            
+            if parameters.count > 0 {
+                handleParams(handlers, parameters: parameters,
+                             request: request, response: response)
             } else {
-                
                 if let result = routeManager.routeSingle(request) {
-                    result.handle(request: request, response: response, next: { 
-                        
-                    })
+                    handleRoutes([result], request: request, response: response)
                 } else {
-                    super.dispatch(request: request, response: response, handlers: nil)
+                    response.status = .NotFound
+                    response.send(text: "Page not found")
                 }
             }
-
-        } else {
-            let handlers = middlewareManager.route(request)
-            dispatch(request: request, response: response, handlers: handlers)
+        }
+    }
+    
+    func handleRoutes(routes: [Handler], request: Request, response: Response) {
+        var routes = routes
+        if let route = routes.popLast() {
+            route.handle(request: request, response: response) {
+                self.handleRoutes(routes, request: request, response: response)
+            }
         }
     }
 
@@ -86,6 +108,14 @@ public class Blackfish: SocketServer {
             
             self.routeManager.register(route.method.rawValue, handler: route)
         }
+    }
+}
+
+extension Blackfish: SocketServerDelegate {
+    func socketServer(socketServer: SocketServer,
+                      didRecieveRequest request: Request,
+                                        withResponse response: Response) {
+        self.dispatch(request: request, response: response, handlers: nil)
     }
 }
 
@@ -110,13 +140,17 @@ extension Blackfish {
         }
 
         do {
-            try self.start(port)
+            try server.start(port)
             runningPort = port
             handler?(error: nil)
-            self.loop()
+            server.loop()
         } catch {
             handler?(error: error)
         }
+    }
+    
+    public func param(param: String, handler: (request: Request, response: Response, param: String, next: () -> ()) -> ()) {
+        parameterManager.addHandler(handler, forParam: param)
     }
 }
 

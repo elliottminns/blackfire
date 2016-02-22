@@ -6,22 +6,27 @@ import Vaquita
     import Glibc
 #endif
 
+protocol SocketServerDelegate: class {
+    func socketServer(socketServer: SocketServer,
+                      didRecieveRequest request: Request,
+                                        withResponse response: Response)
+}
+
 public class SocketServer {
 
     let socketManager: SocketManager
 
-    /// A socket open to the port the server is listening on. Usually 80.
     private var listenSocket: Socket = Socket(rawSocket: -1)
-
-    /// A set of connected client sockets.
+    
     private var clientSockets: Set<Socket> = []
 
     private var clientSocketsLock = NSLock()
 
-    /// The queue to dispatch requests on.
     private var queue: dispatch_queue_t
 
     private let socketParser: SocketParser
+    
+    weak var delegate: SocketServerDelegate?
 
     init() {
         socketManager = SocketManager()
@@ -29,10 +34,6 @@ public class SocketServer {
         socketParser = SocketParser()
     }
 
-    /**
-        Starts the server on a given port.
-        - parameter listenPort: The port to listen on.
-    */
     func start(listenPort: Int) throws {
 
         self.stop()
@@ -74,24 +75,15 @@ public class SocketServer {
                 request.address = address
 
                 request.parameters = [:]
-
+                
                 let response = Response(request: request, responder: self, 
                     socket: socket)
 
-                self.dispatch(request: request, response: response, 
-                    handlers: nil)
+                self.delegate?.socketServer(self,
+                                           didRecieveRequest: request,
+                                           withResponse: response)
             }
         }
-    }
-
-    /**
-        Returns a closure that given a Request returns a Response
-
-        - returns: DispatchResponse
-    */
-    func dispatch(request request: Request, response: Response, handlers: [Handler]?) {
-        response.status = .NotFound
-        response.send(text: "Page not found")
     }
 
     func stop() {
