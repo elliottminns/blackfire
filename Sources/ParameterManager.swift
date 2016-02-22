@@ -23,8 +23,13 @@ class ParameterManager {
         
         for (key, _) in params {
             
-            if let h = self.handlers[key] {
-                handlers[key] = h
+            var param = key
+            if param.hasPrefix(":") {
+                param.removeAtIndex(param.startIndex)
+            }
+            
+            if let h = self.handlers[param] {
+                handlers[param] = h
             }
         }
         

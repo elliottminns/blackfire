@@ -53,9 +53,20 @@ final public class Blackfish {
             
         } else {
             
-            let params = routeManager.paramsForPath(request.path)
+            let params = routeManager.paramsForPath(request.method.rawValue, path: request.path)
+            
+            var parameters = [String: String]()
+            
+            for (key, value) in params {
+                var k = key
+                if k.hasPrefix(":") {
+                    k.removeAtIndex(k.startIndex)
+                }
+                parameters[k] = value
+            }
+            
             let paramHandlers = parameterManager.handlersForParams(params)
-            handleParams(paramHandlers, parameters: params, request: request, response: response)
+            handleParams(paramHandlers, parameters: parameters, request: request, response: response)
         }
     }
     
@@ -65,12 +76,16 @@ final public class Blackfish {
         var handlers = handlers
         var parameters = parameters
         
-        if let param = parameters.first where handlers[param.0] != nil {
+        if let param = parameters.first, let keyHandlers = handlers[param.0] where keyHandlers.count > 0 {
             
             let key = param.0
             let value = param.1
             
-            let handler = handlers[key]!.removeFirst()
+            var kHandlers = keyHandlers
+            
+            let handler = kHandlers.removeFirst()
+            
+            handlers[key] = kHandlers;
             
             handler(request: request, response: response, param: value) {
                 self.handleParams(handlers, parameters: parameters,

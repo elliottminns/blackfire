@@ -24,8 +24,14 @@ final class HandlerManager<T: Handler> {
 
 extension HandlerManager {
     
-    func paramsForPath(path: String) -> [String: String] {
-        return pathTree.paramsForPath(path)
+    func paramsForPath(method: String?, path: String) -> [String: String] {
+        let fullPath: String
+        if let method = method {
+            fullPath = method + "/" + path
+        } else {
+            fullPath = "*/" + path
+        }
+        return pathTree.paramsForPath(fullPath)
     }
     
     func register(handler: Handler) {
