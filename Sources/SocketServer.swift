@@ -21,9 +21,12 @@ public class SocketServer {
     /// The queue to dispatch requests on.
     private var queue: dispatch_queue_t
 
+    private let socketParser: SocketParser
+
     init() {
         socketManager = SocketManager()
         queue = dispatch_queue_create("blackfish.queue.request", DISPATCH_QUEUE_CONCURRENT)
+        socketParser = SocketParser()
     }
 
     /**
@@ -61,21 +64,22 @@ public class SocketServer {
     }
 
     func handleConnection(socket: Socket) {
-        //try to get the ip address of the incoming request (like 127.0.0.1)
+
         let address = try? socket.peername()
 
-        //create a request parser
-        let parser = SocketParser()
-
-        if let request = try? parser.readHttpRequest(socket) {
+        if let request = try? socketParser.readHttpRequest(socket) {
 
             dispatch_async(dispatch_get_main_queue()) {
 
                 request.address = address
+
                 request.parameters = [:]
 
-                let response = Response(request: request, responder: self, socket: socket)
-                self.dispatch(request: request, response: response, handlers: nil)
+                let response = Response(request: request, responder: self, 
+                    socket: socket)
+
+                self.dispatch(request: request, response: response, 
+                    handlers: nil)
             }
         }
     }

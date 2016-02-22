@@ -1,4 +1,5 @@
 import Foundation
+import Vaquita
 
 public class Request {
 
@@ -13,6 +14,16 @@ public class Request {
 
     public let method: Method
 
+    public var params: [String: String] {
+        get {
+            return parameters
+        }
+
+        set {
+            parameters = newValue;
+        }
+    }
+
     public var parameters: [String: String] = [:]
 
     ///GET or POST data
@@ -24,9 +35,9 @@ public class Request {
 
     var headers: [String: String] = [:]
 
-    var body: [UInt8] = []
+    public var body: Data = Data(bytes: [])
 
-    var address: String? = ""
+    public var address: String? = ""
 
     public var files: [String: [MultipartFile]] = [:]
 
@@ -34,5 +45,13 @@ public class Request {
 
     init(method: Method) {
         self.method = method
+    }
+
+    public func getHeader(header: String) -> String? {
+        return headers[header]
+    }
+
+    public func setValue(value: String, forHeader header: String) {
+        headers[header] = value
     }
 }

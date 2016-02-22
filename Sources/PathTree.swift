@@ -1,11 +1,3 @@
-//
-//  Tree.swift
-//  blackfish
-//
-//  Created by Elliott Minns on 05/02/2016.
-//  Copyright © 2016 Elliott Minns. All rights reserved.
-//
-
 import Foundation
 
 private class Node<T> {

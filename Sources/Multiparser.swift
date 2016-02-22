@@ -184,9 +184,9 @@ public class Multiparser: Middleware {
         }
     }
     
-    private func parseMultiPartFormData(data: [UInt8], boundary: String) -> [MultiPart] {
+    private func parseMultiPartFormData(data: Data, boundary: String) -> [MultiPart] {
         
-        var generator = data.generate()
+        var generator = data.bytes.generate()
         
         var result = [MultiPart]()
         
