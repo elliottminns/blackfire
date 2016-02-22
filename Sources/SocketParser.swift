@@ -7,6 +7,7 @@
 #endif
 
 import Foundation
+import Vaquita
 
 enum SocketParserError: ErrorType {
     case InvalidStatusLine(String)
@@ -48,15 +49,13 @@ class SocketParser {
                 
                 let body = try readBody(socket, size: contentLengthValue)
                 
-                if let bodyString = NSString(bytes: body, length: body.count,
-                    encoding: NSUTF8StringEncoding) {
-                        let postArray = bodyString.description.split("&")
-                        for postItem in postArray {
-                            let pair = postItem.split("=")
-                            if pair.count == 2 {
-                                request.data[pair[0]] = pair[1]
-                            }
-                        }
+                let bodyString = try body.toString()
+                let postArray = bodyString.split("&")
+                for postItem in postArray {
+                    let pair = postItem.split("=")
+                    if pair.count == 2 {
+                        request.data[pair[0]] = pair[1]
+                    }
                 }
                 
                 request.body = body
@@ -83,14 +82,14 @@ class SocketParser {
         return query
     }
     
-    private func readBody(socket: Socket, size: Int) throws -> [UInt8] {
+    private func readBody(socket: Socket, size: Int) throws -> Data {
         var body = [UInt8]()
         var counter = 0
         while counter < size {
             body.append(try socket.read())
             counter += 1
         }
-        return body
+        return Data(bytes: body)
     }
     
     private func readHeaders(socket: Socket) throws -> [String: String] {

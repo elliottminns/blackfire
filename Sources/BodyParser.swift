@@ -1,3 +1,4 @@
+import Vaquita
 
 class JSONParser: Middleware {
     
@@ -12,12 +13,17 @@ class JSONParser: Middleware {
         let contentTypeTokens = contentTypeHeader.split(";").map { $0.trim() }
         guard let contentType = contentTypeTokens.first where 
             contentType == "application/json" else { return }
+        
+        do {
 
-        let jsonString = String.fromUInt8(request.body)
-        let json = parseJsonString(jsonString)
+            let jsonString = try request.body.toString()
+            let json = parseJsonString(jsonString)
 		
-		for (key, value) in json {
-            request.data[key] = value
+		    for (key, value) in json {
+                request.data[key] = value
+            }
+        } catch {
+        
         }
     }
 
