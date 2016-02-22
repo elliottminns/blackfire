@@ -26,6 +26,10 @@ final public class Logger {
             return [.black, .red, .green, .yellow, .blue, .magenta, .cyan, .white]
 	    }
     }
+    
+    public init() {
+        
+    }
 }
 
 func + (let left: Logger.ANSIColors, let right: String) -> String {

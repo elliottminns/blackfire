@@ -20,18 +20,20 @@ class Index: Controller {
     }
 }
 
-class Logger: Middleware {
-    func handle(request: Request, response: Response, next: (() -> ())) {
-        print(request.path)
-        next()
-    }
-}
-
 let app = Blackfish()
 
 app.use(path: "/", controller: Index())
-app.use(path: "/", middleware: Logger())
 app.use(middleware: Multiparser())
+app.use(middleware: Logger())
+
+app.get("/user/:id") { request, response in
+    response.send(text: request.parameters["id"]!)
+}
+
+app.param("id") { (request, response, param, next) in
+    print(param)
+    next()
+}
 
 app.listen(port: 3000) { error in
     if error == nil {

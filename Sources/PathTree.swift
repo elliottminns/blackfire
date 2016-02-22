@@ -18,6 +18,11 @@ class PathTree<T> {
         }
     }
     
+    func paramsForPath(path: String) -> [String: String] {
+        let result = findValue(path)
+        return result.params
+    }
+    
     private func inflateTreeToPath(path: String) -> Node<T> {
         var generator = segmentsForPath(path)
         
@@ -44,21 +49,23 @@ class PathTree<T> {
         return node
     }
     
-    func findValue(path: String) -> T? {
+    func findValue(path: String) -> (handler: T?, params: [String: String]) {
         var generator = segmentsForPath(path)
         
         var params = [String:String]()
         
-        return findValues(&rootNode, params: &params, generator: &generator, values: [], exclude: true).first
+        let handler = findValues(&rootNode, params: &params, generator: &generator, values: [], exclude: true).first
+        
+        return (handler: handler, params: params)
     }
     
-    func findValues(path: String) -> [T] {
+    func findValues(path: String) -> (handlers: [T], params: [String: String]) {
         
         var generator = segmentsForPath(path)
         
         var params = [String:String]()
-        
-        return findValues(&rootNode, params: &params, generator: &generator, values: [])
+        let handlers = findValues(&rootNode, params: &params, generator: &generator, values: [])
+        return (handlers: handlers, params: params)
     }
     
     private func findValues(inout node: Node<T>, inout params: [String: String], inout generator: IndexingGenerator<[String]>, values: [T], exclude: Bool = false) -> [T] {
@@ -72,7 +79,9 @@ class PathTree<T> {
                 return values
             }
             
-            let variableNodes = node.nodes.filter { $0.0.characters.first == ":" }
+            let variableNodes = node.nodes.filter {
+                $0.0.characters.first == ":"
+            }
             
             if let variableNode = variableNodes.first {
                 params[variableNode.0] = pathToken

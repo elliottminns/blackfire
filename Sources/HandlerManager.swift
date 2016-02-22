@@ -24,6 +24,10 @@ final class HandlerManager<T: Handler> {
 
 extension HandlerManager {
     
+    func paramsForPath(path: String) -> [String: String] {
+        return pathTree.paramsForPath(path)
+    }
+    
     func register(handler: Handler) {
         let path = "*/" + handler.path
         pathTree.addHandler(handler, toPath: path, overwrite: !allowsMultiples)
@@ -42,6 +46,7 @@ extension HandlerManager {
     }
     
     func routeSingle(request: Request) -> Handler? {
+        
         let path: String
         
         if request.method != Request.Method.Unknown {
@@ -50,10 +55,17 @@ extension HandlerManager {
             path = "*/" + request.path
         }
         
-        return pathTree.findValue(path)
+        let result = pathTree.findValue(path)
+        
+        for (key, value) in result.params {
+            request.params[key] = value
+        }
+        
+        return result.handler
     }
 
     func route(request: Request) -> [Handler] {
+        
         let path: String
 
         if request.method != Request.Method.Unknown {
@@ -62,7 +74,13 @@ extension HandlerManager {
             path = "*/" + request.path
         }
         
-        return pathTree.findValues(path)
+        let result = pathTree.findValues(path)
+        
+        for (key, value) in result.params {
+            request.params[key] = value
+        }
+        
+        return result.handlers
     }
 }
 

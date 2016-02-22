@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F28B4DE1C7BB9D5009E02AC /* ParameterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B4D81C7BB984009E02AC /* ParameterManager.swift */; };
+		4F28B4E01C7BBB5C009E02AC /* StaticFileMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B4DF1C7BBB5C009E02AC /* StaticFileMiddleware.swift */; };
+		4F28B4E11C7BC56F009E02AC /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7DB81C7BB5EC003D59AA /* Logger.swift */; };
 		4F477ED71C750BD200F458F4 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F477ED61C750BD200F458F4 /* Controller.swift */; };
 		4F477EE41C750E6A00F458F4 /* Echo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F477EDF1C750E4900F458F4 /* Echo.framework */; };
 		4F477EEC1C75206D00F458F4 /* Resources in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4F477EE91C75200900F458F4 /* Resources */; };
@@ -26,15 +29,17 @@
 		4F6A6DE01C657E4800368F5D /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E221C60C55200CDF49D /* Response.swift */; };
 		4F6A6DE11C657E4800368F5D /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E241C60C55200CDF49D /* Route.swift */; };
 		4F6A6DE21C657E4800368F5D /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2071C62B09E006FC98B /* Router.swift */; };
-		4F6A6DE41C657E4800368F5D /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E261C60C55200CDF49D /* Server.swift */; };
+		4F6A6DE41C657E4800368F5D /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E261C60C55200CDF49D /* Application.swift */; };
 		4F6A6DE51C657E4800368F5D /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E271C60C55200CDF49D /* Session.swift */; };
 		4F6A6DE61C657E4800368F5D /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E281C60C55200CDF49D /* Socket.swift */; };
 		4F6A6DE71C657E4800368F5D /* SocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E291C60C55200CDF49D /* SocketServer.swift */; };
 		4F6A6DE81C657E4800368F5D /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E2A1C60C55200CDF49D /* StringExtensions.swift */; };
-		4F6A6DE91C657E4800368F5D /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66E2B1C60C55200CDF49D /* Tests.swift */; };
 		4F6A6DEA1C657E4800368F5D /* HandlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2131C64E17A006FC98B /* HandlerManager.swift */; };
 		4F6A6DEB1C657E4800368F5D /* PathTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAC2151C64E31A006FC98B /* PathTree.swift */; };
 		4F6A6DED1C657EDC00368F5D /* PublicInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6A6DEC1C657EDC00368F5D /* PublicInterfaceTests.swift */; };
+		4FBD7DC41C7BB631003D59AA /* Vaquita.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBD7DC11C7BB629003D59AA /* Vaquita.framework */; };
+		4FBD7DDC1C7BB654003D59AA /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7DC51C7BB64C003D59AA /* SocketManager.swift */; };
+		4FBD7DDD1C7BB654003D59AA /* BodyParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7DB71C7BB5EC003D59AA /* BodyParser.swift */; };
 		4FE66DCC1C60C29800CDF49D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE66DCB1C60C29800CDF49D /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +86,20 @@
 			remoteGlobalIDString = 4F6A6DBF1C657DFE00368F5D;
 			remoteInfo = "Blackfish-OSX";
 		};
+		4FBD7DC01C7BB629003D59AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FBD7DBB1C7BB629003D59AA /* Vaquita.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F8B67631C77D8EC000E0DC5;
+			remoteInfo = Vaquita;
+		};
+		4FBD7DC21C7BB629003D59AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FBD7DBB1C7BB629003D59AA /* Vaquita.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F8B676D1C77D8EC000E0DC5;
+			remoteInfo = VaquitaTests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -97,6 +116,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F28B4D81C7BB984009E02AC /* ParameterManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterManager.swift; sourceTree = "<group>"; };
+		4F28B4DF1C7BBB5C009E02AC /* StaticFileMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticFileMiddleware.swift; sourceTree = "<group>"; };
 		4F477ED61C750BD200F458F4 /* Controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		4F477ED81C750E4900F458F4 /* Echo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Echo.xcodeproj; path = ../../echo/Xcode/Echo/Echo.xcodeproj; sourceTree = "<group>"; };
 		4F477EE91C75200900F458F4 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = "../../blackfish-example/Resources"; sourceTree = "<group>"; };
@@ -108,6 +129,10 @@
 		4F6A6DC91C657DFE00368F5D /* Blackfish_OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blackfish_OSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F6A6DD01C657DFE00368F5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F6A6DEC1C657EDC00368F5D /* PublicInterfaceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicInterfaceTests.swift; sourceTree = "<group>"; };
+		4FBD7DB71C7BB5EC003D59AA /* BodyParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BodyParser.swift; sourceTree = "<group>"; };
+		4FBD7DB81C7BB5EC003D59AA /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		4FBD7DBB1C7BB629003D59AA /* Vaquita.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Vaquita.xcodeproj; path = ../../vaquita/Xcode/Vaquita/Vaquita.xcodeproj; sourceTree = "<group>"; };
+		4FBD7DC51C7BB64C003D59AA /* SocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketManager.swift; sourceTree = "<group>"; };
 		4FDAC2051C625FBE006FC98B /* MultipartFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipartFile.swift; sourceTree = "<group>"; };
 		4FDAC2071C62B09E006FC98B /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		4FDAC20F1C639AAD006FC98B /* Middleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
@@ -122,12 +147,11 @@
 		4FE66E211C60C55200CDF49D /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		4FE66E221C60C55200CDF49D /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		4FE66E241C60C55200CDF49D /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
-		4FE66E261C60C55200CDF49D /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
+		4FE66E261C60C55200CDF49D /* Application.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		4FE66E271C60C55200CDF49D /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		4FE66E281C60C55200CDF49D /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		4FE66E291C60C55200CDF49D /* SocketServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketServer.swift; sourceTree = "<group>"; };
 		4FE66E2A1C60C55200CDF49D /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
-		4FE66E2B1C60C55200CDF49D /* Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		4FE66E3E1C60C9AB00CDF49D /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,6 +160,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FBD7DC41C7BB631003D59AA /* Vaquita.framework in Frameworks */,
 				4F477EE41C750E6A00F458F4 /* Echo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -188,9 +213,19 @@
 			path = ../Tests;
 			sourceTree = "<group>";
 		};
+		4FBD7DBC1C7BB629003D59AA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4FBD7DC11C7BB629003D59AA /* Vaquita.framework */,
+				4FBD7DC31C7BB629003D59AA /* VaquitaTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4FE66DBF1C60C29800CDF49D = {
 			isa = PBXGroup;
 			children = (
+				4FBD7DBB1C7BB629003D59AA /* Vaquita.xcodeproj */,
 				4F477ED81C750E4900F458F4 /* Echo.xcodeproj */,
 				4FE66E1B1C60C55200CDF49D /* Sources */,
 				4FE66DCA1C60C29800CDF49D /* Blackfish */,
@@ -222,6 +257,10 @@
 		4FE66E1B1C60C55200CDF49D /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				4FE66E261C60C55200CDF49D /* Application.swift */,
+				4FBD7DC51C7BB64C003D59AA /* SocketManager.swift */,
+				4FBD7DB71C7BB5EC003D59AA /* BodyParser.swift */,
+				4FBD7DB81C7BB5EC003D59AA /* Logger.swift */,
 				4FE66E1D1C60C55200CDF49D /* JSONSerializer.swift */,
 				4FE66E1E1C60C55200CDF49D /* LinuxFixes.swift */,
 				4FE66E1F1C60C55200CDF49D /* MemorySessionDriver.swift */,
@@ -233,17 +272,17 @@
 				4FE66E221C60C55200CDF49D /* Response.swift */,
 				4FE66E241C60C55200CDF49D /* Route.swift */,
 				4FDAC2071C62B09E006FC98B /* Router.swift */,
-				4FE66E261C60C55200CDF49D /* Server.swift */,
 				4FE66E271C60C55200CDF49D /* Session.swift */,
 				4FE66E281C60C55200CDF49D /* Socket.swift */,
 				4FE66E291C60C55200CDF49D /* SocketServer.swift */,
 				4FE66E2A1C60C55200CDF49D /* StringExtensions.swift */,
-				4FE66E2B1C60C55200CDF49D /* Tests.swift */,
 				4FDAC2131C64E17A006FC98B /* HandlerManager.swift */,
 				4FDAC2151C64E31A006FC98B /* PathTree.swift */,
 				4F477ED61C750BD200F458F4 /* Controller.swift */,
 				4F477EED1C7521C900F458F4 /* Multiparser.swift */,
 				4F477EEF1C75293C00F458F4 /* MimeType.swift */,
+				4F28B4D81C7BB984009E02AC /* ParameterManager.swift */,
+				4F28B4DF1C7BBB5C009E02AC /* StaticFileMiddleware.swift */,
 			);
 			name = Sources;
 			path = ../Sources;
@@ -354,6 +393,10 @@
 					ProductGroup = 4F477ED91C750E4900F458F4 /* Products */;
 					ProjectRef = 4F477ED81C750E4900F458F4 /* Echo.xcodeproj */;
 				},
+				{
+					ProductGroup = 4FBD7DBC1C7BB629003D59AA /* Products */;
+					ProjectRef = 4FBD7DBB1C7BB629003D59AA /* Vaquita.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -386,6 +429,20 @@
 			remoteRef = 4F477EE21C750E4900F458F4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		4FBD7DC11C7BB629003D59AA /* Vaquita.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Vaquita.framework;
+			remoteRef = 4FBD7DC01C7BB629003D59AA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4FBD7DC31C7BB629003D59AA /* VaquitaTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = VaquitaTests.xctest;
+			remoteRef = 4FBD7DC21C7BB629003D59AA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -410,22 +467,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FBD7DDD1C7BB654003D59AA /* BodyParser.swift in Sources */,
 				4F6A6DE61C657E4800368F5D /* Socket.swift in Sources */,
-				4F6A6DE91C657E4800368F5D /* Tests.swift in Sources */,
-				4F6A6DE41C657E4800368F5D /* Server.swift in Sources */,
+				4F6A6DE41C657E4800368F5D /* Application.swift in Sources */,
 				4F6A6DD71C657E4800368F5D /* Middleware.swift in Sources */,
 				4F6A6DDC1C657E4800368F5D /* MemorySessionDriver.swift in Sources */,
+				4FBD7DDC1C7BB654003D59AA /* SocketManager.swift in Sources */,
 				4F6A6DE11C657E4800368F5D /* Route.swift in Sources */,
 				4F6A6DDD1C657E4800368F5D /* MultipartFile.swift in Sources */,
 				4F6A6DE51C657E4800368F5D /* Session.swift in Sources */,
+				4F28B4E11C7BC56F009E02AC /* Logger.swift in Sources */,
 				4F477EEE1C7521C900F458F4 /* Multiparser.swift in Sources */,
 				4F6A6DE21C657E4800368F5D /* Router.swift in Sources */,
 				4F6A6DDB1C657E4800368F5D /* LinuxFixes.swift in Sources */,
 				4F477EF01C75293C00F458F4 /* MimeType.swift in Sources */,
 				4F6A6DE01C657E4800368F5D /* Response.swift in Sources */,
+				4F28B4E01C7BBB5C009E02AC /* StaticFileMiddleware.swift in Sources */,
 				4F6A6DDE1C657E4800368F5D /* SocketParser.swift in Sources */,
 				4F477ED71C750BD200F458F4 /* Controller.swift in Sources */,
 				4F6A6DE81C657E4800368F5D /* StringExtensions.swift in Sources */,
+				4F28B4DE1C7BB9D5009E02AC /* ParameterManager.swift in Sources */,
 				4F6A6DD91C657E4800368F5D /* Renderer.swift in Sources */,
 				4F6A6DE71C657E4800368F5D /* SocketServer.swift in Sources */,
 				4F6A6DEB1C657E4800368F5D /* PathTree.swift in Sources */,
