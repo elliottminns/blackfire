@@ -88,7 +88,7 @@ struct Socket {
 
             var sent = 0
 
-            while sent < data.size {
+            while sent < data.bytes.count {
 
                 #if os(Linux)
                     let s = send(self.rawSocket,
