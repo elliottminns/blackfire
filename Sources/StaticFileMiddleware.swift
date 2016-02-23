@@ -18,6 +18,8 @@ struct StaticFileMiddleware: Middleware {
                 response.body = array
                 response.contentType = .Text
                 response.send()
+            } else {
+                next()
             }
         } else {
         
