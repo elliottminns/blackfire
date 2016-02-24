@@ -3,7 +3,6 @@ import Vaquita
 
 public enum Event {
     case OnFinish
-    case OnStart
 }
 
 public class Request {
