@@ -258,15 +258,17 @@
 			isa = PBXGroup;
 			children = (
 				4FE66E261C60C55200CDF49D /* Application.swift */,
-				4FBD7DC51C7BB64C003D59AA /* SocketManager.swift */,
 				4FBD7DB71C7BB5EC003D59AA /* BodyParser.swift */,
+				4F477ED61C750BD200F458F4 /* Controller.swift */,
+				4FBD7DC51C7BB64C003D59AA /* SocketManager.swift */,
 				4FBD7DB81C7BB5EC003D59AA /* Logger.swift */,
 				4FE66E1D1C60C55200CDF49D /* JSONSerializer.swift */,
 				4FE66E1E1C60C55200CDF49D /* LinuxFixes.swift */,
 				4FE66E1F1C60C55200CDF49D /* MemorySessionDriver.swift */,
 				4FDAC20F1C639AAD006FC98B /* Middleware.swift */,
+				4F477EEF1C75293C00F458F4 /* MimeType.swift */,
+				4F477EED1C7521C900F458F4 /* Multiparser.swift */,
 				4FDAC2051C625FBE006FC98B /* MultipartFile.swift */,
-				4FE66E201C60C55200CDF49D /* SocketParser.swift */,
 				4FE66E3E1C60C9AB00CDF49D /* Renderer.swift */,
 				4FE66E211C60C55200CDF49D /* Request.swift */,
 				4FE66E221C60C55200CDF49D /* Response.swift */,
@@ -275,14 +277,12 @@
 				4FE66E271C60C55200CDF49D /* Session.swift */,
 				4FE66E281C60C55200CDF49D /* Socket.swift */,
 				4FE66E291C60C55200CDF49D /* SocketServer.swift */,
+				4F28B4DF1C7BBB5C009E02AC /* StaticFileMiddleware.swift */,
 				4FE66E2A1C60C55200CDF49D /* StringExtensions.swift */,
+				4FE66E201C60C55200CDF49D /* SocketParser.swift */,
 				4FDAC2131C64E17A006FC98B /* HandlerManager.swift */,
 				4FDAC2151C64E31A006FC98B /* PathTree.swift */,
-				4F477ED61C750BD200F458F4 /* Controller.swift */,
-				4F477EED1C7521C900F458F4 /* Multiparser.swift */,
-				4F477EEF1C75293C00F458F4 /* MimeType.swift */,
 				4F28B4D81C7BB984009E02AC /* ParameterManager.swift */,
-				4F28B4DF1C7BBB5C009E02AC /* StaticFileMiddleware.swift */,
 			);
 			name = Sources;
 			path = ../Sources;

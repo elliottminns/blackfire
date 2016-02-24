@@ -1,3 +1,4 @@
+import Foundation
 
 final public class Logger {
 	enum ANSIColors: String {
@@ -40,8 +41,25 @@ extension Logger: Middleware {
     
     public func handle(request: Request, response: Response, next: () -> ()) {
  		defer { next() }
+        
         let method = ANSIColors.green + request.method.rawValue
+        
         let path = ANSIColors.black + request.path
-		print("\(method) \(path)")
+		
+        request.data["startTime"] = NSDate.timeIntervalSinceReferenceDate()
+        
+        request.addListener(event: Event.OnFinish) {
+            
+            let finishTime = NSDate.timeIntervalSinceReferenceDate()
+            
+            var log = "\(method) \(path)"
+            
+            if let startTime = request.data["startTime"] as? NSTimeInterval {
+                let delta = (finishTime - startTime) * 1000
+                log += String(format: " - \(Int(delta)) ms")
+            }
+            
+            print(log)
+        }
     }
 }
