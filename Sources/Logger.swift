@@ -40,6 +40,7 @@ func + (let left: Logger.ANSIColors, let right: String) -> String {
 extension Logger: Middleware {
     
     public func handle(request: Request, response: Response, next: () -> ()) {
+        
  		defer { next() }
         
         let method = ANSIColors.green + request.method.rawValue
