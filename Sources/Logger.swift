@@ -47,11 +47,11 @@ extension Logger: Middleware {
         
         let path = ANSIColors.black + request.path
 		
-        request.data["startTime"] = NSDate.timeIntervalSinceReferenceDate()
+        request.data["startTime"] = NSDate().timeIntervalSinceReferenceDate
         
         request.addListener(event: Event.OnFinish) {
             
-            let finishTime = NSDate.timeIntervalSinceReferenceDate()
+            let finishTime = NSDate().timeIntervalSinceReferenceDate
             
             var log = "\(method) \(path)"
             
