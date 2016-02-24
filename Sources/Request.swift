@@ -1,6 +1,11 @@
 import Foundation
 import Vaquita
 
+public enum Event {
+    case OnFinish
+    case OnStart
+}
+
 public class Request {
 
     public enum Method: String {
@@ -23,6 +28,8 @@ public class Request {
             parameters = newValue;
         }
     }
+    
+    var listeners: [Event: [() -> ()]]
 
     public var parameters: [String: String] = [:]
 
@@ -45,6 +52,15 @@ public class Request {
 
     init(method: Method) {
         self.method = method
+        listeners = [:]
+    }
+    
+    public func addListener(event event: Event, listener: () -> Void) {
+        if listeners[event] == nil {
+            listeners[event] = []
+        }
+        
+        listeners[event]?.append(listener)
     }
 
     public func getHeader(header: String) -> String? {
@@ -53,5 +69,17 @@ public class Request {
 
     public func setValue(value: String, forHeader header: String) {
         headers[header] = value
+    }
+    
+    func fireOnFinish() {
+        fireEvent(Event.OnFinish)
+    }
+    
+    func fireEvent(event: Event) {
+        if let listeners = self.listeners[event] {
+            for listener in listeners {
+                listener()
+            }
+        }
     }
 }
