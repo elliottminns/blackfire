@@ -21,7 +21,7 @@ public class Session {
 	static var driver: SessionDriver = MemorySessionDriver()
 
 	public static func start(request: Request) {
-		if let key = request.cookies["vapor-session"] {
+		if let key = request.cookies["blackfish-session"] {
 			if let session = self.driver.sessions[key] {
 				request.session = session
 			} else {
