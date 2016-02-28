@@ -26,7 +26,7 @@ public class Response {
     public var cookies: [String: String] = [:]
     public var additionalHeaders: [String: String] = [:]
 
-    unowned let request: Request
+    weak var request: Request?
     unowned let responder: Responder
     weak var renderSupplier: RendererSupplier?
 
@@ -101,7 +101,7 @@ public class Response {
     }
 
     func headers() -> [String: String] {
-        var headers = ["Server" : "Blackfish \(Blackfish.VERSION)"]
+        var headers = ["Server" : "Blackfish \(BlackfishApp.VERSION)"]
 
         if self.cookies.count > 0 {
             var cookieString = ""
