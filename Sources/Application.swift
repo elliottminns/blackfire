@@ -1,7 +1,7 @@
 
 import Foundation
 
-final public class Blackfish {
+final public class BlackfishApp {
 
     public static let VERSION = "0.1.3"
 
@@ -126,7 +126,7 @@ final public class Blackfish {
     }
 }
 
-extension Blackfish: SocketServerDelegate {
+extension BlackfishApp: SocketServerDelegate {
     func socketServer(socketServer: SocketServer,
                       didRecieveRequest request: Request,
                                         withResponse response: Response) {
@@ -136,7 +136,7 @@ extension Blackfish: SocketServerDelegate {
 
 // MARK: - Public Methods
 
-extension Blackfish {
+extension BlackfishApp {
 
     public func listen(port inPort: Int = 80, handler: ((error: ErrorType?) -> ())? = nil) {
 
@@ -171,7 +171,7 @@ extension Blackfish {
 
 // MARK: - Routing
 
-extension Blackfish: Routing {
+extension BlackfishApp: Routing {
 
     public func use(path path: String, router: Router) {
         Route.createRoutesFromRouter(router, withPath: path)
@@ -245,7 +245,7 @@ extension Blackfish: Routing {
 
 // MARK: - RendererSupplier
 
-extension Blackfish: RendererSupplier {
+extension BlackfishApp: RendererSupplier {
     public func rendererForFile(filename: String) -> Renderer? {
 
         for (key, value) in renderers {
