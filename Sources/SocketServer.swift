@@ -111,6 +111,7 @@ extension SocketServer: Responder {
         let socket = response.socket
 
         defer { socket
+            response.request.fireOnFinish()
             socket.release()
         }
 
