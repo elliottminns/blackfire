@@ -43,13 +43,5 @@ class PublicInterfaceTests: XCTestCase {
             
         }
     }
-    
-    func testUseInterface() {
-        server.use(middleware: Middleware(handler: { (request, response, next) -> Void in
-            
-        }))
-    }
-    
-    
 
 }
