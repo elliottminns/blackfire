@@ -55,7 +55,7 @@ Starting the server is as simple as express.
 ```swift
 import Blackfish
 
-let app = Blackfish()
+let app = BlackfishApp()
 
 app.get("/") { request, response in
     response.send(text: "Hello World!")
@@ -148,7 +148,7 @@ main.swift
 ```
 
 ```swift
-let app = Blackfish()
+let app = BlackfishApp()
 
 app.use(path: "/test", controller: MyController())
 
