@@ -198,7 +198,7 @@ public class Multiparser: Middleware {
         return result
     }
     
-    private func nextMultiPart(inout generator: IndexingGenerator<[UInt8]>,
+    private func nextMultiPart(generator: inout IndexingGenerator<[UInt8]>,
                                      boundary: String, isFirst: Bool) -> MultiPart? {
         if isFirst {
             guard nextMultiPartLine(&generator) == boundary else {
@@ -227,7 +227,7 @@ public class Multiparser: Middleware {
         return MultiPart(headers: headers, body: body)
     }
     
-    private func nextMultiPartLine(inout generator: IndexingGenerator<[UInt8]>) -> String? {
+    private func nextMultiPartLine(generator: inout IndexingGenerator<[UInt8]>) -> String? {
         var result = String()
         while let value = generator.next() {
             if value > Multiparser.CR {
@@ -243,7 +243,7 @@ public class Multiparser: Middleware {
     static let CR = UInt8(13)
     static let NL = UInt8(10)
     
-    private func nextMultiPartBody(inout generator: IndexingGenerator<[UInt8]>, boundary: String) -> Data? {
+    private func nextMultiPartBody(generator: inout IndexingGenerator<[UInt8]>, boundary: String) -> Data? {
         
         var body = [UInt8]()
         

@@ -29,7 +29,7 @@ class PathTree<T> {
         return inflateTreeWithGenerator(&generator, node: &rootNode)
     }
     
-    private func inflateTreeWithGenerator(inout generator: IndexingGenerator<[String]>, inout node: Node<T>) -> Node<T> {
+    private func inflateTreeWithGenerator(generator: inout IndexingGenerator<[String]>, node: inout Node<T>) -> Node<T> {
     
         var generator = generator
         
@@ -68,7 +68,7 @@ class PathTree<T> {
         return (handlers: handlers, params: params)
     }
     
-    private func findValues(inout node: Node<T>, inout params: [String: String], inout generator: IndexingGenerator<[String]>, values: [T], exclude: Bool = false) -> [T] {
+    private func findValues(node: inout Node<T>, params: inout [String: String], generator: inout IndexingGenerator<[String]>, values: [T], exclude: Bool = false) -> [T] {
             
             var values = values
             
