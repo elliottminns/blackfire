@@ -71,11 +71,11 @@ extension Route: Handler {
     func handle(request request: Request, response: Response, next: (() -> ())) {
             
         // Grab request params
-        let routePaths = self.path.split("?")[0].split("/")
+        let routePaths = self.path.splitWithCharacter("?")[0].splitWithCharacter("/")
         
         for (index, path) in routePaths.enumerate() {
             if path.hasPrefix(":") {
-                let requestPaths = request.path.split("/")
+                let requestPaths = request.path.splitWithCharacter("/")
                 if requestPaths.count > index {
                     var trimPath = path
                     trimPath.removeAtIndex(path.startIndex)

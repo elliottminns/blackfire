@@ -147,7 +147,7 @@ extension BlackfishApp {
         if Process.arguments.count >= 2 {
             let secondArg = Process.arguments[1]
             if secondArg.hasPrefix("--port=") {
-                let portString = secondArg.split("=")[1]
+                let portString = secondArg.splitWithCharacter("=")[1]
                 if let portInt = Int(portString) {
                     port = portInt
                 }

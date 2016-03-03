@@ -10,7 +10,7 @@ class JSONParser: Middleware {
             return
         }
 
-        let contentTypeTokens = contentTypeHeader.split(";").map { $0.trim() }
+        let contentTypeTokens = contentTypeHeader.splitWithCharacter(";").map { $0.trimWhitespace() }
         guard let contentType = contentTypeTokens.first where 
             contentType == "application/json" else { return }
         
@@ -112,11 +112,11 @@ class JSONParser: Middleware {
             
             if c == ":" && !inString && key == nil && !inObject && arrayLevel == 0 {
                 if key == nil {
-                    key = cleanString(buffer.trim())
+                    key = cleanString(buffer.trimWhitespace())
                 }
                 buffer = ""
             } else if c == "," && !inString && !inObject && arrayLevel == 0 {
-                pairs.append((key: key, value: buffer.trim()))
+                pairs.append((key: key, value: buffer.trimWhitespace()))
                 buffer = ""
                 key = nil
             } else {
@@ -133,7 +133,7 @@ class JSONParser: Middleware {
         }
         
         if let key = key {
-            pairs.append((key: key, value: buffer.trim()))
+            pairs.append((key: key, value: buffer.trimWhitespace()))
         }
         
         
@@ -180,7 +180,7 @@ class JSONParser: Middleware {
         let components = string.componentsSeparatedByString(",")
         
         for component in components {
-            let component = component.trim()
+            let component = component.trimWhitespace()
             let value: Any?
             if component.hasPrefix("{") {
                 value = parseJsonString(component)

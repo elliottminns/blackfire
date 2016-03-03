@@ -112,13 +112,13 @@ class PathTree<T> {
     }
     
     private func segmentsForPath(path: String) -> IndexingGenerator<[String]> {
-        let pathSegments: [String] = (stripQuery(path)).split("/")
+        let pathSegments: [String] = (stripQuery(path)).splitWithCharacter("/")
         return pathSegments.generate()
     }
     
     private func stripQuery(path: String) -> String {
         
-        if let path = path.split("?").first {
+        if let path = path.splitWithCharacter("?").first {
             return path
         }
         return path

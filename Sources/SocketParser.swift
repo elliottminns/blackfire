@@ -19,7 +19,7 @@ class SocketParser {
         
         let statusLine = try socket.readLine()
         
-        let statusLineTokens = statusLine.split(" ")
+        let statusLineTokens = statusLine.splitWithCharacter(" ")
         
         if statusLineTokens.count < 3 {
             throw SocketParserError.InvalidStatusLine(statusLine)
@@ -33,9 +33,9 @@ class SocketParser {
         request.headers = try readHeaders(socket)
 
         if let cookieString = request.headers["cookie"] {
-            let cookies = cookieString.split(";")
+            let cookies = cookieString.splitWithCharacter(";")
             for cookie in cookies {
-                let cookieArray = cookie.split("=")
+                let cookieArray = cookie.splitWithCharacter("=")
                 if cookieArray.count == 2 {
                     let key = cookieArray[0].stringByReplacingOccurrencesOfString(" ", withString: "")
                     request.cookies[key] = cookieArray[1]
@@ -50,9 +50,9 @@ class SocketParser {
                 let body = try readBody(socket, size: contentLengthValue)
                 
                 let bodyString = try body.toString()
-                let postArray = bodyString.split("&")
+                let postArray = bodyString.splitWithCharacter("&")
                 for postItem in postArray {
-                    let pair = postItem.split("=")
+                    let pair = postItem.splitWithCharacter("=")
                     if pair.count == 2 {
                         request.data[pair[0]] = pair[1]
                     }
@@ -67,15 +67,16 @@ class SocketParser {
     private func extractQueryParams(url: String) -> [String: Any] {
         var query = [String: Any]()
 
-        var urlParts = url.split("?")
+        var urlParts = url.splitWithCharacter("?")
         if urlParts.count < 2 {
             return query
         }
 
-        for subQuery in urlParts[1].split("&") {
-            let tokens = subQuery.split(1, separator: "=")
-            if let name = tokens.first, value = tokens.last {
-                query[name.removePercentEncoding()] = value.removePercentEncoding()
+        for subQuery in urlParts[1].splitWithCharacter("&") {
+            let tokens = subQuery.splitWithCharacter("=")
+            if let name = tokens.first?.stringByRemovingPercentEncoding, 
+                value = tokens.last?.stringByRemovingPercentEncoding {
+                    query[name] = value
             }
         }
 
@@ -99,16 +100,16 @@ class SocketParser {
             if headerLine.isEmpty {
                 return requestHeaders
             }
-            let headerTokens = headerLine.split(1, separator: ":")
+            let headerTokens = headerLine.splitWithCharacter(":")
             if let name = headerTokens.first, value = headerTokens.last {
-                requestHeaders[name.lowercaseString] = value.trim()
+                requestHeaders[name.lowercaseString] = value.trimWhitespace()
             }
         } while true
     }
     
     func supportsKeepAlive(headers: [String: String]) -> Bool {
         if let value = headers["connection"] {
-            return "keep-alive" == value.trim()
+            return "keep-alive" == value.trimWhitespace()
         }
         return false
     }
