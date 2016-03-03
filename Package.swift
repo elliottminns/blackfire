@@ -6,6 +6,8 @@ let package = Package(
         .Package(url: "https://github.com/elliottminns/echo.git",
                 majorVersion: 0),
         .Package(url: "https://github.com/elliottminns/vaquita.git",
-                 Version(0, 1, 1))
+                 Version(0, 1, 1)),
+        .Package(url: "https://github.com/elliottminns/narwhal.git",
+                 Version(0, 1, 0))
     ]
 )
