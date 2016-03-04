@@ -12,6 +12,7 @@ A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubu
 - [x] Type safe
 - [x] Powered by [Echo](https://github.com/elliottminns/echo)
 - [x] Running on [Heroku](https://blackfish-example.herokuapp.com)
+- [x] Powered by [libuv](https://github.com/libuv/libuv)
 
 Table of Contents
 =================
@@ -40,6 +41,30 @@ Table of Contents
 You must have Swift 2.2 or later installed. You can learn more about Swift 2.2 at [Swift.org](http://swift.org)
 
 Blackfish is tested using the latest Swift **Development** snapshots, with current testing using snapshot [February 8, 2016](https://swift.org/download/)
+
+You also need to have [libuv](https://github.com/libuv/libuv) installed.
+
+You can install this using either homebrew on OS X or apt-get on Ubuntu
+
+OS X
+
+```
+$ brew install libuv
+```
+
+Ubuntu
+
+```
+$ apt-get install libuv
+```
+
+To build a Blackfish app, you must call `swift build` and add your libuv linker path
+
+```
+$ swift build -Xlinker -L/usr/local/lib
+```
+
+See the [Blackfish Example](https://github.com/elliottminns/blackfish-example) for more details, and how to create a `makefile`
 
 ### Work in Progress
 
