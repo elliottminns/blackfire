@@ -9,4 +9,4 @@ install:
     - curl https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a/swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a-ubuntu14.04.tar.gz -s | tar xz -C swift &> /dev/null
 
 script:
-    - env PATH=$(pwd)/swift/swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a-ubuntu14.04/usr/bin:$PATH swift build -Xlinker -L/usr/local/lib -c release
+    - env PATH=$(pwd)/swift/swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a-ubuntu14.04/usr/bin:$PATH swift build -Xlinker -L/usr/lib -c release
