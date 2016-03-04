@@ -11,11 +11,11 @@ final public class BlackfishApp {
 
     private var renderers: [String: Renderer]
 
-    private let server: SocketServer
+    private let server: Server
 
     private let parameterManager: ParameterManager
 
-    private let socketParser = SocketParser()
+    private let requestParser = RequestParser()
 
     public var port: Int {
         return runningPort
@@ -28,7 +28,7 @@ final public class BlackfishApp {
         routeManager = HandlerManager<Route>(allowsMultiplesPerPath: false)
         renderers = [:]
         runningPort = 3000
-        server = SocketServer()
+        server = Server()
         parameterManager = ParameterManager()
         renderers[".html"] = HTMLRenderer()
         use(middleware: StaticFileMiddleware())
@@ -128,22 +128,18 @@ final public class BlackfishApp {
     }
 }
 
-extension BlackfishApp: SocketServerDelegate {
+extension BlackfishApp: ServerDelegate {
     
-    public func socketServer(socketServer: SocketServer,
-                      didRecieveRequestOnSocket socket: Socket) {
-
-        let address = try? socket.peername()
-      
-        if let request = try? socketParser.readHttpRequest(socket) {
-
-             request.address = address
-
+    public func server(server: Server, didRecieveConnection connection: Connection) {
+        
+        let data = connection.data
+        
+        if let request = try? requestParser.readHttpRequest(data) {
             request.parameters = [:]
-
+            
             let response = Response(request: request, responder: self,
-              socket: socket)
-            self.dispatch(request: request, response: response, handlers: nil)
+                                    connection: connection)
+            dispatch(request: request, response: response, handlers: nil)
         }
     }
 }
@@ -168,12 +164,8 @@ extension BlackfishApp {
             }
         }
 
-        do {
-            try server.start(port)
-            runningPort = port
-            handler?(error: nil)
-            server.loop()
-        } catch {
+        runningPort = port
+        server.listen(port) { error in
             handler?(error: error)
         }
     }
@@ -275,42 +267,30 @@ extension BlackfishApp: RendererSupplier {
 extension BlackfishApp: Responder {
     public func sendResponse(response: Response) {
 
-            let socket = response.socket
+        let connection = response.connection
 
-            defer { socket
-                response.request?.fireOnFinish()
-                socket.release()
-            }
-
-            do {
-                try socket.writeString("HTTP/1.1 \(response.status.code) \(response.reasonPhrase)\r\n")
-
-                var headers = response.headers()
-
-                if response.body.count >= 0 {
-                    headers["Content-Length"] = "\(response.body.count)"
-                }
-
-                if true && response.body.count != -1 {
-                    headers["Connection"] = "keep-alive"
-                }
-
-                for (name, value) in headers {
-                    try socket.writeString("\(name): \(value)\r\n")
-                }
-
-                try socket.writeString("\r\n")
-
-                try socket.writeData(Data(bytes: response.body))
-
-            } catch let socketError as SocketError {
-                if let message = socketError.errorMessage {
-                    print("Error: \(socketError) error message: \(message)")
-                } else {
-                    print("Error: \(socketError)")
-                }
-            } catch {
-                print("Error: \(error)")
-            }
+        var responseString = ""
+        responseString = "HTTP/1.1 \(response.status.code) \(response.reasonPhrase)\r\n"
+        
+        var headers = response.headers()
+        
+        if response.body.count >= 0 {
+            headers["Content-Length"] = "\(response.body.count)"
         }
+        
+        if true && response.body.count != -1 {
+            headers["Connection"] = "keep-alive"
+        }
+        
+        for (name, value) in headers {
+            responseString += "\(name): \(value)\r\n"
+        }
+        
+        responseString += "\r\n"
+        var data: Data = Data(string: responseString)
+        data.append(response.body)
+        
+        connection.writeData(data)
+
+    }
 }

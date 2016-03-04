@@ -1,29 +1,53 @@
-//
-// Based on HttpParser from Swifter (https://github.com/glock45/swifter) by Damian Kołakowski.
-//
 
 #if os(Linux)
     import Glibc
 #endif
 
 import Foundation
-import Vaquita
 import Echo
 
-enum SocketParserError: ErrorType {
+enum RequestParserError: ErrorType {
     case InvalidStatusLine(String)
 }
 
-class SocketParser {
+extension Data {
+    var lines: [String] {
+        
+        var lines: [String] = []
+        
+        var line = ""
+        
+        for byte in bytes {
+            if byte > 13 {
+                line.append(Character(UnicodeScalar(byte)))
+            } else {
+                lines.append(line)
+                line = ""
+            }
+        }
+        
+        lines.append(line)
+        
+        return lines
+    }
+}
 
-    func readHttpRequest(socket: Socket) throws -> Request {
+class RequestParser {
 
-        let statusLine = try socket.readLine()
+    func readHttpRequest(data: Data) throws -> Request {
+        
+        var lines = data.lines
+        
+        guard let statusLine = lines.first else {
+            throw RequestParserError.InvalidStatusLine("")
+        }
+        
+        lines.removeFirst()
 
         let statusLineTokens = statusLine.splitWithCharacter(" ")
 
         if statusLineTokens.count < 3 {
-            throw SocketParserError.InvalidStatusLine(statusLine)
+            throw RequestParserError.InvalidStatusLine(statusLine)
         }
 
         let method = Request.Method(rawValue: statusLineTokens[0]) ?? .Unknown
@@ -31,7 +55,7 @@ class SocketParser {
 
         request.path = statusLineTokens[1]
         request.data = extractQueryParams(request.path)
-        request.headers = try readHeaders(socket)
+        request.headers = try readHeaders(lines)
 
         if let cookieString = request.headers["cookie"] {
             let cookies = cookieString.splitWithCharacter(";")
@@ -46,11 +70,9 @@ class SocketParser {
 
         if let contentLength = request.headers["content-length"],
 
-            let contentLengthValue = Int(contentLength) {
+            let _ = Int(contentLength) {
 
-                let body = try readBody(socket, size: contentLengthValue)
-
-                let bodyString = try body.toString()
+                let bodyString = try data.toString()
                 let postArray = bodyString.splitWithCharacter("&")
                 for postItem in postArray {
                     let pair = postItem.splitWithCharacter("=")
@@ -59,7 +81,7 @@ class SocketParser {
                     }
                 }
 
-                request.body = body
+                request.body = data
         }
 
         return request
@@ -84,28 +106,23 @@ class SocketParser {
         return query
     }
 
-    private func readBody(socket: Socket, size: Int) throws -> Vaquita.Data {
-        var body = [UInt8]()
-        var counter = 0
-        while counter < size {
-            body.append(try socket.read())
-            counter += 1
-        }
-        return Data(bytes: body)
-    }
-
-    private func readHeaders(socket: Socket) throws -> [String: String] {
+    private func readHeaders(lines: [String]) throws -> [String: String] {
+        
         var requestHeaders = [String: String]()
-        repeat {
-            let headerLine = try socket.readLine()
-            if headerLine.isEmpty {
+        
+        for line in lines {
+            if line.isEmpty {
                 return requestHeaders
             }
-            let headerTokens = headerLine.splitWithCharacter(":")
+            
+            let headerTokens = line.splitWithCharacter(":")
+            
             if let name = headerTokens.first, value = headerTokens.last {
                 requestHeaders[name.lowercaseString] = value.trimWhitespace()
             }
-        } while true
+        }
+        
+        return requestHeaders
     }
 
     func supportsKeepAlive(headers: [String: String]) -> Bool {

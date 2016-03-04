@@ -31,7 +31,7 @@ public class Response {
     unowned let responder: Responder
     weak var renderSupplier: RendererSupplier?
 
-    let socket: Socket
+    let connection: Connection
 
     public enum ContentType {
         case Text, HTML, JSON, None
@@ -132,13 +132,13 @@ public class Response {
         return headers
     }
 
-    init(request: Request, responder: Responder, socket: Socket) {
+    init(request: Request, responder: Responder, connection: Connection) {
         self.request = request
         self.status = .OK
         self.contentType = .Text
         self.body = []
         self.responder = responder
-        self.socket = socket
+        self.connection = connection
     }
 }
 

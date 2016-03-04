@@ -20,10 +20,10 @@ class Index: Controller {
     }
 }
 
-let app = Blackfish()
+let app = BlackfishApp()
 
 app.use(path: "/", controller: Index())
-app.use(middleware: Multiparser())
+//app.use(middleware: Multiparser())
 app.use(middleware: Logger())
 
 app.get("/user/:id") { request, response in
@@ -31,7 +31,7 @@ app.get("/user/:id") { request, response in
 }
 
 app.param("id") { (request, response, param, next) in
-    print(param)
+//    print(param)
     next()
 }
 

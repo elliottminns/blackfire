@@ -1,5 +1,3 @@
-import Vaquita
-
 class JSONParser: Middleware {
     
     func handle(request: Request, response: Response, next: () -> ()) {

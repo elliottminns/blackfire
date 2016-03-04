@@ -1,5 +1,5 @@
 import Foundation
-import Vaquita
+import Echo
 
 public enum Event {
     case OnFinish
