@@ -55,7 +55,7 @@ $ brew install libuv
 Ubuntu
 
 ```
-$ apt-get install libuv
+$ apt-get install libuv-dev
 ```
 
 To build a Blackfish app, you must call `swift build` and add your libuv linker path
