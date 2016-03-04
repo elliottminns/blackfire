@@ -46,17 +46,13 @@ You also need to have [libuv](https://github.com/libuv/libuv) installed.
 
 You can install this using either homebrew on OS X or apt-get on Ubuntu
 
-```
 OS X
-```
 
 ```
 $ brew install libuv
 ```
 
-```
 Ubuntu
-```
 
 ```
 $ apt-get install libuv
