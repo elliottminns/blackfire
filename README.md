@@ -4,9 +4,7 @@
 
 A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubuntu.
 
-![Travis Badge](https://travis-ci.org/elliottminns/blackfish.svg?branch=master)
-
-[![Join the chat at https://gitter.im/elliottminns/blackfish](https://badges.gitter.im/elliottminns/blackfish.svg)](https://gitter.im/elliottminns/blackfish?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![Travis Badge](https://travis-ci.org/elliottminns/blackfish.svg?branch=master) [![Join the chat at https://gitter.im/elliottminns/blackfish](https://badges.gitter.im/elliottminns/blackfish.svg)](https://gitter.im/elliottminns/blackfish?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 - [x] Insanely fast
 - [x] Single Threaded
