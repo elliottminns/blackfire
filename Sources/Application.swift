@@ -1,4 +1,4 @@
-
+import Echo
 import Foundation
 
 final public class BlackfishApp {
@@ -10,10 +10,12 @@ final public class BlackfishApp {
     private let routeManager: HandlerManager<Route>
 
     private var renderers: [String: Renderer]
-    
+
     private let server: SocketServer
-    
+
     private let parameterManager: ParameterManager
+
+    private let socketParser = SocketParser()
 
     public var port: Int {
         return runningPort
@@ -33,30 +35,30 @@ final public class BlackfishApp {
         use(middleware: JSONParser())
         server.delegate = self
     }
-    
+
     func dispatch(request request: Request, response: Response, handlers: [Handler]?) {
         response.renderSupplier = self
         let handlers = middlewareManager.route(request)
         handleMiddleware(handlers, request: request, response: response)
 
     }
-    
+
     func handleMiddleware(handlers: [Handler], request: Request, response: Response) {
-        
+
         var handlers = handlers
-        
+
         if let handler = handlers.popLast() {
-            
+
             handler.handle(request: request, response: response) {
                 self.handleMiddleware(handlers, request: request, response: response)
             }
-            
+
         } else {
-            
+
             let params = routeManager.paramsForPath(request.method.rawValue, path: request.path)
-            
+
             var parameters = [String: String]()
-            
+
             for (key, value) in params {
                 var k = key
                 if k.hasPrefix(":") {
@@ -64,36 +66,36 @@ final public class BlackfishApp {
                 }
                 parameters[k] = value
             }
-            
+
             let paramHandlers = parameterManager.handlersForParams(params)
             handleParams(paramHandlers, parameters: parameters, request: request, response: response)
         }
     }
-    
+
     func handleParams(handlers: [String: [ParameterManager.Handler]],
                       parameters: [String: String], request: Request, response: Response) {
-        
+
         var handlers = handlers
         var parameters = parameters
-        
+
         if let param = parameters.first, let keyHandlers = handlers[param.0] where keyHandlers.count > 0 {
-            
+
             let key = param.0
             let value = param.1
-            
+
             var kHandlers = keyHandlers
-            
+
             let handler = kHandlers.removeFirst()
-            
+
             handlers[key] = kHandlers;
-            
+
             handler(request: request, response: response, param: value) {
                 self.handleParams(handlers, parameters: parameters,
                                   request: request, response: response)
             }
         } else {
             parameters.popFirst()
-            
+
             if parameters.count > 0 {
                 handleParams(handlers, parameters: parameters,
                              request: request, response: response)
@@ -107,7 +109,7 @@ final public class BlackfishApp {
             }
         }
     }
-    
+
     func handleRoutes(routes: [Handler], request: Request, response: Response) {
         var routes = routes
         if let route = routes.popLast() {
@@ -120,17 +122,29 @@ final public class BlackfishApp {
     func parseRoutes() {
 
         for route in Route.routes {
-            
+
             self.routeManager.register(route.method.rawValue, handler: route)
         }
     }
 }
 
 extension BlackfishApp: SocketServerDelegate {
-    func socketServer(socketServer: SocketServer,
-                      didRecieveRequest request: Request,
-                                        withResponse response: Response) {
-        self.dispatch(request: request, response: response, handlers: nil)
+    
+    public func socketServer(socketServer: SocketServer,
+                      didRecieveRequestOnSocket socket: Socket) {
+
+        let address = try? socket.peername()
+      
+        if let request = try? socketParser.readHttpRequest(socket) {
+
+             request.address = address
+
+            request.parameters = [:]
+
+            let response = Response(request: request, responder: self,
+              socket: socket)
+            self.dispatch(request: request, response: response, handlers: nil)
+        }
     }
 }
 
@@ -163,7 +177,7 @@ extension BlackfishApp {
             handler?(error: error)
         }
     }
-    
+
     public func param(param: String, handler: (request: Request, response: Response, param: String, next: () -> ()) -> ()) {
         parameterManager.addHandler(handler, forParam: param)
     }
@@ -176,41 +190,41 @@ extension BlackfishApp: Routing {
     public func use(path path: String, router: Router) {
         Route.createRoutesFromRouter(router, withPath: path)
     }
-    
+
     public func use(renderer renderer: Renderer, ext: String) {
         renderers[ext] = renderer
     }
-    
+
     public func use(path path: String, controller: Controller) {
         let router = Router()
         controller.routes(router)
         Route.createRoutesFromRouter(router, withPath: path)
     }
 
-    public func use(middleware middleware: (request: Request, 
+    public func use(middleware middleware: (request: Request,
                     response: Response, next: () -> ()) -> ()) {
         self.use(path: "/", middleware: middleware)
     }
 
     public func use(path: String,
-                    middleware: (request: Request, response: Response, 
+                    middleware: (request: Request, response: Response,
                                  next: () -> ()) -> ()) {
         self.use(path: path, middleware: middleware)
     }
 
-    public func use(path path: String, 
-        middleware: (request: Request, response: Response, 
+    public func use(path path: String,
+        middleware: (request: Request, response: Response,
                      next: () -> ()) -> ()) {
-        let handler = MiddlewareClosureHandler(path: path, 
+        let handler = MiddlewareClosureHandler(path: path,
                                                handler: middleware)
         middlewareManager.register(handler)
 
     }
-    
+
     public func use(middleware middleware: Middleware) {
         use(path: "/", middleware: middleware)
     }
-    
+
     public func use(path path: String, middleware: Middleware) {
         let middlewareHandler = MiddlewareHandler(middleware: middleware,
                                                   path: path)
@@ -256,4 +270,47 @@ extension BlackfishApp: RendererSupplier {
 
         return nil
     }
+}
+
+extension BlackfishApp: Responder {
+    public func sendResponse(response: Response) {
+
+            let socket = response.socket
+
+            defer { socket
+                response.request?.fireOnFinish()
+                socket.release()
+            }
+
+            do {
+                try socket.writeString("HTTP/1.1 \(response.status.code) \(response.reasonPhrase)\r\n")
+
+                var headers = response.headers()
+
+                if response.body.count >= 0 {
+                    headers["Content-Length"] = "\(response.body.count)"
+                }
+
+                if true && response.body.count != -1 {
+                    headers["Connection"] = "keep-alive"
+                }
+
+                for (name, value) in headers {
+                    try socket.writeString("\(name): \(value)\r\n")
+                }
+
+                try socket.writeString("\r\n")
+
+                try socket.writeData(Data(bytes: response.body))
+
+            } catch let socketError as SocketError {
+                if let message = socketError.errorMessage {
+                    print("Error: \(socketError) error message: \(message)")
+                } else {
+                    print("Error: \(socketError)")
+                }
+            } catch {
+                print("Error: \(error)")
+            }
+        }
 }

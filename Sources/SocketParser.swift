@@ -8,26 +8,27 @@
 
 import Foundation
 import Vaquita
+import Echo
 
 enum SocketParserError: ErrorType {
     case InvalidStatusLine(String)
 }
 
 class SocketParser {
-    
+
     func readHttpRequest(socket: Socket) throws -> Request {
-        
+
         let statusLine = try socket.readLine()
-        
+
         let statusLineTokens = statusLine.splitWithCharacter(" ")
-        
+
         if statusLineTokens.count < 3 {
             throw SocketParserError.InvalidStatusLine(statusLine)
         }
 
         let method = Request.Method(rawValue: statusLineTokens[0]) ?? .Unknown
         let request = Request(method: method)
-        
+
         request.path = statusLineTokens[1]
         request.data = extractQueryParams(request.path)
         request.headers = try readHeaders(socket)
@@ -44,11 +45,11 @@ class SocketParser {
         }
 
         if let contentLength = request.headers["content-length"],
-            
+
             let contentLengthValue = Int(contentLength) {
-                
+
                 let body = try readBody(socket, size: contentLengthValue)
-                
+
                 let bodyString = try body.toString()
                 let postArray = bodyString.splitWithCharacter("&")
                 for postItem in postArray {
@@ -57,13 +58,13 @@ class SocketParser {
                         request.data[pair[0]] = pair[1]
                     }
                 }
-                
+
                 request.body = body
         }
 
         return request
     }
-    
+
     private func extractQueryParams(url: String) -> [String: Any] {
         var query = [String: Any]()
 
@@ -74,7 +75,7 @@ class SocketParser {
 
         for subQuery in urlParts[1].splitWithCharacter("&") {
             let tokens = subQuery.splitWithCharacter("=")
-            if let name = tokens.first?.stringByRemovingPercentEncoding, 
+            if let name = tokens.first?.stringByRemovingPercentEncoding,
                 value = tokens.last?.stringByRemovingPercentEncoding {
                     query[name] = value
             }
@@ -82,8 +83,8 @@ class SocketParser {
 
         return query
     }
-    
-    private func readBody(socket: Socket, size: Int) throws -> Data {
+
+    private func readBody(socket: Socket, size: Int) throws -> Vaquita.Data {
         var body = [UInt8]()
         var counter = 0
         while counter < size {
@@ -92,7 +93,7 @@ class SocketParser {
         }
         return Data(bytes: body)
     }
-    
+
     private func readHeaders(socket: Socket) throws -> [String: String] {
         var requestHeaders = [String: String]()
         repeat {
@@ -106,7 +107,7 @@ class SocketParser {
             }
         } while true
     }
-    
+
     func supportsKeepAlive(headers: [String: String]) -> Bool {
         if let value = headers["connection"] {
             return "keep-alive" == value.trimWhitespace()

@@ -1,3 +1,4 @@
+import Echo
 import Foundation
 
 public protocol Responder: class {
