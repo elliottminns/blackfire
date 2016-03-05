@@ -265,6 +265,7 @@ extension BlackfishApp: RendererSupplier {
 }
 
 extension BlackfishApp: Responder {
+    
     public func sendResponse(response: Response) {
 
         let connection = response.connection
@@ -291,6 +292,8 @@ extension BlackfishApp: Responder {
         data.append(response.body)
         
         connection.writeData(data)
-
+        
+        response.request?.fireOnFinish()
+        response.request?.session.destroy()
     }
 }

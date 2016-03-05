@@ -49,18 +49,22 @@ extension Logger: Middleware {
 		
         request.data["startTime"] = NSDate().timeIntervalSinceReferenceDate
         
+        weak var weakRequest = request
+        
         request.addListener(event: Event.OnFinish) {
             
-            let finishTime = NSDate().timeIntervalSinceReferenceDate
-            
-            var log = "\(method) \(path)"
-            
-            if let startTime = request.data["startTime"] as? NSTimeInterval {
-                let delta = (finishTime - startTime) * 1000
-                log += String(format: " - \(Int(delta)) ms")
+            if let request = weakRequest {
+                let finishTime = NSDate().timeIntervalSinceReferenceDate
+                
+                var log = "\(method) \(path)"
+                
+                if let startTime = request.data["startTime"] as? NSTimeInterval {
+                    let delta = (finishTime - startTime) * 1000
+                    log += String(format: " - \(Int(delta)) ms")
+                }
+                
+                print(log)
             }
-            
-            print(log)
         }
     }
 }

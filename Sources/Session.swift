@@ -1,3 +1,5 @@
+import Foundation
+
 protocol SessionDriver {
 	var sessions: [String: Session] { get set }
 }
@@ -42,16 +44,14 @@ public class Session {
 	}
 
 	public func destroy() {
-		if let key = self.key {
-			Session.driver.sessions.removeValueForKey(key)
-		}
+        Session.driver.sessions.removeAll();
 	}
 
 	var key: String?
 	public var data: [String: String] = [:] {
 		didSet {
 			if self.key == nil {
-				let key = "12931923912" //TODO: generate random key
+				let key = NSUUID().UUIDString
 				self.key = key
 				Session.driver.sessions[key] = self
 			}
