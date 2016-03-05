@@ -112,7 +112,7 @@ class RequestParser {
         
         for line in lines {
             if line.isEmpty {
-                return requestHeaders
+                continue
             }
             
             let headerTokens = line.splitWithCharacter(":")
