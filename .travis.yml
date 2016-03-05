@@ -4,7 +4,7 @@ sudo: required
 dist: trusty
 
 install:
-    - apt-get install libuv-dev
+    - sudo apt-get install libuv-dev
     - mkdir swift
     - curl https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a/swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a-ubuntu14.04.tar.gz -s | tar xz -C swift &> /dev/null
 
