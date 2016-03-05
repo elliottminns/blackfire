@@ -60,8 +60,14 @@ $ apt-get install libuv-dev
 
 To build a Blackfish app, you must call `swift build` and add your libuv linker path
 
+OS X:
 ```
 $ swift build -Xlinker -L/usr/local/lib
+```
+
+Linux:
+```
+$ swift build -Xlinker -L/usr/lib
 ```
 
 See the [Blackfish Example](https://github.com/elliottminns/blackfish-example) for more details, and how to create a `makefile`
