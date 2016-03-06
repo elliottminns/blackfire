@@ -71,8 +71,8 @@ class RequestParser {
         if let contentLength = request.headers["content-length"],
 
             let _ = Int(contentLength) {
-
-                let bodyString = try data.toString()
+            
+            if let bodyString = lines.last {
                 let postArray = bodyString.splitWithCharacter("&")
                 for postItem in postArray {
                     let pair = postItem.splitWithCharacter("=")
@@ -80,8 +80,10 @@ class RequestParser {
                         request.data[pair[0]] = pair[1]
                     }
                 }
-
-                request.body = data
+                
+                let body = Data(string: bodyString)
+                request.body = body
+            }
         }
 
         return request
@@ -112,7 +114,7 @@ class RequestParser {
         
         for line in lines {
             if line.isEmpty {
-                return requestHeaders
+                continue
             }
             
             let headerTokens = line.splitWithCharacter(":")
