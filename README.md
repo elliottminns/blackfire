@@ -55,19 +55,18 @@ $ brew install libuv
 Ubuntu
 
 ```
-$ apt-get install libuv-dev
+$ sudo apt-get install automake libtool
+$ curl -O http://dist.libuv.org/dist/v1.8.0/libuv-v1.8.0.tar.gz
+$ tar xzf libuv-v1.8.0.tar.gz
+$ cd libuv-v1.8.0 && sh autogen.sh
+$ ./configure                                                       
+$ make && sudo make install
 ```
 
 To build a Blackfish app, you must call `swift build` and add your libuv linker path
 
-OS X:
 ```
 $ swift build -Xlinker -L/usr/local/lib
-```
-
-Linux:
-```
-$ swift build -Xlinker -L/usr/lib
 ```
 
 See the [Blackfish Example](https://github.com/elliottminns/blackfish-example) for more details, and how to create a `makefile`
