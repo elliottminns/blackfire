@@ -183,21 +183,23 @@ extension Response {
         send()
     }
 
-    public func send(json json: Any) {
-
+    public func send(json json: Any, status: Status = .OK) {
+        
         let data: [UInt8]
-
+        
         if let json = json as? AnyObject {
             if NSJSONSerialization.isValidJSONObject(json) {
-
-            do {
-                let json = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
-                data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
-            } catch let errorMessage {
-                self.send(error: "Server error: \(errorMessage)")
-                return
-            }
+                
+                do {
+                    let json = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
+                    data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
+                } catch let errorMessage {
+                    self.status = .Error
+                    self.send(error: "Server error: \(errorMessage)")
+                    return
+                }
             } else {
+                self.status = .Error
                 self.send(error: "Server error: Invalid JSON")
                 return
             }
@@ -206,12 +208,11 @@ extension Response {
             let string = JSONSerializer.serialize(json)
             data = [UInt8](string.utf8)
         }
-
-
+        
+        self.status = status
         contentType = .JSON
-        status = .OK
         body = data
-
+        
         self.send()
     }
 
