@@ -112,10 +112,7 @@ class RequestParser {
         
         var requestHeaders = [String: String]()
         
-        for line in lines {
-            if line.isEmpty {
-                continue
-            }
+        for line in lines.filter({ $0.isEmpty == false }) {
             
             let headerTokens = line.splitWithCharacter(":")
             
