@@ -20,7 +20,7 @@ extension Data {
         for byte in bytes {
             if byte > 13 {
                 line.append(Character(UnicodeScalar(byte)))
-            } else {
+            } else if !line.isEmpty {
                 lines.append(line)
                 line = ""
             }
