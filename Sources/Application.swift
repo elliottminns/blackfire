@@ -135,6 +135,7 @@ extension BlackfishApp: ServerDelegate {
         let data = connection.data
         
         if let request = try? requestParser.readHttpRequest(data) {
+            
             request.parameters = [:]
             
             let response = Response(request: request, responder: self,

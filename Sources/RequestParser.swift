@@ -8,6 +8,7 @@ import Echo
 
 enum RequestParserError: ErrorType {
     case InvalidStatusLine(String)
+    case NotRecievedAllContent
 }
 
 extension Data {
@@ -55,7 +56,7 @@ class RequestParser {
 
         request.path = statusLineTokens[1]
         request.data = extractQueryParams(request.path)
-        request.headers = try readHeaders(lines)
+        request.headers = try readHeaders(&lines)
 
         if let cookieString = request.headers["cookie"] {
             let cookies = cookieString.splitWithCharacter(";")
@@ -69,10 +70,10 @@ class RequestParser {
         }
 
         if let contentLength = request.headers["content-length"],
-
-            let _ = Int(contentLength) {
+            let contentSize = Int(contentLength) {
             
-            if let bodyString = lines.last {
+            
+            if let bodyString = lines.last where bodyString.characters.count == contentSize {
                 let postArray = bodyString.splitWithCharacter("&")
                 for postItem in postArray {
                     let pair = postItem.splitWithCharacter("=")
@@ -83,6 +84,8 @@ class RequestParser {
                 
                 let body = Data(string: bodyString)
                 request.body = body
+            } else {
+                throw RequestParserError.NotRecievedAllContent
             }
         }
 
@@ -108,7 +111,7 @@ class RequestParser {
         return query
     }
 
-    private func readHeaders(lines: [String]) throws -> [String: String] {
+    private func readHeaders(lines: inout [String]) throws -> [String: String] {
         
         var requestHeaders = [String: String]()
         
