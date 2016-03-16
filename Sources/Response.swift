@@ -43,7 +43,7 @@ public class Response {
         case BadRequest, Unauthorized, Forbidden, NotFound
         case Error
         case Unknown
-        case Custom(Int)
+        case Custom(Int, String)
 
         public var code: Int {
             switch self {
@@ -62,42 +62,38 @@ public class Response {
                 case .Error: return 500
 
                 case .Unknown: return 0
-                case .Custom(let code):
+                case .Custom(let code, _):
                     return code
             }
         }
-    }
-
-    var reasonPhrase: String {
-        switch self.status {
-        case .OK:
-            return "OK"
-        case .Created:
-            return "Created"
-        case .Accepted:
-            return "Accepted"
-        case .NoContent:
-            return "No Content"
-
-        case .MovedPermanently:
-            return "Moved Permanently"
-
-        case .BadRequest:
-            return "Bad Request"
-        case .Unauthorized:
-            return "Unauthorized"
-        case .Forbidden:
-            return "Forbidden"
-        case .NotFound:
-            return "Not Found"
-
-        case .Error:
-            return "Internal Server Error"
-
-        case .Unknown:
-            return "Unknown"
-        case .Custom:
-            return "Custom"
+        
+        public var description: String {
+            switch self {
+            case .OK:
+                return "OK"
+            case .Created:
+                return "Created"
+            case .Accepted:
+                return "Accepted"
+            case .NoContent:
+                return "No Content"
+            case .MovedPermanently:
+                return "Moved Permanently"
+            case .BadRequest:
+                return "Bad Request"
+            case .Unauthorized:
+                return "Unauthorized"
+            case .Forbidden:
+                return "Forbidden"
+            case .NotFound:
+                return "Not Found"
+            case .Error:
+                return "Internal Server Error"
+            case .Unknown:
+                return "Unknown"
+            case .Custom(_, let description):
+                return description
+            }
         }
     }
 
@@ -146,17 +142,17 @@ public class Response {
 
 extension Response {
 
-    public func send() {
-
+    public func send(status: Status? = nil) {
+        if let status = status {
+            self.status = status
+        }
         responder.sendResponse(self)
     }
 
-    public func send(text text: String) {
-
+    public func send(text text: String, status: Status = .OK) {
         body = [UInt8](text.utf8)
         contentType = .Text
-        status = .OK
-        send()
+        send(status)
     }
 
     public func send(error error: String) {
@@ -164,23 +160,20 @@ extension Response {
         let text = "{\n\t\"error\": true,\n\t\"message\":\"\(error)\"\n}"
         body = [UInt8](text.utf8)
         contentType = .JSON
-        status = .Error
-        send()
+        send(.Error)
     }
 
-    public func send(html html: String) {
+    public func send(html html: String, status: Status = .OK) {
 
         let serialised = "<html><meta charset=\"UTF-8\"><body>\(html)</body></html>"
         body = [UInt8](serialised.utf8)
         contentType = .HTML
-        status = .OK
-        send()
+        send(status)
     }
 
     public func redirect(path: String) {
-        status = .MovedPermanently
         additionalHeaders["Location"] = path
-        send()
+        send(.MovedPermanently)
     }
 
     public func send(json json: Any, status: Status = .OK) {
@@ -194,12 +187,10 @@ extension Response {
                     let json = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
                     data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
                 } catch let errorMessage {
-                    self.status = .Error
                     self.send(error: "Server error: \(errorMessage)")
                     return
                 }
             } else {
-                self.status = .Error
                 self.send(error: "Server error: Invalid JSON")
                 return
             }
@@ -209,38 +200,32 @@ extension Response {
             data = [UInt8](string.utf8)
         }
         
-        self.status = status
         contentType = .JSON
         body = data
         
-        self.send()
+        send(status)
     }
 
-    public func render(path: String) {
-        render(path, data: nil)
+    public func render(path: String, status: Status = .OK) {
+        render(path, data: nil, status: status)
     }
 
-    public func render(path: String, data: [String: Any]?) {
+    public func render(path: String, data: [String: Any]?, status: Status = .OK) {
 
         guard let renderer = self.renderSupplier?.rendererForFile(path) else {
-            status = .Error
-            contentType = .Text
-            body = [UInt8]("No renderer for this view type of \(path)".utf8)
-            send()
+            send(error: "No renderer for this view type of \(path)")
             return
         }
 
         do {
             body = try renderer.renderToBytes(path, data: data)
             contentType = .HTML
-            status = .OK
         } catch let errorMessage {
-            status = .Error
-            contentType = .Text
-            body = [UInt8]("An error occured: \(errorMessage)".utf8)
+            send(error: "An error occured: \(errorMessage)")
+            return
         }
 
-        send()
+        send(status)
     }
 }
 

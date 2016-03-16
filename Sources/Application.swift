@@ -103,8 +103,7 @@ final public class BlackfishApp {
                 if let result = routeManager.routeSingle(request) {
                     handleRoutes([result], request: request, response: response)
                 } else {
-                    response.status = .NotFound
-                    response.send()
+                    response.send(.NotFound)
                 }
             }
         }
@@ -272,7 +271,7 @@ extension BlackfishApp: Responder {
         let connection = response.connection
 
         var responseString = ""
-        responseString = "HTTP/1.1 \(response.status.code) \(response.reasonPhrase)\r\n"
+        responseString = "HTTP/1.1 \(response.status.code) \(response.status.description)\r\n"
         
         var headers = response.headers()
         
