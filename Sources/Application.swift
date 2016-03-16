@@ -104,7 +104,7 @@ final public class BlackfishApp {
                     handleRoutes([result], request: request, response: response)
                 } else {
                     response.status = .NotFound
-                    response.send(text: "Page not found")
+                    response.send()
                 }
             }
         }
