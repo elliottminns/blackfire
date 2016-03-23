@@ -35,7 +35,11 @@ class JSONParser: Middleware {
     }
     
     func isDoubleValue(string string: String) -> Bool {
+        #if os(Linux)
         return string.containsString(".")
+        #else 
+        return string.contains(".")
+        #endif
     }
     
     func isStringValue(string string: String) -> Bool {
