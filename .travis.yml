@@ -4,17 +4,9 @@ sudo: required
 dist: trusty
 
 install:
-    - sudo apt-get install automake
-    - sudo apt-get install libtool
-    - mkdir libuv
-    - curl http://dist.libuv.org/dist/v1.8.0/libuv-v1.8.0.tar.gz -s | tar xz -C libuv &> /dev/null
-    - cd libuv/libuv-v1.8.0 && sh autogen.sh
-    - ./configure
-    - make
-    - sudo make install
-    - cd ../../
     - mkdir swift
     - curl https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a/swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a-ubuntu14.04.tar.gz -s | tar xz -C swift &> /dev/null
+    - export LD_LIBRARY_PATH=$(pwd)/swift/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a-ubuntu14.04/usr/lib/swift/linux/:$LD_LIBRARY_PATH
 
 script:
     - env PATH=$(pwd)/swift/swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a-ubuntu14.04/usr/bin:$PATH swift build -Xlinker -L/usr/local/lib -c release
