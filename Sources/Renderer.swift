@@ -2,7 +2,7 @@ import Foundation
 
 let resourceDir: String = "Resources"
 
-enum RendererError: ErrorType {
+enum RendererError: ErrorProtocol {
     case InvalidPath
     case ParseError
 }

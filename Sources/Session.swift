@@ -51,7 +51,7 @@ public class Session {
 	public var data: [String: String] = [:] {
 		didSet {
 			if self.key == nil {
-				let key = NSUUID().UUIDString
+				let key = NSUUID().uuidString
 				self.key = key
 				Session.driver.sessions[key] = self
 			}

@@ -8,10 +8,10 @@ struct StaticFileMiddleware: Middleware {
         let fileManager = NSFileManager.defaultManager()
         var isDir: ObjCBool = false
         
-        if fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) {
+        if fileManager.fileExists(atPath: filePath, isDirectory: &isDir) {
             // File exists
             if let fileBody = NSData(contentsOfFile: filePath) {
-                var array = [UInt8](count: fileBody.length, repeatedValue: 0)
+                var array = [UInt8](repeating: 0, count: fileBody.length)
                 fileBody.getBytes(&array, length: fileBody.length)
                 
                 response.status = .OK

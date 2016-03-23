@@ -29,7 +29,8 @@ class PathTree<T> {
         return inflateTreeWithGenerator(&generator, node: &rootNode)
     }
     
-    private func inflateTreeWithGenerator(generator: inout IndexingGenerator<[String]>, node: inout Node<T>) -> Node<T> {
+    private func inflateTreeWithGenerator(generator: inout IndexingIterator<[String]>, 
+                                          node: inout Node<T>) -> Node<T> {
     
         var generator = generator
         
@@ -68,13 +69,15 @@ class PathTree<T> {
         return (handlers: handlers, params: params)
     }
     
-    private func findValues(node: inout Node<T>, params: inout [String: String], generator: inout IndexingGenerator<[String]>, values: [T], exclude: Bool = false) -> [T] {
+    private func findValues(node: inout Node<T>, params: inout [String: String], 
+                            generator: inout IndexingIterator<[String]>, 
+                            values: [T], exclude: Bool = false) -> [T] {
             
             var values = values
             
             guard let pathToken = generator.next() else {
                 if exclude {
-                    values.appendContentsOf(node.handler)
+                    values.append(contentsOf: node.handler)
                 }
                 return values
             }
@@ -91,7 +94,7 @@ class PathTree<T> {
             if let handlerNode = node.nodes[pathToken] {
                 
                 if !exclude {
-                    values.appendContentsOf(handlerNode.handler)
+                    values.append(contentsOf: handlerNode.handler)
                 }
                 
                 let nextValues = findValues(&node.nodes[pathToken]!, params: &params, generator: &generator, values: values, exclude: exclude)
@@ -101,7 +104,7 @@ class PathTree<T> {
             
             if let handlerNode = node.nodes["*"] {
                 if !exclude {
-                    values.appendContentsOf(handlerNode.handler)
+                    values.append(contentsOf: handlerNode.handler)
                 }
                 let nextValues = findValues(&node.nodes["*"]!, params: &params, generator: &generator,
                     values: values, exclude: exclude)
@@ -111,9 +114,9 @@ class PathTree<T> {
             return values
     }
     
-    private func segmentsForPath(path: String) -> IndexingGenerator<[String]> {
+    private func segmentsForPath(path: String) -> IndexingIterator<[String]> {
         let pathSegments: [String] = (stripQuery(path)).splitWithCharacter("/")
-        return pathSegments.generate()
+        return pathSegments.makeIterator()
     }
     
     private func stripQuery(path: String) -> String {

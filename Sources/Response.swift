@@ -16,7 +16,7 @@ public protocol RendererSupplier: class {
  */
 public class Response {
 
-    public enum SerializationError: ErrorType {
+    public enum SerializationError: ErrorProtocol {
         case InvalidObject
         case NotSupported
     }
@@ -184,7 +184,8 @@ extension Response {
             if NSJSONSerialization.isValidJSONObject(json) {
                 
                 do {
-                    let json = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
+                    let json = try NSJSONSerialization.data(withJSONObject: json,
+                                                            options: .prettyPrinted)
                     data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
                 } catch let errorMessage {
                     self.send(error: "Server error: \(errorMessage)")

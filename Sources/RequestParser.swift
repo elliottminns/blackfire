@@ -6,7 +6,7 @@
 import Foundation
 import Echo
 
-enum RequestParserError: ErrorType {
+enum RequestParserError: ErrorProtocol {
     case InvalidStatusLine(String)
     case NotRecievedAllContent
 }
@@ -63,7 +63,8 @@ class RequestParser {
             for cookie in cookies {
                 let cookieArray = cookie.splitWithCharacter("=")
                 if cookieArray.count == 2 {
-                    let key = cookieArray[0].stringByReplacingOccurrencesOfString(" ", withString: "")
+                    let key = cookieArray[0].replacingOccurrences(of: " ", 
+                                                                  with: "")
                     request.cookies[key] = cookieArray[1]
                 }
             }
@@ -103,8 +104,8 @@ class RequestParser {
 
         for subQuery in urlParts[1].splitWithCharacter("&") {
             let tokens = subQuery.splitWithCharacter("=")
-            if let name = tokens.first?.stringByRemovingPercentEncoding,
-                value = tokens.last?.stringByRemovingPercentEncoding {
+            if let name = tokens.first?.removingPercentEncoding,
+                value = tokens.last?.removingPercentEncoding {
                     query[name] = value
             }
         }
@@ -121,7 +122,7 @@ class RequestParser {
             let headerTokens = line.splitWithCharacter(":")
             
             if let name = headerTokens.first, value = headerTokens.last {
-                requestHeaders[name.lowercaseString] = value.trimWhitespace()
+                requestHeaders[name.lowercased()] = value.trimWhitespace()
             }
         }
         

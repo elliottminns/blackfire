@@ -73,12 +73,12 @@ extension Route: Handler {
         // Grab request params
         let routePaths = self.path.splitWithCharacter("?")[0].splitWithCharacter("/")
         
-        for (index, path) in routePaths.enumerate() {
+        for (index, path) in routePaths.enumerated() {
             if path.hasPrefix(":") {
                 let requestPaths = request.path.splitWithCharacter("/")
                 if requestPaths.count > index {
                     var trimPath = path
-                    trimPath.removeAtIndex(path.startIndex)
+                    trimPath.remove(at: path.startIndex)
                     request.parameters[trimPath] = requestPaths[index]
                 }
             }

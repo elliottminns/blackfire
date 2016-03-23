@@ -35,7 +35,7 @@ class JSONParser: Middleware {
     }
     
     func isDoubleValue(string string: String) -> Bool {
-        return string.containsString(".")
+        return string.contains(".")
     }
     
     func isStringValue(string string: String) -> Bool {
@@ -45,8 +45,8 @@ class JSONParser: Middleware {
     func cleanString(string: String) -> String {
         if (string.hasPrefix("'") && string.hasSuffix("'")) || (string.hasPrefix("\"") && string.hasSuffix("\"")) {
             var value = string
-            value.removeAtIndex(value.startIndex)
-            value.removeAtIndex(value.endIndex.predecessor())
+            value.remove(at: value.startIndex)
+            value.remove(at: value.endIndex.predecessor())
             return value
         } else {
             return string
@@ -59,11 +59,11 @@ class JSONParser: Middleware {
         
         var string = string
         if string.hasPrefix("{") {
-            string.removeAtIndex(string.startIndex)
+            string.remove(at: string.startIndex)
         }
         
         if string.hasSuffix("}") {
-            string.removeAtIndex(string.endIndex.predecessor())
+            string.remove(at: string.endIndex.predecessor())
         }
         
         let characters = string.characters
@@ -167,15 +167,15 @@ class JSONParser: Middleware {
         if !string.hasPrefix("[") {
             return nil
         } else {
-            string.removeAtIndex(string.startIndex)
+            string.remove(at: string.startIndex)
         }
         
         if string.hasSuffix("]") {
-            string.removeAtIndex(string.endIndex.predecessor())
+            string.remove(at: string.endIndex.predecessor())
         }
         
         var array = [Any]()
-        let components = string.componentsSeparatedByString(",")
+        let components = string.componentsSeparated(by: ",")
         
         for component in components {
             let component = component.trimWhitespace()

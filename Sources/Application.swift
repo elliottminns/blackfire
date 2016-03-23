@@ -62,7 +62,7 @@ final public class BlackfishApp {
             for (key, value) in params {
                 var k = key
                 if k.hasPrefix(":") {
-                    k.removeAtIndex(k.startIndex)
+                    k.remove(at: k.startIndex)
                 }
                 parameters[k] = value
             }
@@ -148,7 +148,7 @@ extension BlackfishApp: ServerDelegate {
 
 extension BlackfishApp {
 
-    public func listen(port inPort: Int = 80, handler: ((error: ErrorType?) -> ())? = nil) {
+    public func listen(port inPort: Int = 80, handler: ((error: ErrorProtocol?) -> ())? = nil) {
 
         parseRoutes()
 

@@ -25,7 +25,7 @@ class ParameterManager {
             
             var param = key
             if param.hasPrefix(":") {
-                param.removeAtIndex(param.startIndex)
+                param.remove(at: param.startIndex)
             }
             
             if let h = self.handlers[param] {
