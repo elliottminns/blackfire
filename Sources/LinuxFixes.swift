@@ -16,8 +16,8 @@ var _module_nsstring = true
             return Int8(utf8.first!)
         }
 
-        var stringByRemovingPercentEncoding: String? {
-            var arr = [Int8]( count: 100000, repeatedValue: 0 )
+        var removingPercentEncoding: String? {
+            var arr = [Int8](repeated: 0, count: 100000)
             var out = UnsafeMutablePointer<Int8>( arr )
 
             withCString { (bytes) in
@@ -48,7 +48,7 @@ var _module_nsstring = true
                 }
             }
 
-            return String.fromCString( arr )
+            return String(cString: arr)
         }
 
         func stringByAddingPercentEscapesUsingEncoding( encoding: UInt ) -> String? {
@@ -69,11 +69,11 @@ var _module_nsstring = true
                     while true {
                         let start = strstr( bytes, sbytes ) - UnsafeMutablePointer<Int8>( bytes )
                         if start < 0 {
-                            out.append( String.fromCString( bytes )! )
+                            out.append( String(cString: bytes )! )
                             break
                         }
                         bytes[start] = 0
-                        out.append( String.fromCString( bytes )! )
+                        out.append( String(cString: bytes )! )
                         bytes += start + Int(strlen( sbytes ))
                     }
                 }
@@ -97,7 +97,7 @@ var _module_nsstring = true
             withCString { (bytes) in
                 let bytes = UnsafeMutablePointer<Int8>(bytes)
                 bytes[index] = 0
-                out = String.fromCString( bytes )!
+                out = String(cString: bytes )!
             }
             return out
         }
@@ -105,7 +105,7 @@ var _module_nsstring = true
         func substringFromIndex( index: Int ) -> String {
             var out = self
             withCString { (bytes) in
-                out = String.fromCString( bytes+index )!
+                out = String(cString: bytes+index )!
             }
             return out
         }
