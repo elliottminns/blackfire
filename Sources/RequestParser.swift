@@ -70,10 +70,11 @@ class RequestParser {
         }
 
         if let contentLength = request.headers["content-length"],
+            
             let contentSize = Int(contentLength) {
             
-            
             if let bodyString = lines.last where bodyString.characters.count == contentSize {
+                
                 let postArray = bodyString.splitWithCharacter("&")
                 for postItem in postArray {
                     let pair = postItem.splitWithCharacter("=")
