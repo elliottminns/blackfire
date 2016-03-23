@@ -38,35 +38,24 @@ Table of Contents
 
 ## Getting Started
 
-You must have Swift 2.2 or later installed. You can learn more about Swift 2.2 at [Swift.org](http://swift.org)
+You must have Swift 3.0 or later installed. You can learn more about Swift 3.0 at [Swift.org](http://swift.org)
 
-Blackfish is tested using the latest Swift **Development** snapshots, with current testing using snapshot [February 8, 2016](https://swift.org/download/)
+Blackfish is tested using the latest Swift **Development** snapshots, with current testing using snapshot [March 16, 2016](https://swift.org/download/)
 
-You also need to have [libuv](https://github.com/libuv/libuv) installed.
+~~You also need to have [libuv](https://github.com/libuv/libuv) installed.~~
 
-You can install this using either homebrew on OS X or apt-get on Ubuntu
+The latest Swift release allows for libuv to be integrated within Blackfish (Great news).
+
+There is one caveat in that it has a pretty breaking bug for building which can be fixed via this work around:
 
 OS X
-
 ```
-$ brew install libuv
-```
-
-Ubuntu
-
-```
-$ sudo apt-get install automake libtool
-$ curl -O http://dist.libuv.org/dist/v1.8.0/libuv-v1.8.0.tar.gz
-$ tar xzf libuv-v1.8.0.tar.gz
-$ cd libuv-v1.8.0 && sh autogen.sh
-$ ./configure                                                       
-$ make && sudo make install
+$ sudo install_name_tool -add_rpath /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a.xctoolchain/usr/lib/swift/macosx /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a.xctoolchain/usr/bin/swift-build
 ```
 
-To build a Blackfish app, you must call `swift build` and add your libuv linker path
-
+Ubuntu 
 ```
-$ swift build -Xlinker -L/usr/local/lib
+- export LD_LIBRARY_PATH="<Path to your swift>/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a-ubuntu14.04/usr/lib/swift/linux:$LD_LIBRARY_PATH"
 ```
 
 See the [Blackfish Example](https://github.com/elliottminns/blackfish-example) for more details, and how to create a `makefile`
