@@ -35,7 +35,7 @@ class JSONParser: Middleware {
     }
     
     func isDoubleValue(string string: String) -> Bool {
-        return string.contains(".")
+        return string.containsString(".")
     }
     
     func isStringValue(string string: String) -> Bool {
@@ -175,7 +175,12 @@ class JSONParser: Middleware {
         }
         
         var array = [Any]()
+
+#if os(Linux)
+        let components = string.componentsSeparatedByString(",")
+#else
         let components = string.componentsSeparated(by: ",")
+#endif
         
         for component in components {
             let component = component.trimWhitespace()

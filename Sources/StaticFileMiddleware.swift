@@ -8,7 +8,13 @@ struct StaticFileMiddleware: Middleware {
         let fileManager = NSFileManager.defaultManager()
         var isDir: ObjCBool = false
         
-        if fileManager.fileExists(atPath: filePath, isDirectory: &isDir) {
+        let exists: Bool
+#if os(Linux)
+        exists = fileManager.fileExistsAtPath(filePath, isDirectory: &isDir)
+#else
+        exists = fileManager.fileExists(atPath: filePath, isDirectory: &isDir)
+#endif
+        if exists {
             // File exists
             if let fileBody = NSData(contentsOfFile: filePath) {
                 var array = [UInt8](repeating: 0, count: fileBody.length)

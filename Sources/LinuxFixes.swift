@@ -17,7 +17,7 @@ var _module_nsstring = true
         }
 
         var removingPercentEncoding: String? {
-            var arr = [Int8](repeated: 0, count: 100000)
+            var arr = [Int8](repeating: 0, count: 100000)
             var out = UnsafeMutablePointer<Int8>( arr )
 
             withCString { (bytes) in
@@ -29,7 +29,8 @@ var _module_nsstring = true
                     let extralen = start < 0 ? Int(strlen( bytes )) : start + 1
                     let required = out - UnsafeMutablePointer<Int8>(arr) + extralen
                     if required > arr.count {
-                        var newarr = [Int8]( count: Int(Double(required) * 1.5), repeatedValue: 0 )
+                        var newarr = [Int8](repeating: 0, 
+                                count: Int(Double(required) * 1.5))
                         strcpy( &newarr, arr )
                         arr = newarr
                         out = &arr + Int(strlen( arr ))
@@ -64,16 +65,16 @@ var _module_nsstring = true
 
             withCString { (bytes) in
                 sep.withCString { (sbytes) in
-                    var bytes = UnsafeMutablePointer<Int8>( bytes )
+                    var bytes = UnsafeMutablePointer<Int8>(bytes)
 
                     while true {
-                        let start = strstr( bytes, sbytes ) - UnsafeMutablePointer<Int8>( bytes )
+                        let start = strstr(bytes, sbytes) - UnsafeMutablePointer<Int8>(bytes)
                         if start < 0 {
-                            out.append( String(cString: bytes )! )
+                            out.append(String(cString: bytes))
                             break
                         }
                         bytes[start] = 0
-                        out.append( String(cString: bytes )! )
+                        out.append(String(cString: bytes))
                         bytes += start + Int(strlen( sbytes ))
                     }
                 }
@@ -97,7 +98,7 @@ var _module_nsstring = true
             withCString { (bytes) in
                 let bytes = UnsafeMutablePointer<Int8>(bytes)
                 bytes[index] = 0
-                out = String(cString: bytes )!
+                out = String(cString: bytes )
             }
             return out
         }
@@ -105,7 +106,7 @@ var _module_nsstring = true
         func substringFromIndex( index: Int ) -> String {
             var out = self
             withCString { (bytes) in
-                out = String(cString: bytes+index )!
+                out = String(cString: bytes+index)
             }
             return out
         }

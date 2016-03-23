@@ -63,8 +63,15 @@ class RequestParser {
             for cookie in cookies {
                 let cookieArray = cookie.splitWithCharacter("=")
                 if cookieArray.count == 2 {
+
+#if os(Linux)
+                    let key = cookieArray[0]
+                        .stringByReplacingOccurrencesOfString(" ", 
+                                withString: "")
+#else
                     let key = cookieArray[0].replacingOccurrences(of: " ", 
                                                                   with: "")
+#endif
                     request.cookies[key] = cookieArray[1]
                 }
             }
