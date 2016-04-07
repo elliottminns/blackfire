@@ -110,7 +110,9 @@ final public class BlackfishApp {
     }
 
     func handleRoutes(routes: [Handler], request: Request, response: Response) {
+        
         var routes = routes
+
         if let route = routes.popLast() {
             route.handle(request: request, response: response) {
                 self.handleRoutes(routes, request: request, response: response)
@@ -170,7 +172,9 @@ extension BlackfishApp {
         }
     }
 
-    public func param(param: String, handler: (request: Request, response: Response, param: String, next: () -> ()) -> ()) {
+    public func param(param: String, handler: (request: Request, 
+                      response: Response, param: String, 
+                      next: () -> ()) -> ()) {
         parameterManager.addHandler(handler, forParam: param)
     }
 }
@@ -221,6 +225,10 @@ extension BlackfishApp: Routing {
         let middlewareHandler = MiddlewareHandler(middleware: middleware,
                                                   path: path)
         middlewareManager.register(middlewareHandler)
+    }
+
+    public func get(path: String, handler: Route.NextHandler) {
+        Route.get(path, handler: handler)
     }
 
     public func get(path: String, handler: Route.Handler) {

@@ -3,16 +3,27 @@ public class Route {
 	static var routes: [Route] = []
 
     public typealias Handler = ((request: Request, response: Response) -> Void)
+    public typealias NextHandler = ((request: Request, response: Response, 
+                                    next: () -> Void) -> Void)
 
 	let method: Request.Method
 	let path: String
-	let handler: Handler
+	let handler: Handler?
+    let nextHandler: NextHandler?
 
 	init(method: Request.Method, path: String, handler: Handler) {
 		self.method = method
 		self.path = path
 		self.handler = handler
+        self.nextHandler = nil
 	}
+    
+    init(method: Request.Method, path: String, nextHandler: NextHandler) {
+        self.method = method
+        self.path = path
+        self.nextHandler = nextHandler
+        self.handler = nil
+    }
     
     class func createRoutesFromRouter(router: Router, withPath path: String) {
         addHandlers(router.gets, toRoutesWithFunction: get, withPath: path)
@@ -23,8 +34,15 @@ public class Route {
         addHandlers(router.alls, toRoutesWithFunction: all, withPath: path)
     }
     
-    class func add(method method: Request.Method, path: String, handler: Handler) {
+    class func add(method method: Request.Method, path: String, 
+                   handler: Handler) {
         let route = Route(method: method, path: path, handler: handler)
+        self.routes.append(route)
+    }
+
+    class func add(method method: Request.Method, path: String,
+                   handler: NextHandler) {
+        let route = Route(method: method, path: path, nextHandler: handler)
         self.routes.append(route)
     }
 
@@ -35,6 +53,10 @@ public class Route {
                 let fullPath = "\(path)\(postPath)"
                 function(path: fullPath, handler: handler)
             }
+    }
+    
+    class func get(path: String, handler: NextHandler) {
+        self.add(method: .Get, path: path, handler: handler)
     }
 
 	class func get(path: String, handler: Handler) {
@@ -86,7 +108,11 @@ extension Route: Handler {
         
         Session.start(request)
         
-        self.handler(request: request, response: response)
-        
+        if let handler = handler {
+            handler(request: request, response: response)
+            next()
+        } else if let handler = nextHandler {
+            handler(request: request, response: response, next: next)
+        }
     }
 }
