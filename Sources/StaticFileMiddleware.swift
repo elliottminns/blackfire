@@ -19,6 +19,12 @@ struct StaticFileMiddleware: Middleware {
             FileSystem.readFile(filePath) { data, error in
                 if let data = data { 
                     let ext = NSURL(fileURLWithPath: filePath).pathExtension ?? ""
+                    
+                    if (ext == "html") {
+                        next()
+                        return
+                    }
+
                     response.status = .OK
                     response.body = data.bytes
                     response.contentType = .File(ext: ext)
