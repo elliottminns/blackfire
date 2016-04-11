@@ -1,4 +1,5 @@
 import Foundation
+import Echo
 
 struct StaticFileMiddleware: Middleware {
     func handle(request: Request, response: Response, next: (() -> ())) {
@@ -15,20 +16,17 @@ struct StaticFileMiddleware: Middleware {
         exists = fileManager.fileExists(atPath: filePath, isDirectory: &isDir)
 #endif
         if exists {
-            // File exists
-            if let fileBody = NSData(contentsOfFile: filePath) {
-                var array = [UInt8](repeating: 0, count: fileBody.length)
-                fileBody.getBytes(&array, length: fileBody.length)
-                
-                response.status = .OK
-                response.body = array
-                response.contentType = .Text
-                response.send()
-            } else {
-                next()
+            FileSystem.readFile(filePath) { data, error in
+                if let data = data { 
+                    response.status = .OK
+                    response.body = data.bytes
+                    response.contentType = .Text
+                    response.send()
+                } else {
+                    next();
+                }
             }
         } else {
-        
             next()
         }
     }
