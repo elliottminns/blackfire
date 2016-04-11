@@ -60,7 +60,7 @@ extension Logger: Middleware {
                 
                 if let startTime = request.data["startTime"] as? NSTimeInterval {
                     let delta = (finishTime - startTime) * 1000
-                    log += String(format: " - \(Int(delta)) ms")
+                    log += " - \(Int(delta)) ms"
                 }
                 
                 print(log)
