@@ -15,7 +15,7 @@ struct StaticFileMiddleware: Middleware {
 #else
         exists = fileManager.fileExists(atPath: filePath, isDirectory: &isDir)
 #endif
-        if exists {
+        if exists && !isDir {
             FileSystem.readFile(filePath) { data, error in
                 if let data = data { 
                     response.status = .OK
