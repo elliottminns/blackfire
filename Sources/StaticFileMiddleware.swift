@@ -3,7 +3,7 @@ import Foundation
 struct StaticFileMiddleware: Middleware {
     func handle(request: Request, response: Response, next: (() -> ())) {
         //check in file system
-        let filePath = "Public" + request.path
+        let filePath = "Resources" + request.path
         
         let fileManager = NSFileManager.defaultManager()
         var isDir: ObjCBool = false
