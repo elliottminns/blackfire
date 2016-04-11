@@ -18,9 +18,10 @@ struct StaticFileMiddleware: Middleware {
         if exists && !isDir {
             FileSystem.readFile(filePath) { data, error in
                 if let data = data { 
+                    let ext = NSURL(fileURLWithPath: filePath).pathExtension ?? ""
                     response.status = .OK
                     response.body = data.bytes
-                    response.contentType = .Text
+                    response.contentType = .File(ext: ext)
                     response.send()
                 } else {
                     next();

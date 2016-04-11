@@ -34,7 +34,11 @@ public class Response {
     let connection: Connection
 
     public enum ContentType {
-        case Text, HTML, JSON, None
+        case Text
+        case HTML
+        case JSON
+        case None
+        case File(ext: String)
     }
 
     public enum Status {
@@ -117,6 +121,8 @@ public class Response {
             headers["Content-Type"] = "application/json"
         case .HTML:
             headers["Content-Type"] = "text/html"
+        case .File(let ext):
+            headers["Content-Type"] = mimeMap[ext]
         default:
             break
         }
