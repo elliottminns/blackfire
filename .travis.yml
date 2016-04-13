@@ -9,4 +9,4 @@ install:
     - export LD_LIBRARY_PATH=$(pwd)/swift/swift-DEVELOPMENT-SNAPSHOT-2016-04-12-a-ubuntu14.04/usr/lib/swift/linux/:$LD_LIBRARY_PATH
 
 script:
-    - env PATH=$(pwd)/swift/swift-DEVELOPMENT-SNAPSHOT-2016-04-12-a-ubuntu14.04/usr/bin:$PATH swift build -configuration release
+    - env PATH=$(pwd)/swift/swift-DEVELOPMENT-SNAPSHOT-2016-04-12-a-ubuntu14.04/usr/bin:$PATH swift build --configuration release
