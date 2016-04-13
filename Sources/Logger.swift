@@ -33,7 +33,7 @@ final public class Logger {
     }
 }
 
-func + (let left: Logger.ANSIColors, let right: String) -> String {
+func + (left: Logger.ANSIColors, right: String) -> String {
    	return left.rawValue + right
 }
 

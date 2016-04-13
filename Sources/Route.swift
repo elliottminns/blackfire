@@ -25,28 +25,28 @@ public class Route {
         self.handler = nil
     }
     
-    class func createRoutesFromRouter(router: Router, withPath path: String) {
-        addHandlers(router.gets, toRoutesWithFunction: get, withPath: path)
-        addHandlers(router.posts, toRoutesWithFunction: post, withPath: path)
-        addHandlers(router.puts, toRoutesWithFunction: put, withPath: path)
-        addHandlers(router.deletes, toRoutesWithFunction: delete, withPath: path)
-        addHandlers(router.patches, toRoutesWithFunction: patch, withPath: path)
-        addHandlers(router.alls, toRoutesWithFunction: all, withPath: path)
+    class func createRoutesFrom(router: Router, withPath path: String) {
+        add(handlers: router.gets, toRoutesWithFunction: get, withPath: path)
+        add(handlers: router.posts, toRoutesWithFunction: post, withPath: path)
+        add(handlers: router.puts, toRoutesWithFunction: put, withPath: path)
+        add(handlers: router.deletes, toRoutesWithFunction: delete, withPath: path)
+        add(handlers: router.patches, toRoutesWithFunction: patch, withPath: path)
+        add(handlers: router.alls, toRoutesWithFunction: all, withPath: path)
     }
     
-    class func add(method method: Request.Method, path: String, 
+    class func add(method: Request.Method, path: String,
                    handler: Handler) {
         let route = Route(method: method, path: path, handler: handler)
         self.routes.append(route)
     }
 
-    class func add(method method: Request.Method, path: String,
+    class func add(method: Request.Method, path: String,
                    handler: NextHandler) {
         let route = Route(method: method, path: path, nextHandler: handler)
         self.routes.append(route)
     }
 
-    class func addHandlers(handlers: [String: Handler],
+    class func add(handlers: [String: Handler],
         toRoutesWithFunction function: ((path: String, handler: Handler) -> Void),
         withPath path: String) {
             for (postPath, handler) in handlers {
@@ -55,27 +55,27 @@ public class Route {
             }
     }
     
-    class func get(path: String, handler: NextHandler) {
+    class func get(_ path: String, handler: NextHandler) {
         self.add(method: .Get, path: path, handler: handler)
     }
 
-	class func get(path: String, handler: Handler) {
+	class func get(_ path: String, handler: Handler) {
         self.add(method: .Get, path: path, handler: handler)
 	}
 
-	class func post(path: String, handler: Handler) {
+	class func post(_ path: String, handler: Handler) {
         self.add(method: .Post, path: path, handler: handler)
 	}
 
-	class func put(path: String, handler: Handler) {
+	class func put(_ path: String, handler: Handler) {
         self.add(method: .Put, path: path, handler: handler)
 	}
 
-	class func patch(path: String, handler: Handler) {
+	class func patch(_ path: String, handler: Handler) {
 		self.add(method: .Patch, path: path, handler: handler)
 	}
 
-	class func delete(path: String, handler: Handler) {
+	class func delete(_ path: String, handler: Handler) {
 		self.add(method: .Delete, path: path, handler: handler)
 	}
 
@@ -90,14 +90,15 @@ public class Route {
 }
 
 extension Route: Handler {
-    func handle(request request: Request, response: Response, next: (() -> ())) {
+    
+    func handle(request: Request, response: Response, next: (() -> ())) {
             
         // Grab request params
-        let routePaths = self.path.splitWithCharacter("?")[0].splitWithCharacter("/")
+        let routePaths = self.path.split(withCharacter: "?")[0].split(withCharacter: "/")
         
         for (index, path) in routePaths.enumerated() {
             if path.hasPrefix(":") {
-                let requestPaths = request.path.splitWithCharacter("/")
+                let requestPaths = request.path.split(withCharacter: "/")
                 if requestPaths.count > index {
                     var trimPath = path
                     trimPath.remove(at: path.startIndex)

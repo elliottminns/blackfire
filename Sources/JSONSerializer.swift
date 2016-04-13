@@ -9,7 +9,7 @@ class JSONSerializer {
             var i = 0
 
             for (key, val) in dict {
-                s += "\"\(key)\":\(self.serialize(val))"
+                s += "\"\(key)\":\(self.serialize(object: val))"
                 if i != (dict.count - 1) {
                     s += ","
                 }
@@ -22,7 +22,7 @@ class JSONSerializer {
             var i = 0
 
             for (key, val) in dict {
-                s += "\"\(key)\":\(self.serialize(val))"
+                s += "\"\(key)\":\(self.serialize(object: val))"
                 if i != (dict.count - 1) {
                     s += ","
                 }
@@ -34,7 +34,7 @@ class JSONSerializer {
             var s = "["
 
             for i in 0 ..< arr.count {
-                s += self.serialize(arr[i])
+                s += self.serialize(object: arr[i])
 
                 if i != (arr.count - 1) {
                     s += ","
@@ -46,7 +46,7 @@ class JSONSerializer {
             var s = "["
 
             for i in 0 ..< arr.count {
-                s += self.serialize(arr[i])
+                s += self.serialize(object: arr[i])
 
                 if i != (arr.count - 1) {
                     s += ","
@@ -60,7 +60,7 @@ class JSONSerializer {
             var s = "["
             
             for i in 0 ..< arr.count {
-                s += self.serialize(arr[i])
+                s += self.serialize(object: arr[i])
                 
                 if i != (arr.count - 1) {
                     s += ","
@@ -73,7 +73,7 @@ class JSONSerializer {
             var s = "["
 
             for i in 0 ..< arr.count {
-                s += self.serialize(arr[i])
+                s += self.serialize(object: arr[i])
 
                 if i != (arr.count - 1) {
                     s += ","

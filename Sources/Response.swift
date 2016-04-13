@@ -2,7 +2,7 @@ import Echo
 import Foundation
 
 public protocol Responder: class {
-    func sendResponse(response: Response)
+    func send(response: Response)
 }
 
 public protocol RendererSupplier: class {
@@ -148,20 +148,20 @@ public class Response {
 
 extension Response {
 
-    public func send(status: Status? = nil) {
+    public func send(_ status: Status? = nil) {
         if let status = status {
             self.status = status
         }
-        responder.sendResponse(self)
+        responder.send(response: self)
     }
 
-    public func send(text text: String, status: Status = .OK) {
+    public func send(text: String, status: Status = .OK) {
         body = [UInt8](text.utf8)
         contentType = .Text
         send(status)
     }
 
-    public func send(error error: String) {
+    public func send(error: String) {
 
         let text = "{\n\t\"error\": true,\n\t\"message\":\"\(error)\"\n}"
         body = [UInt8](text.utf8)
@@ -169,7 +169,7 @@ extension Response {
         send(.Error)
     }
 
-    public func send(html html: String, status: Status = .OK) {
+    public func send(html: String, status: Status = .OK) {
 
         let serialised = "<html><meta charset=\"UTF-8\"><body>\(html)</body></html>"
         body = [UInt8](serialised.utf8)
@@ -182,7 +182,7 @@ extension Response {
         send(.MovedPermanently)
     }
 
-    public func send(json json: Any, status: Status = .OK) {
+    public func send(json: Any, status: Status = .OK) {
         
         let data: [UInt8]
         
@@ -209,7 +209,7 @@ extension Response {
             }
         } else {
             //fall back to manual serializer
-            let string = JSONSerializer.serialize(json)
+            let string = JSONSerializer.serialize(object: json)
             data = [UInt8](string.utf8)
         }
         
@@ -219,19 +219,19 @@ extension Response {
         send(status)
     }
 
-    public func render(path: String, status: Status = .OK) {
+    public func render(_ path: String, status: Status = .OK) {
         render(path, data: nil, status: status)
     }
 
-    public func render(path: String, data: [String: Any]?, status: Status = .OK) {
+    public func render(_ path: String, data: [String: Any]?, status: Status = .OK) {
 
-        guard let renderer = self.renderSupplier?.rendererForFile(path) else {
+        guard let renderer = self.renderSupplier?.rendererForFile(filename: path) else {
             send(error: "No renderer for this view type of \(path)")
             return
         }
 
         do {
-            body = try renderer.renderToBytes(path, data: data)
+            body = try renderer.renderToBytes(path: path, data: data)
             contentType = .HTML
         } catch let errorMessage {
             send(error: "An error occured: \(errorMessage)")

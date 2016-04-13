@@ -54,7 +54,7 @@ public class Request {
         listeners = [:]
     }
     
-    public func addListener(event event: Event, listener: () -> Void) {
+    public func addListener(event: Event, listener: () -> Void) {
         if listeners[event] == nil {
             listeners[event] = []
         }
@@ -71,10 +71,10 @@ public class Request {
     }
     
     func fireOnFinish() {
-        fireEvent(Event.OnFinish)
+        fire(event: Event.OnFinish)
     }
     
-    func fireEvent(event: Event) {
+    func fire(event: Event) {
         if let listeners = self.listeners[event] {
             for listener in listeners {
                 listener()

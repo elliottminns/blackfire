@@ -3,7 +3,7 @@ import Foundation
 
 protocol Handler {
     
-    func handle(request request: Request, response: Response, next: (() -> ()))
+    func handle(request: Request, response: Response, next: (() -> ()))
     
     var path: String { get }
     
@@ -31,12 +31,12 @@ extension HandlerManager {
         } else {
             fullPath = "*/" + path
         }
-        return pathTree.paramsForPath(fullPath)
+        return pathTree.paramsForPath(path: fullPath)
     }
     
     func register(handler: Handler) {
         let path = "*/" + handler.path
-        pathTree.addHandler(handler, toPath: path, overwrite: !allowsMultiples)
+        pathTree.addHandler(handler: handler, toPath: path, overwrite: !allowsMultiples)
     }
     
     func register(method: String?, handler: Handler) {
@@ -48,7 +48,7 @@ extension HandlerManager {
             path = "*/" + handler.path
         }
         
-        pathTree.addHandler(handler, toPath: path, overwrite: allowsMultiples)
+        pathTree.addHandler(handler: handler, toPath: path, overwrite: allowsMultiples)
     }
     
     func routeSingle(request: Request) -> Handler? {
@@ -61,7 +61,7 @@ extension HandlerManager {
             path = "*/" + request.path
         }
         
-        let result = pathTree.findValue(path)
+        let result = pathTree.findValue(path: path)
         
         for (key, value) in result.params {
             request.params[key] = value
@@ -80,7 +80,7 @@ extension HandlerManager {
             path = "*/" + request.path
         }
         
-        let result = pathTree.findValues(path)
+        let result = pathTree.findValues(path: path)
         
         for (key, value) in result.params {
             request.params[key] = value

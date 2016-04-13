@@ -45,7 +45,7 @@ class RequestParser {
         
         lines.removeFirst()
 
-        let statusLineTokens = statusLine.splitWithCharacter(" ")
+        let statusLineTokens = statusLine.split(withCharacter: " ")
 
         if statusLineTokens.count < 3 {
             throw RequestParserError.InvalidStatusLine(statusLine)
@@ -55,13 +55,13 @@ class RequestParser {
         let request = Request(method: method)
 
         request.path = statusLineTokens[1]
-        request.data = extractQueryParams(request.path)
-        request.headers = try readHeaders(&lines)
+        request.data = extractQueryParams(url: request.path)
+        request.headers = try readHeaders(lines: &lines)
 
         if let cookieString = request.headers["cookie"] {
-            let cookies = cookieString.splitWithCharacter(";")
+            let cookies = cookieString.split(withCharacter: ";")
             for cookie in cookies {
-                let cookieArray = cookie.splitWithCharacter("=")
+                let cookieArray = cookie.split(withCharacter: "=")
                 if cookieArray.count == 2 {
 
 #if os(Linux)
@@ -83,9 +83,9 @@ class RequestParser {
             
             if let bodyString = lines.last where bodyString.characters.count == contentSize {
                 
-                let postArray = bodyString.splitWithCharacter("&")
+                let postArray = bodyString.split(withCharacter: "&")
                 for postItem in postArray {
-                    let pair = postItem.splitWithCharacter("=")
+                    let pair = postItem.split(withCharacter: "=")
                     if pair.count == 2 {
                         request.data[pair[0]] = pair[1]
                     }
@@ -104,13 +104,13 @@ class RequestParser {
     private func extractQueryParams(url: String) -> [String: Any] {
         var query = [String: Any]()
 
-        var urlParts = url.splitWithCharacter("?")
+        var urlParts = url.split(withCharacter: "?")
         if urlParts.count < 2 {
             return query
         }
 
-        for subQuery in urlParts[1].splitWithCharacter("&") {
-            let tokens = subQuery.splitWithCharacter("=")
+        for subQuery in urlParts[1].split(withCharacter: "&") {
+            let tokens = subQuery.split(withCharacter: "=")
             if let name = tokens.first?.removingPercentEncoding,
                 value = tokens.last?.removingPercentEncoding {
                     query[name] = value
@@ -126,7 +126,7 @@ class RequestParser {
         
         for line in lines.filter({ $0.isEmpty == false }) {
             
-            let headerTokens = line.splitWithCharacter(":")
+            let headerTokens = line.split(withCharacter: ":")
             
             if let name = headerTokens.first, value = headerTokens.last {
                 requestHeaders[name.lowercased()] = value.trimWhitespace()

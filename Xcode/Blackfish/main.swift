@@ -4,8 +4,8 @@ let app = BlackfishApp()
 
 app.use(middleware: Logger())
 
-app.get("/") { req, res in
-    res.render("views/index.html")
+app.get("/") { (request, response) in
+    response.render("views/index.html")
 }
 
 app.listen(port: 3000) { error in

@@ -22,7 +22,7 @@ public class Session {
 	}
 	static var driver: SessionDriver = MemorySessionDriver()
 
-	public static func start(request: Request) {
+	public static func start(_ request: Request) {
 		if let key = request.cookies["blackfish-session"] {
 			if let session = self.driver.sessions[key] {
 				request.session = session
@@ -33,7 +33,7 @@ public class Session {
 		}
 	}
 
-	public static func close(request request: Request, response: Response) {
+	public static func close(request: Request, response: Response) {
 		if let key = request.session.key {
 			response.cookies["blackfish-session"] = key
 		} 

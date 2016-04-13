@@ -16,7 +16,7 @@ extension String {
         return String(characters)
     }
 
-    func splitWithCharacter(character: Character) -> [String] {
+    func split(withCharacter character: Character) -> [String] {
         return self.characters.split { $0 == character }.map { String($0) }
     }
 }

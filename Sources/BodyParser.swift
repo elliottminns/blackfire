@@ -8,14 +8,14 @@ class JSONParser: Middleware {
             return
         }
 
-        let contentTypeTokens = contentTypeHeader.splitWithCharacter(";").map { $0.trimWhitespace() }
+        let contentTypeTokens = contentTypeHeader.split(withCharacter: ";").map { $0.trimWhitespace() }
         guard let contentType = contentTypeTokens.first where 
             contentType == "application/json" else { return }
         
         do {
 
             let jsonString = try request.body.toString()
-            let json = parseJsonString(jsonString)
+            let json = parse(jsonString: jsonString)
 		
 		    for (key, value) in json {
                 request.data[key] = value
@@ -26,15 +26,15 @@ class JSONParser: Middleware {
     }
 
     
-    func boolValue(string string: String) -> Bool {
+    func boolValue(string: String) -> Bool {
         return string == "true"
     }
     
-    func isBoolValue(string string: String) -> Bool {
+    func isBoolValue(string: String) -> Bool {
         return string == "true" || string == "false"
     }
     
-    func isDoubleValue(string string: String) -> Bool {
+    func isDoubleValue(string: String) -> Bool {
         #if os(Linux)
         return string.containsString(".")
         #else 
@@ -42,7 +42,7 @@ class JSONParser: Middleware {
         #endif
     }
     
-    func isStringValue(string string: String) -> Bool {
+    func isStringValue(string: String) -> Bool {
         return (string.hasPrefix("'") && string.hasSuffix("'")) || (string.hasPrefix("\"") && string.hasSuffix("\""))
     }
     
@@ -114,7 +114,7 @@ class JSONParser: Middleware {
             
             if c == ":" && !inString && key == nil && !inObject && arrayLevel == 0 {
                 if key == nil {
-                    key = cleanString(buffer.trimWhitespace())
+                    key = cleanString(string: buffer.trimWhitespace())
                 }
                 buffer = ""
             } else if c == "," && !inString && !inObject && arrayLevel == 0 {
@@ -144,19 +144,19 @@ class JSONParser: Middleware {
         
     }
     
-    func parseJsonString(string: String) -> [String: Any] {
+    func parse(jsonString string: String) -> [String: Any] {
         var json = [String: Any]()
         
-        let pairs = splitIntoKeyValues(string)
+        let pairs = splitIntoKeyValues(string: string)
         
         for pair in pairs {
             if let key = pair.key, value = pair.value {
-                if let value = valueForProperty(value) {
+                if let value = valueForProperty(string: value) {
                     json[key] = value
-                } else if let value = arrayForString(value) {
+                } else if let value = arrayForString(string: value) {
                     json[key] = value
                 } else {
-                    json[key] = parseJsonString(value)
+                    json[key] = parse(jsonString: value)
                 }
             }
         }
@@ -183,16 +183,16 @@ class JSONParser: Middleware {
 #if os(Linux)
         let components = string.componentsSeparatedByString(",")
 #else
-        let components = string.componentsSeparated(by: ",")
+        let components = string.components(separatedBy: ",")
 #endif
         
         for component in components {
             let component = component.trimWhitespace()
             let value: Any?
             if component.hasPrefix("{") {
-                value = parseJsonString(component)
+                value = parse(jsonString: component)
             } else {
-                value = valueForProperty(component)
+                value = valueForProperty(string: component)
             }
             
             if let value = value {
@@ -212,7 +212,7 @@ class JSONParser: Middleware {
         }
         
         if isStringValue(string: string) {
-            let value = cleanString(string)
+            let value = cleanString(string: string)
             return value
         } else if isBoolValue(string: string) {
             return boolValue(string: string)

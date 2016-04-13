@@ -18,8 +18,8 @@ class MiddlewareHandler {
 
 extension MiddlewareHandler: Handler {
     
-    func handle(request request: Request, response: Response, next: (() -> ())) {
-        middleware.handle(request, response: response, next: next)
+    func handle(request: Request, response: Response, next: (() -> ())) {
+        middleware.handle(request: request, response: response, next: next)
     }
 }
 
@@ -38,7 +38,7 @@ class MiddlewareClosureHandler {
 
 extension MiddlewareClosureHandler: Handler {
 
-    func handle(request request: Request, response: Response, next: () -> ()) {
+    func handle(request: Request, response: Response, next: () -> ()) {
         self.handler(request: request, response: response, next: next)
     }
 }

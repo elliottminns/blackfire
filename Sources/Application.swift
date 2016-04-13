@@ -36,10 +36,10 @@ final public class BlackfishApp {
         server.delegate = self
     }
 
-    func dispatch(request request: Request, response: Response, handlers: [Handler]?) {
+    func dispatch(request: Request, response: Response, handlers: [Handler]?) {
         response.renderSupplier = self
-        let handlers = middlewareManager.route(request)
-        handleMiddleware(handlers, request: request, response: response)
+        let handlers = middlewareManager.route(request: request)
+        handleMiddleware(handlers: handlers, request: request, response: response)
 
     }
 
@@ -50,12 +50,12 @@ final public class BlackfishApp {
         if let handler = handlers.popLast() {
 
             handler.handle(request: request, response: response) {
-                self.handleMiddleware(handlers, request: request, response: response)
+                self.handleMiddleware(handlers: handlers, request: request, response: response)
             }
 
         } else {
 
-            let params = routeManager.paramsForPath(request.method.rawValue, path: request.path)
+            let params = routeManager.paramsForPath(method: request.method.rawValue, path: request.path)
 
             var parameters = [String: String]()
 
@@ -67,8 +67,8 @@ final public class BlackfishApp {
                 parameters[k] = value
             }
 
-            let paramHandlers = parameterManager.handlersForParams(params)
-            handleParams(paramHandlers, parameters: parameters, request: request, response: response)
+            let paramHandlers = parameterManager.handlersForParams(params: params)
+            handleParams(handlers: paramHandlers, parameters: parameters, request: request, response: response)
         }
     }
 
@@ -90,18 +90,18 @@ final public class BlackfishApp {
             handlers[key] = kHandlers;
 
             handler(request: request, response: response, param: value) {
-                self.handleParams(handlers, parameters: parameters,
+                self.handleParams(handlers: handlers, parameters: parameters,
                                   request: request, response: response)
             }
         } else {
-            parameters.popFirst()
+            let _ = parameters.popFirst()
 
             if parameters.count > 0 {
-                handleParams(handlers, parameters: parameters,
+                handleParams(handlers: handlers, parameters: parameters,
                              request: request, response: response)
             } else {
-                if let result = routeManager.routeSingle(request) {
-                    handleRoutes([result], request: request, response: response)
+                if let result = routeManager.routeSingle(request: request) {
+                    handle(routes: [result], request: request, response: response)
                 } else {
                     response.send(.NotFound)
                 }
@@ -109,13 +109,13 @@ final public class BlackfishApp {
         }
     }
 
-    func handleRoutes(routes: [Handler], request: Request, response: Response) {
+    func handle(routes: [Handler], request: Request, response: Response) {
         
         var routes = routes
 
         if let route = routes.popLast() {
             route.handle(request: request, response: response) {
-                self.handleRoutes(routes, request: request, response: response)
+                self.handle(routes: routes, request: request, response: response)
             }
         }
     }
@@ -124,18 +124,18 @@ final public class BlackfishApp {
 
         for route in Route.routes {
 
-            self.routeManager.register(route.method.rawValue, handler: route)
+            self.routeManager.register(method: route.method.rawValue, handler: route)
         }
     }
 }
 
 extension BlackfishApp: ServerDelegate {
     
-    public func server(server: Server, didRecieveConnection connection: Connection) {
+    public func server(_ server: Server, didRecieveConnection connection: Connection) {
         
         let data = connection.data
         
-        if let request = try? requestParser.readHttpRequest(data) {
+        if let request = try? requestParser.readHttpRequest(data: data) {
             
             request.parameters = [:]
             
@@ -155,11 +155,11 @@ extension BlackfishApp {
         parseRoutes()
 
         var port = inPort
-
-        if Process.arguments.count >= 2 {
+        
+        if Process.argc >= 2 {
             let secondArg = Process.arguments[1]
             if secondArg.hasPrefix("--port=") {
-                let portString = secondArg.splitWithCharacter("=")[1]
+                let portString = secondArg.split(withCharacter: "=")[1]
                 if let portInt = Int(portString) {
                     port = portInt
                 }
@@ -167,7 +167,7 @@ extension BlackfishApp {
         }
 
         runningPort = port
-        server.listen(port) { error in
+        server.listen(port: port) { error in
             handler?(error: error)
         }
     }
@@ -175,7 +175,7 @@ extension BlackfishApp {
     public func param(param: String, handler: (request: Request, 
                       response: Response, param: String, 
                       next: () -> ()) -> ()) {
-        parameterManager.addHandler(handler, forParam: param)
+        parameterManager.addHandler(handler: handler, forParam: param)
     }
 }
 
@@ -183,76 +183,73 @@ extension BlackfishApp {
 
 extension BlackfishApp: Routing {
 
-    public func use(path path: String, router: Router) {
-        Route.createRoutesFromRouter(router, withPath: path)
+    public func use(path: String, router: Router) {
+        Route.createRoutesFrom(router: router, withPath: path)
     }
 
-    public func use(renderer renderer: Renderer, ext: String) {
+    public func use(renderer: Renderer, ext: String) {
         renderers[ext] = renderer
     }
 
-    public func use(path path: String, controller: Controller) {
+    public func use(path: String, controller: Controller) {
         let router = Router()
-        controller.routes(router)
-        Route.createRoutesFromRouter(router, withPath: path)
+        controller.routes(router: router)
+    
+        Route.createRoutesFrom(router: router, withPath: path)
     }
 
-    public func use(middleware middleware: (request: Request,
+    public func use(middleware: (request: Request,
                     response: Response, next: () -> ()) -> ()) {
         self.use(path: "/", middleware: middleware)
     }
 
-    public func use(path: String,
+    public func use(_ path: String,
                     middleware: (request: Request, response: Response,
                                  next: () -> ()) -> ()) {
         self.use(path: path, middleware: middleware)
     }
 
-    public func use(path path: String,
+    public func use(path: String,
         middleware: (request: Request, response: Response,
                      next: () -> ()) -> ()) {
         let handler = MiddlewareClosureHandler(path: path,
                                                handler: middleware)
-        middlewareManager.register(handler)
+        middlewareManager.register(handler: handler)
 
     }
 
-    public func use(middleware middleware: Middleware) {
+    public func use(middleware: Middleware) {
         use(path: "/", middleware: middleware)
     }
 
-    public func use(path path: String, middleware: Middleware) {
+    public func use(path: String, middleware: Middleware) {
         let middlewareHandler = MiddlewareHandler(middleware: middleware,
                                                   path: path)
-        middlewareManager.register(middlewareHandler)
+        middlewareManager.register(handler: middlewareHandler)
     }
 
-    public func get(path: String, handler: Route.NextHandler) {
+    public func get(_ path: String, handler: Route.Handler) {
         Route.get(path, handler: handler)
     }
 
-    public func get(path: String, handler: Route.Handler) {
-        Route.get(path, handler: handler)
-    }
-
-    public func put(path: String, handler: Route.Handler) {
+    public func put(_ path: String, handler: Route.Handler) {
         Route.put(path, handler: handler)
     }
 
-    public func delete(path: String, handler: Route.Handler) {
+    public func delete(_ path: String, handler: Route.Handler) {
         Route.delete(path, handler: handler)
     }
 
-    public func post(path: String, handler: Route.Handler) {
+    public func post(_ path: String, handler: Route.Handler) {
         Route.post(path, handler: handler)
     }
 
-    public func patch(path: String, handler: Route.Handler) {
+    public func patch(_ path: String, handler: Route.Handler) {
         Route.patch(path, handler: handler)
     }
 
-    public func all(path: String, handler: Route.Handler) {
-        Route.all(path, handler: handler)
+    public func all(_ path: String, handler: Route.Handler) {
+        Route.all(path: path, handler: handler)
     }
 
 }
@@ -274,7 +271,7 @@ extension BlackfishApp: RendererSupplier {
 
 extension BlackfishApp: Responder {
     
-    public func sendResponse(response: Response) {
+    public func send(response: Response) {
 
         let connection = response.connection
 
@@ -299,7 +296,7 @@ extension BlackfishApp: Responder {
         var data: Data = Data(string: responseString)
         data.append(response.body)
         
-        connection.writeData(data)
+        connection.write(data: data)
         
         response.request?.fireOnFinish()
         response.request?.session.destroy()

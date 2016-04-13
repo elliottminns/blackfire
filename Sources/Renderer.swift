@@ -14,15 +14,15 @@ public protocol Renderer {
 
 extension Renderer {
     
-    private func resourcePath(fileName: String) -> String {
-        return resourceDir + "/" + fileName
+    private func resource(file: String) -> String {
+        return resourceDir + "/" + file
     }
     
     func renderToBytes(path: String, data: [String: Any]?) throws -> [UInt8] {
         
-        let body = try render(resourcePath(path), data: data)
+        let body = try render(path: resource(file: path), data: data)
         
-        return convertToBytes(body)
+        return convertToBytes(data: body)
     }
     
     private func convertToBytes(data: String) -> [UInt8] {
@@ -46,7 +46,7 @@ class HTMLRenderer: Renderer {
 
     func render(path: String, data: [String: Any]? = nil) throws -> String  {
         
-        return try stringFromFile(path)
+        return try stringFromFile(path: path)
     }
 
 }

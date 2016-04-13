@@ -1,12 +1,12 @@
 
 protocol Routing {
-    func use(middleware middleware: Middleware)
-    func get(path: String, handler: Route.Handler)
-    func put(path: String, handler: Route.Handler)
-    func delete(path: String, handler: Route.Handler)
-    func post(path: String, handler: Route.Handler)
-    func patch(path: String, handler: Route.Handler)
-    func all(path: String, handler: Route.Handler)
+    func use(middleware: Middleware)
+    func get(_ path: String, handler: Route.Handler)
+    func put(_ path: String, handler: Route.Handler)
+    func delete(_ path: String, handler: Route.Handler)
+    func post(_ path: String, handler: Route.Handler)
+    func patch(_ path: String, handler: Route.Handler)
+    func all(_ path: String, handler: Route.Handler)
 }
 
 public class Router: Routing {
@@ -27,31 +27,31 @@ public class Router: Routing {
         
     }
     
-    final public func use(middleware middleware: Middleware) {
+    final public func use(middleware: Middleware) {
         self.middleware.append(middleware)
     }
     
-    final public func get(path: String, handler: Route.Handler) {
+    final public func get(_ path: String, handler: Route.Handler) {
         gets[path] = handler
     }
     
-    final public func put(path: String, handler: Route.Handler) {
+    final public func put(_ path: String, handler: Route.Handler) {
         puts[path] = handler
     }
     
-    final public func delete(path: String, handler: Route.Handler) {
+    final public func delete(_ path: String, handler: Route.Handler) {
         deletes[path] = handler;
     }
     
-    final public func post(path: String, handler: Route.Handler) {
+    final public func post(_ path: String, handler: Route.Handler) {
         posts[path] = handler;
     }
     
-    final public func patch(path: String, handler: Route.Handler) {
+    final public func patch(_ path: String, handler: Route.Handler) {
         patches[path] = handler;
     }
     
-    public func all(path: String, handler: Route.Handler) {
+    public func all(_ path: String, handler: Route.Handler) {
         alls[path] = handler;
     }
 }
