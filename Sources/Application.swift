@@ -151,7 +151,7 @@ extension BlackfishApp: ServerDelegate {
 extension BlackfishApp {
 
     public func listen(port inPort: Int = 80, handler: ((error: ErrorProtocol?) -> ())? = nil) {
-
+        
         parseRoutes()
 
         var port = inPort
