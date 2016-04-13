@@ -13,8 +13,8 @@
 		4F28B4E11C7BC56F009E02AC /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7DB81C7BB5EC003D59AA /* Logger.swift */; };
 		4F477ED71C750BD200F458F4 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F477ED61C750BD200F458F4 /* Controller.swift */; };
 		4F477EE41C750E6A00F458F4 /* Echo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F477EDF1C750E4900F458F4 /* Echo.framework */; };
-		4F477EEC1C75206D00F458F4 /* Resources in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4F477EE91C75200900F458F4 /* Resources */; };
 		4F477EF01C75293C00F458F4 /* MimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F477EEF1C75293C00F458F4 /* MimeType.swift */; };
+		4F4FC4D81CBE6BEF005107CE /* Resources in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4F4FC4D71CBE6AA1005107CE /* Resources */; };
 		4F5EF3BC1C68E5BD000295DF /* Blackfish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F6A6DC01C657DFE00368F5D /* Blackfish.framework */; };
 		4F6A6DC31C657DFE00368F5D /* Blackfish-OSX.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F6A6DC21C657DFE00368F5D /* Blackfish-OSX.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F6A6DCA1C657DFE00368F5D /* Blackfish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F6A6DC01C657DFE00368F5D /* Blackfish.framework */; };
@@ -92,7 +92,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				4F477EEC1C75206D00F458F4 /* Resources in CopyFiles */,
+				4F4FC4D81CBE6BEF005107CE /* Resources in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,8 +104,8 @@
 		4F28B4DF1C7BBB5C009E02AC /* StaticFileMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticFileMiddleware.swift; sourceTree = "<group>"; };
 		4F477ED61C750BD200F458F4 /* Controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		4F477ED81C750E4900F458F4 /* Echo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Echo.xcodeproj; path = ../../echo/Xcode/Echo/Echo.xcodeproj; sourceTree = "<group>"; };
-		4F477EE91C75200900F458F4 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = "../../blackfish-example/Resources"; sourceTree = "<group>"; };
 		4F477EEF1C75293C00F458F4 /* MimeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MimeType.swift; sourceTree = "<group>"; };
+		4F4FC4D71CBE6AA1005107CE /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = ../Resources; sourceTree = "<group>"; };
 		4F6A6DC01C657DFE00368F5D /* Blackfish.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Blackfish.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F6A6DC21C657DFE00368F5D /* Blackfish-OSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blackfish-OSX.h"; sourceTree = "<group>"; };
 		4F6A6DC41C657DFE00368F5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -202,8 +202,8 @@
 				4FE66DCA1C60C29800CDF49D /* Blackfish */,
 				4F6A6DC11C657DFE00368F5D /* Blackfish-OSX */,
 				4F6A6DCD1C657DFE00368F5D /* Tests */,
-				4F477EE91C75200900F458F4 /* Resources */,
 				4FE66DC91C60C29800CDF49D /* Products */,
+				4F4FC4D71CBE6AA1005107CE /* Resources */,
 			);
 			sourceTree = "<group>";
 		};
