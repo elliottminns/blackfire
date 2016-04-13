@@ -228,7 +228,6 @@
 		4FE66E1B1C60C55200CDF49D /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				4FE66E261C60C55200CDF49D /* Application.swift */,
 				4FBD7DB71C7BB5EC003D59AA /* BodyParser.swift */,
 				4F477ED61C750BD200F458F4 /* Controller.swift */,
 				4FBD7DB81C7BB5EC003D59AA /* Logger.swift */,
@@ -239,6 +238,7 @@
 				4F477EEF1C75293C00F458F4 /* MimeType.swift */,
 				4FDAC2051C625FBE006FC98B /* MultipartFile.swift */,
 				4FE66E3E1C60C9AB00CDF49D /* Renderer.swift */,
+				4FE66E261C60C55200CDF49D /* Application.swift */,
 				4FE66E211C60C55200CDF49D /* Request.swift */,
 				4FE66E221C60C55200CDF49D /* Response.swift */,
 				4FE66E241C60C55200CDF49D /* Route.swift */,
