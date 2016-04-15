@@ -26,14 +26,15 @@ let app = BlackfishApp()
 
 let task = FibTask()
 
-let request = URLRequest(host: "squior.io", path: "/", port: 80)
-
-let connection = URLConnection(request: request)
-
 app.use(middleware: Logger())
 
 app.get("/") { (request, response) in
-    response.render("views/index.html")
+    
+    let req = URLRequest(host: "127.0.0.1", path: "/api/v1/tutor/become", port: 3001, method: .POST)
+    
+    HTTP.perform(request: req) { (res, error) in
+        response.render("views/index.html")
+    }
 }
 
 app.listen(port: 5000) { error in

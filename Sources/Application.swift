@@ -32,7 +32,7 @@ final public class BlackfishApp {
         parameterManager = ParameterManager()
         renderers[".html"] = HTMLRenderer()
         use(middleware: StaticFileMiddleware())
-        use(middleware: JSONParser())
+        use(middleware: BodyParser())
         server.delegate = self
     }
 
