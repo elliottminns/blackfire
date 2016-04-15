@@ -131,7 +131,7 @@ final public class BlackfishApp {
 
 extension BlackfishApp: ServerDelegate {
     
-    public func server(_ server: Server, didRecieveConnection connection: Connection) {
+    public func server(_ server: Server, didRecieveConnection connection: IncomingConnection) {
         
         let data = connection.data
         

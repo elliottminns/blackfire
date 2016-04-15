@@ -55,7 +55,17 @@ class RequestParser {
         let request = Request(method: method)
 
         request.path = statusLineTokens[1]
-        request.data = extractQueryParams(url: request.path)
+        
+        if method == .Get {
+            
+            let params = extractQueryParams(url: request.path)
+            
+            for (key, value) in params {
+                
+                request.data[key] = value
+            }
+        }
+        
         request.headers = try readHeaders(lines: &lines)
 
         if let cookieString = request.headers["cookie"] {

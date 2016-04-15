@@ -636,6 +636,7 @@
 		4FE66DD01C60C29800CDF49D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../../echo/.build/debug";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -643,6 +644,7 @@
 		4FE66DD11C60C29800CDF49D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../../echo/.build/debug";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
