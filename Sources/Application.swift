@@ -164,6 +164,10 @@ extension BlackfishApp {
                 if let portInt = Int(portString) {
                     port = portInt
                 }
+            } else if secondArg == "--port" {
+                if let portInt = Int(Process.arguments[2]) {
+                    port = portInt
+                }
             }
         }
 
