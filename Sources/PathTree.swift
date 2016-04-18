@@ -50,68 +50,151 @@ class PathTree<T> {
         return node
     }
     
-    func findValue(path: String) -> (handler: T?, params: [String: String]) {
-        var generator = segments(forPath: path)
-        
-        var params = [String:String]()
-        
-        let handler = findValues(node: &rootNode, params: &params, generator: &generator, values: [], exclude: true).first
-        
-        return (handler: handler, params: params)
+    private func findNodes(forPath path: String) -> [(path: String, handlers: [T])]? {
+        let comps = path.split(withCharacter: "/")
+        let nodes = findNodes(withComps: comps, forNode: rootNode, withPart: "")
+        return nodes
     }
     
-    func findValues(path: String) -> (handlers: [T], params: [String: String]) {
+    private func findNodes(withComps comps: [String],
+                           forNode node: Node<T>,
+                           withPart part: String) -> [(path: String, handlers: [T])]? {
         
-        var generator = segments(forPath: path)
+        guard comps.count > 0 else {
+            return [(path: part, handlers: node.handler)]
+        }
+        
+        var comps = comps
+        
+        let next = comps.removeFirst()
+        
+        // Check for variables
+        
+        if let nextNode = node.nodes[next] {
+            if let path = findNodes(withComps: comps, forNode: nextNode, withPart: next) {
+                return [(path: part, handlers: node.handler)] + path
+            } else {
+                return nil
+            }
+            
+        } else {
+            let variables = node.nodes.filter { $0.0.characters.first == ":" }
+            
+            if variables.count > 0 {
+                
+                for variable in variables {
+                    if let path = findNodes(withComps: comps, forNode: variable.value, withPart: variable.key) {
+                        return [(path: part, handlers: node.handler)] + path
+                    }
+                    
+                }
+                
+            }
+                
+            if let nextNode = node.nodes["*"] {
+                if let path = findNodes(withComps: comps, forNode: nextNode, withPart: next) {
+                    return [(path: part, handlers: node.handler)] + path
+                } else {
+                    return nil
+                }
+            } else {
+                return nil
+            }
+        }
+        
+    }
+    
+    func findValue(path: String) -> (handlers: [T], params: [String: String]) {
         
         var params = [String:String]()
-        let handlers = findValues(node: &rootNode, params: &params, generator: &generator, values: [])
+        var handlers: [T] = []
+        
+        if let nodePath = findNodes(forPath: path) {
+            
+            let pathComps = [""] + path.split(withCharacter: "/")
+            
+            for i in 0 ..< nodePath.count {
+                let path = pathComps[i]
+                let node = nodePath[i]
+                if node.path.characters.first == ":" {
+                    params[node.path] = path
+                }
+            }
+            
+            handlers = nodePath.last?.handlers ?? []
+            
+        }
+        
         return (handlers: handlers, params: params)
     }
     
-    private func findValues(node: inout Node<T>, params: inout [String: String], 
-                            generator: inout IndexingIterator<[String]>, 
-                            values: [T], exclude: Bool = false) -> [T] {
+    
+    func findValues(path: String) -> (handlers: [T], params: [String: String]) {
+        
+        var params = [String:String]()
+        var handlers: [T] = []
+        
+        let nodePath = findAllNodes(forPath: path)
             
-            var values = values
-            
-            guard let pathToken = generator.next() else {
-                if exclude {
-                    values.append(contentsOf: node.handler)
-                }
-                return values
+        let pathComps = [""] +  path.split(withCharacter: "/")
+        
+        for i in 0 ..< nodePath.count {
+            let path = pathComps[i]
+            let node = nodePath[i]
+            if node.path.characters.first == ":" {
+                params[node.path] = path
             }
             
-            let variableNodes = node.nodes.filter {
-                $0.0.characters.first == ":"
-            }
+            handlers += node.handlers
+        }
+        
+        
+        return (handlers: handlers, params: params)
+    }
+    
+    func findAllNodes(forPath path: String) -> [(path: String, handlers: [T])] {
+        let comps = path.split(withCharacter: "/")
+        let nodes = findAllNodes(withComps: comps, forNode: rootNode, withPart: "")
+        return nodes
+    }
+    
+    private func findAllNodes(withComps comps: [String],
+                              forNode node: Node<T>,
+                              withPart part: String) -> [(path: String, handlers: [T])] {
+        guard comps.count > 0 else {
+            return [(path: part, handlers: node.handler)]
+        }
+        
+        var comps = comps
+        
+        let next = comps.removeFirst()
+        
+        var paths: [(path: String, handlers: [T])] = []
+        
+        // Check for variables
+        
+        if let nextNode = node.nodes[next] {
+            paths += findAllNodes(withComps: comps, forNode: nextNode, withPart: next)
             
-            if let variableNode = variableNodes.first {
-                params[variableNode.0] = pathToken
-                return findValues(node: &node.nodes[variableNode.0]!, params: &params, generator: &generator, values: values, exclude: exclude)
-            }
+        } else {
+            let variables = node.nodes.filter { $0.0.characters.first == ":" }
             
-            if let handlerNode = node.nodes[pathToken] {
+            if variables.count > 0 {
                 
-                if !exclude {
-                    values.append(contentsOf: handlerNode.handler)
+                for variable in variables {
+                    if let path = findNodes(withComps: comps, forNode: variable.value, withPart: variable.key) {
+                        paths += [(path: part, handlers: node.handler)] + path
+                    }
                 }
-                
-                let nextValues = findValues(node: &node.nodes[pathToken]!, params: &params, generator: &generator, values: values, exclude: exclude)
-                
-                return nextValues
             }
             
-            if let handlerNode = node.nodes["*"] {
-                if !exclude {
-                    values.append(contentsOf: handlerNode.handler)
-                }
-                let nextValues = findValues(node: &node.nodes["*"]!, params: &params, generator: &generator,
-                    values: values, exclude: exclude)
-                return nextValues
+            if let nextNode = node.nodes["*"] {
+                paths += findAllNodes(withComps: comps, forNode: nextNode, withPart: next)
             }
-            
-            return values
+        }
+
+        return [(path: part, handlers: node.handler)] + paths
+        
     }
     
     private func segments(forPath path: String) -> IndexingIterator<[String]> {

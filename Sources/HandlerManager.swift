@@ -35,7 +35,7 @@ extension HandlerManager {
     }
     
     func register(handler: Handler) {
-        let path = "*/" + handler.path
+        let path = "*" + handler.path
         pathTree.addHandler(handler: handler, toPath: path, overwrite: !allowsMultiples)
     }
     
@@ -43,15 +43,15 @@ extension HandlerManager {
         let path: String
         
         if let method = method {
-            path = method + "/" + handler.path
+            path = method + "" + handler.path
         } else {
-            path = "*/" + handler.path
+            path = "*" + handler.path
         }
         
         pathTree.addHandler(handler: handler, toPath: path, overwrite: allowsMultiples)
     }
     
-    func routeSingle(request: Request) -> Handler? {
+    func routeSingle(request: Request) -> [Handler] {
         
         let path: String
         
@@ -67,7 +67,7 @@ extension HandlerManager {
             request.params[key] = value
         }
         
-        return result.handler
+        return result.handlers
     }
 
     func route(request: Request) -> [Handler] {
@@ -75,9 +75,9 @@ extension HandlerManager {
         let path: String
 
         if request.method != Request.Method.Unknown {
-            path = request.method.rawValue + "/" + request.path
+            path = request.method.rawValue + "" + request.path
         } else {
-            path = "*/" + request.path
+            path = "*" + request.path
         }
         
         let result = pathTree.findValues(path: path)

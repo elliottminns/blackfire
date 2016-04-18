@@ -28,6 +28,14 @@ let task = FibTask()
 
 app.use(middleware: Logger())
 
+app.get("/owners/:id/sites") { req, res in
+    res.send(text: "Owners")
+}
+
+app.get("/owners/:ownerId/sites/:siteId/floors") { req, res in
+    res.send(text: "Floors")
+}
+
 app.get("/") { (request, response) in
     
     let req = URLRequest(host: "127.0.0.1", path: "/api/v1/tutor/become", port: 3001, method: .POST)

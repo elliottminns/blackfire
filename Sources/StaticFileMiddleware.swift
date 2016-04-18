@@ -16,26 +16,14 @@ struct StaticFileMiddleware: Middleware {
         exists = fileManager.fileExists(atPath: filePath, isDirectory: &isDir)
 #endif
         if exists && !isDir {
-//            FileSystem.readFile(atPath: filePath) { (data, error) in
-//                guard let data = data else {
-//                    print("Nexting");
-//                    next();
-//                    return
-//                }
             
             if let fileBody = NSData(contentsOfFile: filePath) {
                 var array = [UInt8](repeating: 0, count: fileBody.length)
                 fileBody.getBytes(&array, length: fileBody.length)
                 let ext = NSURL(fileURLWithPath: filePath).pathExtension ?? ""
                 
-                if (ext == "html") {
-                    next()
-                    return
-                }
-                
                 response.status = .OK
                 response.body = array
-//                response.body = data.bytes
                 response.contentType = .File(ext: ext)
                 response.send()
             } else {

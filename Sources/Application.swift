@@ -100,8 +100,9 @@ final public class BlackfishApp {
                 handleParams(handlers: handlers, parameters: parameters,
                              request: request, response: response)
             } else {
-                if let result = routeManager.routeSingle(request: request) {
-                    handle(routes: [result], request: request, response: response)
+                let result = routeManager.routeSingle(request: request)
+                if result.count > 0 {
+                    handle(routes: result, request: request, response: response)
                 } else {
                     response.send(.NotFound)
                 }
