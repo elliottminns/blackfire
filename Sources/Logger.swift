@@ -2,7 +2,7 @@ import Foundation
 
 final public class Logger {
 	enum ANSIColors: String {
-    	case black = "\u{001B}[0;30m"
+    	case black = "\u{001B}[0;0m"
     	case red = "\u{001B}[0;31m"
     	case green = "\u{001B}[0;32m"
     	case yellow = "\u{001B}[0;33m"
