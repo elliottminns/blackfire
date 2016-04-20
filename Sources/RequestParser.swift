@@ -97,7 +97,11 @@ class RequestParser {
                 for postItem in postArray {
                     let pair = postItem.split(withCharacter: "=")
                     if pair.count == 2 {
-                        request.data[pair[0]] = pair[1]
+                        let key             = pair[0]
+                        let encodedValue    = pair[1]
+                        if let value = encodedValue.removingPercentEncoding {
+                            request.data[key]   = value
+                        }
                     }
                 }
                 
