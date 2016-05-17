@@ -1,6 +1,10 @@
 import Echo
 import Foundation
 
+#if os(Linux)
+    import Dispatch
+#endif
+
 final public class BlackfishApp {
 
     public static let VERSION = "0.8.0"
@@ -130,7 +134,7 @@ final public class BlackfishApp {
 
 extension BlackfishApp: HTTPServerDelegate {
     
-    public func server(_ server: HTTPServer, didRecieveRequest request: HTTPRequest, response: HTTPResponse) {
+    public func server(_ server: HTTPServer, didReceiveRequest request: HTTPRequest, response: HTTPResponse) {
         
         let req = Request(request: request)
         req.parameters = [:]
@@ -168,7 +172,7 @@ extension BlackfishApp {
         do {
             try server.listen(port: port)
             handler?(error: nil)
-            NSRunLoop.main().run()
+            dispatch_main()
         } catch {
             handler?(error: error)
         }
