@@ -10,9 +10,12 @@ A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubu
 - [x] Single Threaded
 - [x] Beautiful syntax
 - [x] Type safe
-- [x] Powered by [Echo](https://github.com/elliottminns/echo)
+- [x] Powered by [Echo](https://github.com/elliottminns/echo) & libdispatch
 - [x] Running on [Heroku](https://blackfish-example.herokuapp.com)
-- [x] Powered by [libuv](https://github.com/libuv/libuv)
+
+##News
+
+Blackfish 0.8 is here, faster than ever. Blackfish uses libdispatch at it's core, allowing for safe and fast non-blocking I/O. 
 
 Table of Contents
 =================
@@ -40,25 +43,23 @@ Table of Contents
 
 You must have Swift 3.0 or later installed. You can learn more about Swift 3.0 at [Swift.org](http://swift.org)
 
-Blackfish is tested using the latest Swift **Development** snapshots, with current testing using snapshot [March 16, 2016](https://swift.org/download/)
+Blackfish is tested using the latest Swift **Development** snapshots, with current testing using snapshot [May 09, 2016](https://swift.org/download/)
 
-~~You also need to have [libuv](https://github.com/libuv/libuv) installed.~~
-
-The latest Swift release allows for libuv to be integrated within Blackfish (Great news).
-
-There is one caveat in that it has a pretty breaking bug for building which can be fixed via this work around:
-
-OS X
-```
-$ sudo install_name_tool -add_rpath /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a.xctoolchain/usr/lib/swift/macosx /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a.xctoolchain/usr/bin/swift-build
-```
+To get started on Linux, you need to have Dispatch installed on your system. To do this you can use the below command to set it up. 
 
 Ubuntu 
+
+First, install the system linux libraries:
+
 ```
-- export LD_LIBRARY_PATH="<Path to your swift>/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a-ubuntu14.04/usr/lib/swift/linux:$LD_LIBRARY_PATH"
+sudo apt-get install autoconf libtool libkqueue-dev libkqueue0 libcurl4-openssl-dev libbsd-dev libblocksruntime-dev
 ```
 
-See the [Blackfish Example](https://github.com/elliottminns/blackfish-example) for more details, and how to create a `makefile`
+Then clone and build libdispatch against your Swift toolchain
+
+```
+git clone -b experimental/foundation https://github.com/apple/swift-corelibs-libdispatch.git && cd swift-corelibs-libdispatch && git submodule init && git submodule update && sh ./autogen.sh && ./configure --with-swift-toolchain=<path-to-swift>/usr --prefix=<path-to-swift>/usr && make && make install
+```
 
 ### Work in Progress
 
