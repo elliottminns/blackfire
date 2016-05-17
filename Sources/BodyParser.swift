@@ -4,7 +4,7 @@ class BodyParser: Middleware {
 
         defer { next() }
 
-        guard let contentTypeHeader = request.headers["content-type"] else {
+        guard let contentTypeHeader = request.headers["Content-Type"] else {
             return
         }
 

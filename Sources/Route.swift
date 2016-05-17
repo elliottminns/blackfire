@@ -1,3 +1,5 @@
+import Echo
+
 public class Route {
 
 	static var routes: [Route] = []
@@ -6,19 +8,19 @@ public class Route {
     public typealias NextHandler = ((request: Request, response: Response, 
                                     next: () -> Void) -> Void)
 
-	let method: Request.Method
+	let method: HTTPMethod
 	let path: String
 	let handler: Handler?
     let nextHandler: NextHandler?
 
-	init(method: Request.Method, path: String, handler: Handler) {
+	init(method: HTTPMethod, path: String, handler: Handler) {
 		self.method = method
 		self.path = path
 		self.handler = handler
         self.nextHandler = nil
 	}
     
-    init(method: Request.Method, path: String, nextHandler: NextHandler) {
+    init(method: HTTPMethod, path: String, nextHandler: NextHandler) {
         self.method = method
         self.path = path
         self.nextHandler = nextHandler
@@ -34,13 +36,13 @@ public class Route {
         add(handlers: router.alls, toRoutesWithFunction: all, withPath: path)
     }
     
-    class func add(method: Request.Method, path: String,
+    class func add(method: HTTPMethod, path: String,
                    handler: Handler) {
         let route = Route(method: method, path: path, handler: handler)
         self.routes.append(route)
     }
 
-    class func add(method: Request.Method, path: String,
+    class func add(method: HTTPMethod, path: String,
                    handler: NextHandler) {
         let route = Route(method: method, path: path, nextHandler: handler)
         self.routes.append(route)
@@ -56,27 +58,27 @@ public class Route {
     }
     
     class func get(_ path: String, handler: NextHandler) {
-        self.add(method: .Get, path: path, handler: handler)
+        self.add(method: .GET, path: path, handler: handler)
     }
 
 	class func get(_ path: String, handler: Handler) {
-        self.add(method: .Get, path: path, handler: handler)
+        self.add(method: .GET, path: path, handler: handler)
 	}
 
 	class func post(_ path: String, handler: Handler) {
-        self.add(method: .Post, path: path, handler: handler)
+        self.add(method: .POST, path: path, handler: handler)
 	}
 
 	class func put(_ path: String, handler: Handler) {
-        self.add(method: .Put, path: path, handler: handler)
+        self.add(method: .PUT, path: path, handler: handler)
 	}
 
 	class func patch(_ path: String, handler: Handler) {
-		self.add(method: .Patch, path: path, handler: handler)
+		self.add(method: .PATCH, path: path, handler: handler)
 	}
 
 	class func delete(_ path: String, handler: Handler) {
-		self.add(method: .Delete, path: path, handler: handler)
+		self.add(method: .DELETE, path: path, handler: handler)
 	}
 
 	class func all(path: String, handler: Handler) {

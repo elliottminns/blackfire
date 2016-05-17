@@ -6,7 +6,7 @@ struct StaticFileMiddleware: Middleware {
         //check in file system
         let filePath = "Resources" + request.path
         
-        let fileManager = NSFileManager.defaultManager()
+        let fileManager = NSFileManager.default()
         var isDir: ObjCBool = false
         
         let exists: Bool

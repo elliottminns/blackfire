@@ -3,7 +3,7 @@ import Foundation
 
 final public class BlackfishApp {
 
-    public static let VERSION = "0.1.3"
+    public static let VERSION = "0.8.0"
 
     private let middlewareManager: HandlerManager<MiddlewareHandler>
 
@@ -11,11 +11,9 @@ final public class BlackfishApp {
 
     private var renderers: [String: Renderer]
 
-    private let server: Server
+    private var server: HTTPServer
 
     private let parameterManager: ParameterManager
-
-    private let requestParser = RequestParser()
 
     public var port: Int {
         return runningPort
@@ -28,8 +26,8 @@ final public class BlackfishApp {
         routeManager = HandlerManager<Route>(allowsMultiplesPerPath: false)
         renderers = [:]
         runningPort = 3000
-        server = Server()
         parameterManager = ParameterManager()
+        server = HTTPServer()
         renderers[".html"] = HTMLRenderer()
         use(middleware: StaticFileMiddleware())
         use(middleware: BodyParser())
@@ -130,20 +128,15 @@ final public class BlackfishApp {
     }
 }
 
-extension BlackfishApp: ServerDelegate {
+extension BlackfishApp: HTTPServerDelegate {
     
-    public func server(_ server: Server, didRecieveConnection connection: IncomingConnection) {
+    public func server(_ server: HTTPServer, didRecieveRequest request: HTTPRequest, response: HTTPResponse) {
         
-        let data = connection.data
+        let req = Request(request: request)
+        req.parameters = [:]
         
-        if let request = try? requestParser.readHttpRequest(data: data) {
-            
-            request.parameters = [:]
-            
-            let response = Response(request: request, responder: self,
-                                    connection: connection)
-            dispatch(request: request, response: response, handlers: nil)
-        }
+        let res = Response(responder: self, response: response, request: req)
+        dispatch(request: req, response: res, handlers: nil)
     }
 }
 
@@ -172,7 +165,11 @@ extension BlackfishApp {
         }
 
         runningPort = port
-        server.listen(port: port) { error in
+        do {
+            try server.listen(port: port)
+            handler?(error: nil)
+            NSRunLoop.main().run()
+        } catch {
             handler?(error: error)
         }
     }
@@ -278,8 +275,6 @@ extension BlackfishApp: Responder {
     
     public func send(response: Response) {
 
-        let connection = response.connection
-
         var responseString = ""
         responseString = "HTTP/1.1 \(response.status.code) \(response.status.description)\r\n"
         
@@ -298,12 +293,14 @@ extension BlackfishApp: Responder {
         }
         
         responseString += "\r\n"
+        
         var data: Data = Data(string: responseString)
+        
         data.append(response.body)
         
-        connection.write(data: data)
+        response.response.send(data: data)
         
-        response.request?.fireOnFinish()
-        response.request?.session.destroy()
+        response.request.fireOnFinish()
+        response.request.session.destroy()
     }
 }

@@ -27,11 +27,10 @@ public class Response {
     public var cookies: [String: String] = [:]
     public var additionalHeaders: [String: String] = [:]
 
-    weak var request: Request?
     unowned let responder: Responder
     weak var renderSupplier: RendererSupplier?
-
-    let connection: IncomingConnection
+    let response: HTTPResponse
+    let request: Request
 
     public enum ContentType {
         case Text
@@ -133,14 +132,14 @@ public class Response {
 
         return headers
     }
-
-    init(request: Request, responder: Responder, connection: IncomingConnection) {
-        self.request = request
-        self.status = .OK
-        self.contentType = .Text
-        self.body = []
+    
+    init(responder: Responder, response: HTTPResponse, request: Request) {
         self.responder = responder
-        self.connection = connection
+        self.contentType = .Text
+        self.status = .OK
+        self.body = []
+        self.response = response
+        self.request = request
     }
 }
 

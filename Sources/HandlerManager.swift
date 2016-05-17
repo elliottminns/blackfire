@@ -1,5 +1,6 @@
 
 import Foundation
+import Echo
 
 protocol Handler {
     
@@ -55,7 +56,7 @@ extension HandlerManager {
         
         let path: String
         
-        if request.method != Request.Method.Unknown {
+        if request.method != HTTPMethod.UNKNOWN {
             path = request.method.rawValue + "/" + request.path
         } else {
             path = "*/" + request.path
@@ -74,7 +75,7 @@ extension HandlerManager {
         
         let path: String
 
-        if request.method != Request.Method.Unknown {
+        if request.method != HTTPMethod.UNKNOWN {
             path = request.method.rawValue + "" + request.path
         } else {
             path = "*" + request.path

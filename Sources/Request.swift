@@ -7,16 +7,7 @@ public enum Event {
 
 public class Request {
 
-    public enum Method: String {
-        case Get = "GET"
-        case Post = "POST"
-        case Put = "PUT"
-        case Patch = "PATCH"
-        case Delete = "DELETE"
-        case Unknown = "x"
-    }
-
-    public let method: Method
+    public let method: HTTPMethod
 
     public var params: [String: String] {
         get {
@@ -49,9 +40,11 @@ public class Request {
 
     public var session: Session = Session()
 
-    init(method: Method) {
-        self.method = method
-        listeners = [:]
+    init(request: HTTPRequest) {
+        self.path = request.path
+        self.headers = request.headers
+        self.method = request.method
+        self.listeners = [:]
     }
     
     public func addListener(event: Event, listener: () -> Void) {

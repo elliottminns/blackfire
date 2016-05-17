@@ -60,7 +60,8 @@ public struct JSONParser {
         if (string.hasPrefix("'") && string.hasSuffix("'")) || (string.hasPrefix("\"") && string.hasSuffix("\"")) {
             var value = string
             value.remove(at: value.startIndex)
-            value.remove(at: value.endIndex.predecessor())
+            value.remove(at: value.index(before: value.endIndex))
+            value.remove(at: value.index(before: value.endIndex))
             return value
         } else {
             return string
@@ -77,7 +78,7 @@ public struct JSONParser {
         }
         
         if string.hasSuffix("}") {
-            string.remove(at: string.endIndex.predecessor())
+            string.remove(at: string.index(before: string.endIndex))
         }
         
         let characters = string.characters
@@ -167,7 +168,7 @@ public struct JSONParser {
         }
         
         if string.hasSuffix("]") {
-            string.remove(at: string.endIndex.predecessor())
+            string.remove(at: string.index(before: string.endIndex))
         }
         
         var array = [Any]()
