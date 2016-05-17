@@ -419,26 +419,3 @@ $ git push heroku master
 And you're good!
 
 For more information, see the [Blackfish Example](https://github.com/elliottminns/blackfish-example) project.
-
-### DigitalOcean
-
-Blackfish has been successfully tested on Ubuntu 14.04 LTS (DigitalOcean) and Ubuntu 15.10 (VirtualBox).
-
-To deploy to DigitalOcean, simply
-
-- Install Swift 2.2
-	- `wget` the .tar.gz from Apple
-	- Set the `export PATH` in your `~/.bashrc`
-	- (you may need to install `binutils` as well if you see `ar not found`)
-- Set Blackfish as a dependency of your project in your Package.swift
-    ```swift
-    dependencies:[
-        // ...Previous dependencies
-        .Package(url: "https://github.com/elliottminns/blackfish.git", majorVersion: 0)
-    ]
-    ```
-- `cd` into the repository
-	- Run `swift build`
-	- Run `.build/debug/MyApp`
-	- (you may need to run as `sudo` to use certain ports)
-	- (you may need to install `ufw` to set appropriate ports)
