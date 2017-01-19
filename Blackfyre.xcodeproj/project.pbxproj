@@ -1,0 +1,409 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		OBJ_37 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Address.swift */; };
+		OBJ_38 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* App.swift */; };
+		OBJ_39 /* Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Buffer.swift */; };
+		OBJ_40 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Connection.swift */; };
+		OBJ_41 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* Data.swift */; };
+		OBJ_42 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* HTTPMethod.swift */; };
+		OBJ_43 /* HTTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* HTTPParser.swift */; };
+		OBJ_44 /* HTTPRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* HTTPRequest.swift */; };
+		OBJ_45 /* HTTPResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* HTTPResponse.swift */; };
+		OBJ_46 /* HTTPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* HTTPServer.swift */; };
+		OBJ_47 /* HttpStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* HttpStatus.swift */; };
+		OBJ_48 /* PathHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* PathHandler.swift */; };
+		OBJ_49 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* Result.swift */; };
+		OBJ_50 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* Routing.swift */; };
+		OBJ_51 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* Server.swift */; };
+		OBJ_52 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* Socket.swift */; };
+		OBJ_53 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* System.swift */; };
+		OBJ_60 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* main.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4FD80C1F1E31730A0072D080 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_32;
+			remoteInfo = Blackfyre;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		OBJ_10 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		OBJ_11 /* Buffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buffer.swift; sourceTree = "<group>"; };
+		OBJ_12 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
+		OBJ_13 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		OBJ_14 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		OBJ_15 /* HTTPParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPParser.swift; sourceTree = "<group>"; };
+		OBJ_16 /* HTTPRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPRequest.swift; sourceTree = "<group>"; };
+		OBJ_17 /* HTTPResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPResponse.swift; sourceTree = "<group>"; };
+		OBJ_18 /* HTTPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPServer.swift; sourceTree = "<group>"; };
+		OBJ_19 /* HttpStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpStatus.swift; sourceTree = "<group>"; };
+		OBJ_20 /* PathHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathHandler.swift; sourceTree = "<group>"; };
+		OBJ_21 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		OBJ_22 /* Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
+		OBJ_23 /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
+		OBJ_24 /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
+		OBJ_25 /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
+		OBJ_27 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		OBJ_30 /* Blackfyre.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Blackfyre.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_31 /* Tester */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tester; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		OBJ_9 /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		OBJ_54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_61 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		OBJ_26 /* Tester */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_27 /* main.swift */,
+			);
+			name = Tester;
+			path = Sources/Tester;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_28 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		OBJ_29 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_30 /* Blackfyre.framework */,
+				OBJ_31 /* Tester */,
+			);
+			name = Products;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		OBJ_5 /*  */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_6 /* Package.swift */,
+				OBJ_7 /* Sources */,
+				OBJ_28 /* Tests */,
+				OBJ_29 /* Products */,
+			);
+			name = "";
+			sourceTree = "<group>";
+		};
+		OBJ_7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_8 /* Blackfyre */,
+				OBJ_26 /* Tester */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		OBJ_8 /* Blackfyre */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_9 /* Address.swift */,
+				OBJ_10 /* App.swift */,
+				OBJ_11 /* Buffer.swift */,
+				OBJ_12 /* Connection.swift */,
+				OBJ_13 /* Data.swift */,
+				OBJ_14 /* HTTPMethod.swift */,
+				OBJ_15 /* HTTPParser.swift */,
+				OBJ_16 /* HTTPRequest.swift */,
+				OBJ_17 /* HTTPResponse.swift */,
+				OBJ_18 /* HTTPServer.swift */,
+				OBJ_19 /* HttpStatus.swift */,
+				OBJ_20 /* PathHandler.swift */,
+				OBJ_21 /* Result.swift */,
+				OBJ_22 /* Routing.swift */,
+				OBJ_23 /* Server.swift */,
+				OBJ_24 /* Socket.swift */,
+				OBJ_25 /* System.swift */,
+			);
+			name = Blackfyre;
+			path = Sources/Blackfyre;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		OBJ_32 /* Blackfyre */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_33 /* Build configuration list for PBXNativeTarget "Blackfyre" */;
+			buildPhases = (
+				OBJ_36 /* Sources */,
+				OBJ_54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Blackfyre;
+			productName = Blackfyre;
+			productReference = OBJ_30 /* Blackfyre.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_55 /* Tester */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_56 /* Build configuration list for PBXNativeTarget "Tester" */;
+			buildPhases = (
+				OBJ_59 /* Sources */,
+				OBJ_61 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4FD80C201E31730A0072D080 /* PBXTargetDependency */,
+			);
+			name = Tester;
+			productName = Tester;
+			productReference = OBJ_31 /* Tester */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		OBJ_1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 9999;
+			};
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "Blackfyre" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_29 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				OBJ_32 /* Blackfyre */,
+				OBJ_55 /* Tester */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		OBJ_36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_37 /* Address.swift in Sources */,
+				OBJ_38 /* App.swift in Sources */,
+				OBJ_39 /* Buffer.swift in Sources */,
+				OBJ_40 /* Connection.swift in Sources */,
+				OBJ_41 /* Data.swift in Sources */,
+				OBJ_42 /* HTTPMethod.swift in Sources */,
+				OBJ_43 /* HTTPParser.swift in Sources */,
+				OBJ_44 /* HTTPRequest.swift in Sources */,
+				OBJ_45 /* HTTPResponse.swift in Sources */,
+				OBJ_46 /* HTTPServer.swift in Sources */,
+				OBJ_47 /* HttpStatus.swift in Sources */,
+				OBJ_48 /* PathHandler.swift in Sources */,
+				OBJ_49 /* Result.swift in Sources */,
+				OBJ_50 /* Routing.swift in Sources */,
+				OBJ_51 /* Server.swift in Sources */,
+				OBJ_52 /* Socket.swift in Sources */,
+				OBJ_53 /* System.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_59 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_60 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4FD80C201E31730A0072D080 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_32 /* Blackfyre */;
+			targetProxy = 4FD80C1F1E31730A0072D080 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		OBJ_3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		OBJ_34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Blackfyre.xcodeproj/Blackfyre_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = Blackfyre;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				TARGET_NAME = Blackfyre;
+			};
+			name = Debug;
+		};
+		OBJ_35 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Blackfyre.xcodeproj/Blackfyre_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = Blackfyre;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				TARGET_NAME = Blackfyre;
+			};
+			name = Release;
+		};
+		OBJ_4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = s;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "-DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 3.0;
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+		OBJ_57 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Blackfyre.xcodeproj/Tester_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
+				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
+				TARGET_NAME = Tester;
+			};
+			name = Debug;
+		};
+		OBJ_58 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Blackfyre.xcodeproj/Tester_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
+				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
+				TARGET_NAME = Tester;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		OBJ_2 /* Build configuration list for PBXProject "Blackfyre" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_3 /* Debug */,
+				OBJ_4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_33 /* Build configuration list for PBXNativeTarget "Blackfyre" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_34 /* Debug */,
+				OBJ_35 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_56 /* Build configuration list for PBXNativeTarget "Tester" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_57 /* Debug */,
+				OBJ_58 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = OBJ_1 /* Project object */;
+}
