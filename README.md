@@ -1,5 +1,7 @@
 ![Fire Image]
-(http://i.imgur.com/51iYcie.png)
+(http://i.imgur.com/1qR6Nl4.png)
 
-Blackfyre is an extremely fast Swift web framework
+
+# Blackfyre
+## An extremely fast Swift web framework
 
