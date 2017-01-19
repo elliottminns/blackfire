@@ -33,7 +33,7 @@ struct Socket {
     init(raw: Int32, type: SocketType = .tcp) throws {
         
         let flags = fcntl(raw, F_GETFL, 0)
-        let status = fcntl(raw, F_SETFL, flags | O_NONBLOCK);
+        let status = fcntl(raw, F_SETFL, flags);
         
         if raw < 0 {
             throw SocketError.NoFileDescriptor
