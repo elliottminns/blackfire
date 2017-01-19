@@ -9,7 +9,7 @@ An extremely fast Swift web framework
 
 If you're familiar with express.js then Blackfire will be known to you. The most simple example of how to use can be seen below:
 
-```
+```swift
 main.swift
 
 import Blackfire
