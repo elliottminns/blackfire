@@ -1,421 +1,142 @@
-#
+![Fire Image]
+(http://i.imgur.com/1qR6Nl4.png)
 
-![Blackfish](http://i.imgur.com/i9wz0fv.png)
+# Blackfire
+###### An extremely fast Swift web framework
 
-A Node/Express Inspired Web Framework for Swift that works on iOS, OS X, and Ubuntu.
+## 🔥 Getting Started
 
-![Travis Badge](https://travis-ci.org/elliottminns/blackfish.svg?branch=master) [![Join the chat at https://gitter.im/elliottminns/blackfish](https://badges.gitter.im/elliottminns/blackfish.svg)](https://gitter.im/elliottminns/blackfish?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![codebeat](https://codebeat.co/badges/3d144744-7218-4f10-887f-a2ade65c3f10)](https://codebeat.co/projects/github-com-elliottminns-blackfish)
-
-- [x] Insanely fast
-- [x] Single Threaded
-- [x] Beautiful syntax
-- [x] Type safe
-- [x] Powered by [Echo](https://github.com/elliottminns/echo) & libdispatch
-- [x] Running on [Heroku](https://blackfish-example.herokuapp.com)
-
-##News
-
-Blackfish 0.8 is here, faster than ever. Blackfish uses libdispatch at it's core, allowing for safe and fast non-blocking I/O. 
-
-Table of Contents
-=================
-
-* [Getting Started](#getting-started)
-  * [Work in Progress](#work-in-progress)
-* [Server](#server)
-* [Routing](#routing)
-  * [Router](#router)
-  * [Controller](#controller)
-  * [JSON](#json)
-  * [Views](#views)
-  * [Response](#response)
-  * [Public](#public)
-* [Database](#database)
-* [Request](#request)
-  * [Middleware](#middleware)
-  * [Multipart](#multipart)
-  * [Session](#session)
-* [Deploying](#deploying)
-  * [Heroku](#heroku)
-  * [DigitialOcean](#digitalocean)
-
-## Getting Started
-
-You must have Swift 3.0 or later installed. You can learn more about Swift 3.0 at [Swift.org](http://swift.org)
-
-Blackfish is tested using the latest Swift **Development** snapshots, with current testing using snapshot [May 09, 2016](https://swift.org/download/)
-
-To get started on Linux, you need to have Dispatch installed on your system. To do this you can use the below command to set it up. 
-
-Ubuntu 
-
-First, install the system linux libraries:
-
-```
-sudo apt-get install autoconf libtool libkqueue-dev libkqueue0 libcurl4-openssl-dev libbsd-dev libblocksruntime-dev
-```
-
-Then clone and build libdispatch against your Swift toolchain
-
-```
-git clone -b experimental/foundation https://github.com/apple/swift-corelibs-libdispatch.git && cd swift-corelibs-libdispatch && git submodule init && git submodule update && sh ./autogen.sh && ./configure --with-swift-toolchain=<path-to-swift>/usr --prefix=<path-to-swift>/usr && make && make install
-```
-
-### Work in Progress
-
-This is a work in progress and will likely change frequently, pull requests are welcome!
-
-The [example project](https://github.com/elliottminns/blackfish-example) shows how easy it is to begin, and has an instance running on Heroku [here](https://blackfish-example.herokuapp.com)
-
-## Server
-
-Starting the server is as simple as express.
-
-`main.swift`
-```swift
-import Blackfish
-
-let app = BlackfishApp()
-
-app.get("/") { request, response in
-    response.send(text: "Hello World!")
-}
-
-app.listen(port: 3000) { error in
-    if error == nil {
-        print("Example app listening on port 3000")
-    }
-}
-```
-
-If you are having trouble connecting, make sure your ports are open. Check out `apt-get ufw` for simple port management.
-
-## Routing
-
-Routing in Blackfish is simple and very similar to Express.
-
-`main.swift`
-```swift
-app.get("/welcome") { request, response in
-	response.send(text: "Hello")
-}
-
-app.post('/') { request, response in
-    // POST data
-    print(request.data)
-    response.send(text: 'Got a POST request')
-});
-
-//...start server
-```
-
-### Router
-
-You can also create a Router object which will allow you to define multiple routes with a prefix.
+If you're familiar with express.js then Blackfire will be known to you. The most simple example of how to use can be seen below:
 
 ```swift
-let router = Router()
-
-router.get("/") { request, response in
-    response.send(text: "Bird is the word")
-}
-
-router.get("/about") { request, response in
-    response.send(text: "Don't you know, about the bird?")
-}
-
-app.use(path: "/birds", router: router)
-
-// ...start server
-```
-
-Navigating to `http://example.com/birds` will show a page with `Bird is the word` and navigating to `http://example.com/birds/about` will show a page with `"Don't you know, about the bird?"`.
-
-### Controller
-
-You can also use controllers to define your paths. All you need to do is extend from the `Controller` protocol and implement your routes in `func routes(router: Router)` to the router object passed in:
-
-```
-MyController.swift
-```
-
-```swift
-class MyController: Controller {
-    
-    func routes(router: Router) {
-        router.get("/", handler: index)
-        router.post("/update", handler: formUpdate)
-    }
-    
-    var index: Route.Handler {
-        return { request, response in
-            response.send(text: "Hello Index")
-        }
-    }
-    
-    func formUpdate(request: Request, response: Response) {
-        response.send(text: "Form updated")
-    }
-}
-```
-
-Routes can be either functions with the correct parameters or Route.Handler objects themselves.
-
-Then we just need to add the controller to the server:
-
-```
 main.swift
-```
 
-```swift
-let app = BlackfishApp()
+import Blackfire
 
-app.use(path: "/test", controller: MyController())
+// Create a nice new 🔥 app for us to play with.
+let app = Flame()
 
-app.listen(port: 3000) { error in
-    if error == nil {
-        print("App listening on port 3000")
-    } else {
-        print("Error")
-    }
+// Let's add a route to begin with.
+app.get("/") { (req, res) in
+  res.send(text: "Hello World")
 }
-```
 
-Now our `/test` and `/test/update` paths will be correct populated
-
-### JSON
-
-Responding with JSON is easy.
-
-```swift
-app.get("version") { request, response in
-	response.send(json: ["version": "1.0"])
-}
-```
-
-This responds to all requests to `http://example.com/version` with the JSON dictionary `{"version": "1.0"}` and `Content-Type: application/json`.
-
-Requesting with JSON is also supported:
-
-```swift
-app.post("/") { request, response in 
-
-    for (key, value) in request.data {
-         print("\(key): \(value)")
-    }
-    
-    response.send(text: "Hello")
+app.start(port: 3000) { result in
+  switch result {
+    case .success:
+      print("Server started on port 3000")
+    case .failure(let error):
+      print("Server failed with error: \(error)")
+  }
 }
 ```
 
 ```
-$ curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d "{'json':{'data': 1}}" http://127.0.0.1:3000
-
-$ "json: ["data": 1]"
+$ curl localhost:3000 
+Hello World%
 ```
-### Views
 
-You can also respond with HTML pages.
+## 🎁 Features
 
-```swift
-app.get("/") { request, response in
-    response.render("index.html")
+Blackfire has all the standard features of a typical minimal Web Framework, let's take a look at some of these.
+
+### 🔱 Routing
+
+Routing, as seen in the above example, takes place by assigning a handler to a method in your App
+
+``` swift
+app.get("/") { (req, res) in
+  res.send(text: "I'm a GET request")
+}
+app.post("/users") { (req, res) in
+  res.send(text: "I'm a POST request to /users")
+}
+app.delete("/all/files") { (req, res) in
+  res.send(text: "I'm a DELETE request to /all/files ...wait")
+}
+app.put("/em/up") { (req, res) in
+  res.send(text: "I'm a PUT request to /em/up Am I being robbed?")
 }
 ```
 
-Just put the file in the `Resources` folder at the root of your project and it will be served.
+This can become tedious if you have a lot of `/users/<something>` routes however, so we created the........
 
-You can also create your own renderers to use within Blackfish. A renderer for [Stencil](https://github.com/kylef/Stencil) is already available here [Blackfish Stencil](https://github.com/elliottminns/blackfish-stencil).
+### 🐒 Router
+###### Don't be scared that it's a monkey handling it, he had a pretty decent job interview on the whiteboard and seems to be doing ok.
 
-```
-index.stencil
-```
-
-```html
-<html>
-    <h1>{{ title }}</h1>
-</html>
-```
+The router object allows you to group routes together. For example
 
 ```swift
-app.get("/") { request, response in
-    res.render("index.stencil", data:["title": "Hello world"])
+let users = Router()
+users.get("/") { req, res in
+  res.send(text: "Get me all the users")
 }
-```
-
-### Response
-
-A manual response can be returned if you want to set something like `cookies`.
-
-```swift
-Route.get("cookie") { request, response in
-    response.status = .OK
-    response.text = "Cookie was set"
-	response.cookies["test"] = "123"
-	response.send()
+users.post("/") { req, res in
+  res.send(text: "Creating a new user")
 }
-```
-
-The Status enum above (`.OK`) can be one of the following.
-
-```swift
-public enum Status {
-    case OK, Created, Accepted
-    case MovedPermanently
-    case BadRequest, Unauthorized, Forbidden, NotFound
-    case ServerError
-    case Unknown
-    case Custom(Int)
-}
-```
-
-Or something custom.
-
-```swift
-let status: Status = .Custom(420) //https://dev.twitter.com/overview/api/response-codes
-```
-
-### Public
-
-All files put in the `Public` folder at the root of your project will be available at the root of your domain. This is a great place to put your assets (`.css`, `.js`, `.png`, etc).
-
-## Database
-
-Blackfish works best with any event based based database, especially if powered by [Echo](https://github.com/elliottminns/echo).
-
-Currently, [Orca](https://github.com/elliottminns/orca) is recommended, which allows for asynchronous, non-blocking data persistence.
-
-Orca currently supports
-
-- [SQLite](https://github.com/elliottminns/orca-sqlite)
-- [MongoDB](https://github.com/elliottminns/orca-mongodb)
-
-
-## Request
-
-Every route call gets passed a `Request` object. This can be used to grab query and path parameters.
-
-This is a list of the properties available on the request object.
-
-```swift
-let method: Method
-var parameters: [String: String] //URL parameters like id in user/:id
-var data: [String: String] //GET or POST data
-var cookies: [String: String]
-var session: Session
-```
-
-### Middleware
-
-Similar to Express, Blackfish provides Middleware which can be used to extend the request stack.
-
-You can either create a middleware class that conforms to the `Middleware` protocol, or pass a closure in to the Blackfish instance.
-
-Below is an example of a validation Middleware conforming class, that validates every request before passing it down the stack.
-
-```swift
-
-class Validator: Middleware {
-
-    func handle(request: Request, response: Response, next: () -> ()) {
-    
-    // Some validation logic
-    if validator.validate(request) {
-
-        // Go to the next call in the stack.
-        next()
-
-    } else {
-
-        // Return an error and don't call anything else in the stack.
-        response.send(error: "Request was unauthorized")
-    }	
+users.get("/favourites") { req, res in
+  res.send(json: ["food": "🍌"])
 }
 
-app.use(middleware: Validator()) 
+// Let's use the router to match for /users
+app.use("/users", users)
 
 ```
+```
+$ curl localhost:3000/users
+Get me all the users%
+$ curl localhost:3000/users/favourites
+{"food":"🍌"}%
+```
 
-You can also use middleware on a path which will add it to that path and further on.
+Powerful stuff. 
+
+## 📫 Request
+
+The request or `req` object contains a bunch of helpful information that your handler may want to use:
+
+These include:
+
+* `request.params` A key value pair of `Strings` that are matched in the route
+* `request.body` The raw body of the recieved request, in the form of a `String`
+* `request.headers` A key value pair of `Strings` of the headers that appeared in the route
+* `request.method` The method of this request, formed from the `HTTPMethod` enum.
+* `request.path` The path of this request
+* `httpProtocol` The protocol for this request.
+
+## 📣 Response
+
+The response or `res` object contains everything you need to return data back to the consumer
+
+* `res.send(text: String)` Send back a basic text response in the form of `Content-Type: text/plain`
+* `res.send(json: Any)` Send back some JSON, takes in a JSON parseable object. This method can fail if the object is not parseable
+* `res.send(status: Int)` Send back a HTTP status with no body
+* `res.send(html: String)` Send back some html with the header of `Content-Type: text/html`
+* `res.send(error: String)` Sends back an error, setting the status to `500`.
+* `res.headers` Set some headers to send back to the client
+
+## 🐈 Threading
+
+Threading is a contentious issue when it comes to web frameworks, the age old question of Single vs Multithreaded is enough to start a flame war. 
+
+So let's fight the fire with fire and solve it once and for all.
+
+### 👸 Queue Types
+
+A Flame app can take a type of either `.serial` or `.concurrent`. These do exactly as they say on the tin and allow for either all requests to be handled via `DispatchQueue.main` or `DispatchQueue.global()`. 
+
+### Why did we do this?
+
+We think that giving you the power to choose which type you want for your app is a *good* thing. We're not sorry.
+
+Just as an FYI, we chose to go with `.serial` as the default setting. It was a 50/50 chance we got it right. Good thing it can be changed.
+
+### Example
 
 ```swift
+// An app which handles only on the main thread.
+let app = Flame(type: .serial)
 
-let userDetail = { (request, response, next) in 
-    let user = findUserById(request.data["userId"])
-    request.data["user"] = user
-    next()
-}
-
-app.use(path: "/user", middleware: userDetail)
-app.use(path: "/dashboard", middleware: Validator())
-
+// An app which handles on multiple concurrent threads.
+let app = Flame(type: .concurrent)
 ```
-
-Middleware is a powerful feature of Blackfish that can open up endless possibilities.
-
-### Multipart
-
-To allow multipart parsing of files and other data from `enctype="multitype/form-data" you need to add the `Multiparser` middleware to the stack:
-
-```swift
-app.use(middleware: Multiparser())
-```
-
-Following this, you can access all multipart text input under `request.data` and files under `request.files`.
-
-example:
-
-```swift
-app.use(middleware: Multiparser())
-
-app.post("/") { request, response in 
-   print(request.data["name"])
-   print(request.files["images"].first)
-}
-```
-
-### Session
-
-Sessions will be kept track of using the `blackfish-session` cookie. The default (and currently only) session driver is `.Memory`.
-
-```swift
-if let name = request.session.data["name"] {
-	//name was in session
-}
-
-//store name in session
-request.session.data["name"] = "Blackfish"
-```
-
-## Deploying
-
-### Heroku
-
-The [Blackfish Example](https://github.com/elliottminns/blackfish-example) app is successfully running on Heroku [here](https://blackfish-example.herokuapp.com)
-
-To set up on Heroku, use the [Swift Heroku Buildpack](https://github.com/kylef/heroku-buildpack-swift) by Kyle Fuller.
-
-Instructions for setting up are:
-
-Create a Procfile at the same level as your Package.swift
-
-
-```
-./Procfile
-```
-
-```
-web: <AppName> --port=$PORT
-```
-
-Then
-
-```
-$ heroku create --buildpack https://github.com/kylef/heroku-buildpack-swift.git
-
-$ git push heroku master
-```
-
-And you're good!
-
-For more information, see the [Blackfish Example](https://github.com/elliottminns/blackfish-example) project.
