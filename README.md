@@ -102,7 +102,7 @@ These include:
 * `request.headers` A key value pair of `Strings` of the headers that appeared in the route
 * `request.method` The method of this request, formed from the `HTTPMethod` enum.
 * `request.path` The path of this request
-* `httpProtocol` The protocol for this request.
+* `request.httpProtocol` The protocol for this request.
 
 ## 📣 Response
 
