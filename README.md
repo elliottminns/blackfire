@@ -3,7 +3,7 @@
 
 
 # Blackfire
-An extremely fast Swift web framework
+###### An extremely fast Swift web framework
 
 ## 🔥 Getting Started
 
@@ -63,8 +63,7 @@ app.put("/em/up") { (req, res) in
 This can become tedious if you have a lot of `/users/<something>` routes however, so we created the........
 
 ### 🐒 Router
-
-Don't be scared that it's a monkey handling it, he had a pretty decent job interview on the whiteboard and seems to be doing ok.
+###### Don't be scared that it's a monkey handling it, he had a pretty decent job interview on the whiteboard and seems to be doing ok.
 
 The router object allows you to group routes together. For example
 
