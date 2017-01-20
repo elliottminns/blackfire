@@ -112,8 +112,8 @@ The response or `res` object contains everything you need to return data back to
 
 * `res.send(text: String)` Send back a basic text response in the form of `Content-Type: text/plain`
 * `res.send(json: Any)` Send back some JSON, takes in a JSON parseable object. This method can fail if the object is not parseable
-* `res.send(status: )` Send back a HTTP status with no body
-* `res.send(html:)` Send back some html with the header of `Content-Type: text/html`
-* `res.send(error:)` Sends back an error, setting the status to `500`.
+* `res.send(status: Int)` Send back a HTTP status with no body
+* `res.send(html: String)` Send back some html with the header of `Content-Type: text/html`
+* `res.send(error: String)` Sends back an error, setting the status to `500`.
 * `res.headers` Set some headers to send back to the client
 
