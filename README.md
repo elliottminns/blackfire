@@ -60,7 +60,7 @@ app.put("/em/up") { (req, res) in
 }
 ```
 
-This can become tedious if you have a lot of `/users/<something>` routes however, so we create the........
+This can become tedious if you have a lot of `/users/<something>` routes however, so we created the........
 
 ### 🐒 Router
 
@@ -92,4 +92,28 @@ $ curl localhost:3000/users/favourites
 ```
 
 Powerful stuff. 
+
+## 📫 Request
+
+The request or `req` object contains a bunch of helpful information that your handler may want to use:
+
+These include:
+
+* `request.params` A key value pair of `Strings` that are matched in the route
+* `request.body` The raw body of the recieved request, in the form of a `String`
+* `request.headers` A key value pair of `Strings` of the headers that appeared in the route
+* `request.method` The method of this request, formed from the `HTTPMethod` enum.
+* `request.path` The path of this request
+* `httpProtocol` The protocol for this request.
+
+## 📣 Response
+
+The response or `res` object contains everything you need to return data back to the consumer
+
+* `res.send(text: String)` Send back a basic text response in the form of `Content-Type: text/plain`
+* `res.send(json: Any)` Send back some JSON, takes in a JSON parseable object. This method can fail if the object is not parseable
+* `res.send(status: )` Send back a HTTP status with no body
+* `res.send(html:)` Send back some html with the header of `Content-Type: text/html`
+* `res.send(error:)` Sends back an error, setting the status to `500`.
+* `res.headers` Set some headers to send back to the client
 
