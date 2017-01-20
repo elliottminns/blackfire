@@ -32,3 +32,64 @@ app.start(port: 3000) { result in
 }
 ```
 
+```
+$ curl localhost:3000 
+Hello World%
+```
+
+## 🎁 Features
+
+Blackfire has all the standard features of a typical minimal Web Framework, let's take a look at some of these.
+
+### 🔱 Routing
+
+Routing, as seen in the above example, takes place by assigning a handler to a method in your App
+
+``` swift
+app.get("/") { (req, res) in
+  res.send(text: "I'm a GET request")
+}
+app.post("/users") { (req, res) in
+  res.send(text: "I'm a POST request to /users")
+}
+app.delete("/all/files") { (req, res) in
+  res.send(text: "I'm a DELETE request to /all/files ...wait")
+}
+app.put("/em/up") { (req, res) in
+  res.send(text: "I'm a PUT request to /em/up Am I being robbed?")
+}
+```
+
+This can become tedious if you have a lot of `/users/<something>` routes however, so we create the........
+
+### 🐒 Router
+
+Don't be scared that it's a monkey handling it, he had a pretty decent job interview on the whiteboard and seems to be doing ok.
+
+The router object allows you to group routes together. For example
+
+```swift
+let users = Router()
+users.get("/") { req, res in
+  res.send(text: "Get me all the users")
+}
+users.post("/") { req, res in
+  res.send(text: "Creating a new user")
+}
+users.get("/favourites") { req, res in
+  res.send(json: ["food": "🍌"])
+}
+
+// Let's use the router to match for /users
+app.use("/users", users)
+
+```
+```
+$ curl localhost:3000/users
+Get me all the users%
+$ curl localhost:3000/users/favourites
+{"food":"🍌"}%
+```
+
+Powerful stuff. 
+
