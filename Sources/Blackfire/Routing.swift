@@ -1,4 +1,3 @@
-public typealias Request = HTTPRequest
 public typealias Response = HTTPResponse
 public typealias RouteHandler = (Request, Response) -> ()
 
@@ -18,8 +17,9 @@ protocol PathRouting: Routing {
 
 extension PathRouting {
 
-  func handlers(with path: String, for method: HTTPMethod) -> [RouteHandler] {
-    return pathHandler.handlers(for: path, with: method)
+  func handler(for path: String) -> RequestHandler {
+    let nodes = pathHandler.nodes(for: path)
+    return RequestHandler(nodes: nodes)
   }
   
   public func use(_ path: String, _ handler: @escaping RouteHandler) {

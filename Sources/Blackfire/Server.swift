@@ -22,17 +22,20 @@ class Server {
   
   let delegate: ServerDelegate
   
-  init(socket: Socket, port: Int, delegate: ServerDelegate, type: SocketType = .tcp) {
+  let queueType: QueueType
+  
+  init(socket: Socket, port: Int, delegate: ServerDelegate, type: SocketType = .tcp, queueType: QueueType) {
     self.socket = socket
     self.port = port
     self.delegate = delegate
     self.type = type
+    self.queueType = queueType
     dispatcher = DispatchSource.makeReadSource(fileDescriptor: socket.raw)
   }
   
-  public convenience init(port: Int, delegate: ServerDelegate, type: SocketType) throws {
+  public convenience init(port: Int, delegate: ServerDelegate, type: SocketType, queueType: QueueType) throws {
     let socket = try Socket()
-    self.init(socket: socket, port: port, delegate: delegate)
+    self.init(socket: socket, port: port, delegate: delegate, type: type, queueType: queueType)
   }
   
   public func listen() throws {
@@ -76,7 +79,7 @@ class Server {
     let fd = systemAccept(self.socket.raw, addr, &len)
     let client = try Socket(raw: fd)
     addr.deallocate(capacity: 1)
-    return SocketConnection(socket: client)
+    return SocketConnection(socket: client, queueType: queueType)
   }
   
   private func bind(socket: Socket, address: Address) throws {

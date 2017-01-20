@@ -25,15 +25,18 @@ public class SocketConnection: Connection {
   
   var readSource: DispatchSourceRead?
   
-  init(socket: Socket) {
+  var queueType: QueueType
+  
+  init(socket: Socket, queueType: QueueType) {
     self.socket = socket
     self.writeData = Data()
+    self.queueType = queueType
   }
   
   public func read(callback: @escaping (_ data: Buffer, _ amount: Int) -> ()) {
     let fd = Int32(socket.raw)
     readSource = DispatchSource.makeReadSource(fileDescriptor: fd,
-                                               queue: DispatchQueue.global())
+                                               queue: queueType.dispatchQueue())
     let buffer = Buffer(size: 256)
     
     readSource?.setEventHandler {
@@ -61,7 +64,7 @@ public class SocketConnection: Connection {
   public func write(data: Data) {
     self.writeData = data
     let writeSource = DispatchSource.makeWriteSource(fileDescriptor: socket.raw,
-                                                     queue: DispatchQueue.global())
+                                                     queue: queueType.dispatchQueue())
     
     var amount = 0
     writeSource.setEventHandler {

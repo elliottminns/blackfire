@@ -29,7 +29,11 @@ class PathHandler {
         next = child
       } else {
         next = Node(path: path)
-        node.children[path] = next
+        if (!path.isEmpty && path[path.startIndex] == ":") {
+          node.children[":*"] = next
+        } else {
+          node.children[path] = next
+        }
       }
       return next
     }
@@ -48,14 +52,20 @@ class PathHandler {
     node.children[last] = child
   }
   
-  func handlers(for path: String, with method: HTTPMethod) -> [RouteHandler] {
+  func nodes(for path: String) -> [Node] {
     let comps = self.comps(for: path)
-    
-    let node = comps.reduce(base) { (node, path) -> Node? in
-      return node?.children[path]
+    let begin: [Node?] = [base]
+    let nodes = comps.reduce(begin) { (nodes, path) -> [Node?] in
+      guard let last = nodes.last else { return [] }
+      
+      if let child = last?.children[path] {
+        return nodes + [child]
+      } else {
+        return nodes + [last?.children[":*"]]
+      }
     }
 
-    return node?.handlers[method] ?? []
+    return nodes.flatMap { $0 }
   }
 }
 
