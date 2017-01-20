@@ -117,3 +117,28 @@ The response or `res` object contains everything you need to return data back to
 * `res.send(error: String)` Sends back an error, setting the status to `500`.
 * `res.headers` Set some headers to send back to the client
 
+## 🐈 Threading
+
+Threading is a contentious issue when it comes to web frameworks, the age old question of Single vs Multithreaded is enough to start a flame war. 
+
+So let's fight the fire with fire and solve it once and for all.
+
+### 👸 Queue Types
+
+A Flame app can take a type of either `.serial` or `.concurrent`. These do exactly as they say on the tin and allow for either all requests to be handled via `DispatchQueue.main` or `DispatchQueue.global()`. 
+
+### Why did we do this?
+
+We think that giving you the power to choose which type you want for your app is a *good* thing. We're not sorry.
+
+Just as an FYI, we chose to go with `.serial` as the default setting. It was a 50/50 chance we got it right. Good thing it can be changed.
+
+### Example
+
+```swift
+// An app which handles only on the main thread.
+let app = Flame(type: .serial)
+
+// An app which handles on multiple concurrent threads.
+let app = Flame(type: .concurrent)
+```
