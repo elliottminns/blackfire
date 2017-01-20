@@ -8,10 +8,8 @@ public protocol Routing {
   func post(_ path: String, _ handler: @escaping RouteHandler)
   func put(_ path: String, _ handler: @escaping RouteHandler)
   func delete(_ path: String, _ handler: @escaping RouteHandler)
-}
-
-public extension Routing {
-
+  
+  func use(_ path: String, _ handler: Routing)
 }
 
 protocol PathRouting: Routing {
@@ -43,4 +41,9 @@ extension PathRouting {
   public func delete(_ path: String, _ handler: @escaping RouteHandler) {
     pathHandler.delete(path, handler)
   }
+  
+  public func use(_ path: String, _ handler: Routing) {
+    pathHandler.use(path, handler)
+  }
+  
 }

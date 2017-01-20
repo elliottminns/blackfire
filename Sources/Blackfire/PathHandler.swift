@@ -13,12 +13,17 @@ class Node {
 }
 
 class PathHandler {
-  let base: Node = Node(path: "/")
+  let base: Node = Node(path: "")
   
-  func add(handler: @escaping RouteHandler, for path: String, with method: HTTPMethod) {
-    let comps = path.components(separatedBy: "/")
-    
-    let node = comps.reduce(base) { (node, path) in
+  private func comps(for path: String) -> [String] {
+    let chars = CharacterSet(charactersIn: "/")
+    let trimmed = path.trimmingCharacters(in: chars)
+    return trimmed.isEmpty ? [] : trimmed.components(separatedBy: "/")
+  }
+  
+  private func node(for path: String) -> Node {
+    let comps = self.comps(for: path)
+    return comps.reduce(base) { (node, path) in
       let next: Node
       if let child = node.children[path] {
         next = child
@@ -28,15 +33,23 @@ class PathHandler {
       }
       return next
     }
-    
+  }
+  
+  func add(handler: @escaping RouteHandler, for path: String, with method: HTTPMethod) {
+    let node = self.node(for: path)
     let handlers = (node.handlers[method] ?? []) + [handler]
     node.handlers[method] = handlers
   }
   
+  func add(child: Node, for path: String) {
+    var comps = path.components(separatedBy: "/")
+    let last = comps.popLast() ?? ""
+    let node = self.node(for: comps.joined(separator: "/"))
+    node.children[last] = child
+  }
+  
   func handlers(for path: String, with method: HTTPMethod) -> [RouteHandler] {
-    let chars = CharacterSet(charactersIn: "/")
-    let comps = [""] + path.trimmingCharacters(in: chars)
-      .components(separatedBy: "/")
+    let comps = self.comps(for: path)
     
     let node = comps.reduce(base) { (node, path) -> Node? in
       return node?.children[path]
@@ -47,9 +60,14 @@ class PathHandler {
 }
 
 
-
 extension PathHandler: Routing {
 
+  func use(_ path: String, _ handler: Routing) {
+    if let pathRouting = handler as? PathRouting {
+      add(child: pathRouting.pathHandler.base, for: path)
+    }
+  }
+  
   func use(_ path: String, _ handler: @escaping RouteHandler) {
     let methods: [HTTPMethod] = [.get, .post, .put, .delete]
     methods.forEach { method in

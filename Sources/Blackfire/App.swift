@@ -2,7 +2,6 @@ import Foundation
 
 public class Flame {
   let pathHandler: PathHandler = PathHandler()
-  
   public init() {}
 }
 
