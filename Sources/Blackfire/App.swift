@@ -17,7 +17,7 @@ extension FlameType {
 }
 
 public class Flame {
-  let pathHandler: PathHandler = PathHandler()
+  public let pathHandler: PathHandler = PathHandler()
   
   public let type: FlameType
   

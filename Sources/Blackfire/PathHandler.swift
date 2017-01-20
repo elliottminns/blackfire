@@ -12,7 +12,7 @@ class Node {
   }
 }
 
-class PathHandler {
+public class PathHandler {
   let base: Node = Node(path: "")
   
   private func comps(for path: String) -> [String] {
@@ -72,32 +72,32 @@ class PathHandler {
 
 extension PathHandler: Routing {
 
-  func use(_ path: String, _ handler: Routing) {
+  public func use(_ path: String, _ handler: Routing) {
     if let pathRouting = handler as? PathRouting {
       add(child: pathRouting.pathHandler.base, for: path)
     }
   }
   
-  func use(_ path: String, _ handler: @escaping RouteHandler) {
+  public func use(_ path: String, _ handler: @escaping RouteHandler) {
     let methods: [HTTPMethod] = [.get, .post, .put, .delete]
     methods.forEach { method in
       add(handler: handler, for: path, with: method)
     }
   }
   
-  func get(_ path: String, _ handler: @escaping RouteHandler) {
+  public func get(_ path: String, _ handler: @escaping RouteHandler) {
     add(handler: handler, for: path, with: .get)
   }
   
-  func post(_ path: String, _ handler: @escaping RouteHandler) {
+  public func post(_ path: String, _ handler: @escaping RouteHandler) {
     add(handler: handler, for: path, with: .post)
   }
   
-  func put(_ path: String, _ handler: @escaping RouteHandler) {
+  public func put(_ path: String, _ handler: @escaping RouteHandler) {
     add(handler: handler, for: path, with: .put)
   }
   
-  func delete(_ path: String, _ handler: @escaping RouteHandler) {
+  public func delete(_ path: String, _ handler: @escaping RouteHandler) {
     add(handler: handler, for: path, with: .delete)
   }
 }

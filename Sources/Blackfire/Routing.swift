@@ -7,11 +7,10 @@ public protocol Routing {
   func post(_ path: String, _ handler: @escaping RouteHandler)
   func put(_ path: String, _ handler: @escaping RouteHandler)
   func delete(_ path: String, _ handler: @escaping RouteHandler)
-  
   func use(_ path: String, _ handler: Routing)
 }
 
-protocol PathRouting: Routing {
+public protocol PathRouting: Routing {
   var pathHandler: PathHandler { get }
 }
 
