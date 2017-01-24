@@ -2,13 +2,12 @@
 (http://i.imgur.com/1qR6Nl4.png)
 
 # Blackfire
+###### An extremely fast Swift web framework
 ![Swift Version](https://img.shields.io/badge/Swift-3.0-orange.svg)
 [![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 ![License Apache](https://img.shields.io/badge/License-Apache-lightgrey.svg) 
 ![Plaforms](https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS%20-blue.svg)
 
-
-###### An extremely fast Swift web framework
 
 ## 🔥 Getting Started
 
