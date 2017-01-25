@@ -54,8 +54,12 @@ public class HTTPResponse {
   public func send(json: Any) {
     self.headers["Content-Type"] = "application/json"
     do {
-      let data = try JSONSerialization.data(withJSONObject: json, options: [])
-      self.body = Buffer(data: data)
+      if JSONSerialization.isValidJSONObject(json) {
+        let data = try JSONSerialization.data(withJSONObject: json, options: [])
+        self.body = Buffer(data: data)
+      } else {
+        self.status = 500
+      }
     } catch {
       self.status = 500
     }
