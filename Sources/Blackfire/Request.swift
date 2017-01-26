@@ -8,12 +8,38 @@
 
 import Foundation
 
-public class Request: HTTPRequest {
+public class Request {
   public let params: [String: String]
+  
+  let raw: HTTPRequest
+  
+  public var query: [String: Any] {
+    return raw.query
+  }
+  
+  public var path: String {
+    return raw.path
+  }
+  
+  public var headers: [String: String] {
+    return raw.headers
+  }
+  
+  public var method: HTTPMethod {
+    return raw.method
+  }
+  
+  public var body: String {
+    return raw.body
+  }
+  
+  public var httpProtocol: String {
+    return raw.httpProtocol
+  }
   
   init(params: [String: String], raw: HTTPRequest) {
     self.params = params
-    super.init(headers: raw.headers, method: raw.method,
-               body: raw.body, path: raw.path, httpProtocol: raw.httpProtocol)
+    self.raw = raw
   }
+  
 }
