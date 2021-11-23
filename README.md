@@ -1,5 +1,5 @@
-![Fire Image]
-(http://i.imgur.com/1qR6Nl4.png)
+<img src="http://i.imgur.com/1qR6Nl4.png">
+
 
 # Blackfire
 ###### An extremely fast Swift web framework
@@ -13,9 +13,24 @@
 
 If you're familiar with express.js then Blackfire will be known to you. The most simple example of how to use can be seen below:
 
+- Installing:
 ```swift
-main.swift
+import PackageDescription
 
+let package = Package(
+    name: "YourApp",
+    dependencies: [
+        .package(url: "https://github.com/elliottminns/blackfire"),
+    ],
+    targets: [
+        .target(
+            name: "YourApp",
+    ]
+)
+```
+
+- main.swift
+```swift
 import Blackfire
 
 // Create a nice new 🔥 app for us to play with.
